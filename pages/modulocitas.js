@@ -55,7 +55,7 @@ export default function ModuloCitas() {
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const [open, setOpen] = useState(false);
   const [openRegCita, setOpenRegCita] = useState(false);
-  const [cedula, setCedula] = useState();
+  const [cedulaPaciente, setCedulaPaciente] = useState();
   const [data, setData] = useState([]);
   const classes = useStyles();
 
@@ -77,6 +77,7 @@ export default function ModuloCitas() {
       },
     })
       .then((name) => {
+        setCedulaPaciente(name);
         if (!name) throw null;
 
         return fetch(`${urlCitas}/${name}`);
@@ -126,7 +127,7 @@ export default function ModuloCitas() {
             Crear cita
           </Button>
         </div>
-        <CardCitas data={data} />
+        <CardCitas data={data}/>
       </div>
       <Modal
         aria-labelledby="spring-modal-title"
@@ -147,7 +148,7 @@ export default function ModuloCitas() {
             <h2 className="text-3xl" id="titulo-registro">
               Registrar usuario
             </h2>
-            <FormRegistroUsuario setOpen={setOpen} />
+            <FormRegistroUsuario setOpen={setOpen} setOpenRegCita={setOpenRegCita} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
           </div>
         </Fade>
       </Modal>
@@ -171,7 +172,7 @@ export default function ModuloCitas() {
             <h2 className="text-3xl" id="titulo-registro">
               Crear cita
             </h2>
-            <FormRegCita setOpen={setOpenRegCita} />
+            <FormRegCita setOpen={setOpenRegCita} cedulaPaciente={cedulaPaciente}/>
           </div>
         </Fade>
       </Modal>

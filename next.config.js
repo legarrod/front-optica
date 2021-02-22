@@ -5,10 +5,10 @@ module.exports = {
     API_OBTENER_TODAS_LAS_CITAS_RESUMIDAS:
       "http://apioptica.recaudo.xyz/public/citas/api/citas_cards",
     API_REGISTRAR_NUEVA_CITA:
-      "http://apioptica.recaudo.xyz/public/citas/api/crear_cita",
+      "http://apioptica.recaudo.xyz/public/citas/api/citas/crear_cita",
     API_OBTENER_TODOS_LOS_PACIENTES:
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes",
     API_GUARDAR_PACIENTE:
-      "http://localhost/back-optica/public/apipacientes/api/pacientes/nuevo",
+      "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/nuevo",
   },
 };

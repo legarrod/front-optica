@@ -3,16 +3,19 @@ import { useForm } from "react-hook-form";
 import { post } from "../../../api/AsyncHttpRequest";
 import swal from "sweetalert";
 
-export default function FormRegistroUsuario({ setOpen }) {
+
+export default function FormRegistroUsuario({ setOpen, setOpenRegCita, setCedulaPaciente, cedulaPaciente }) {
   const url = `${process.env.API_GUARDAR_PACIENTE}`;
   const { register, handleSubmit } = useForm();
   const [dataResponse, setDataResponse] = useState("");
 
-  const onSubmit = (data) => post(url, data, setDataResponse);
+  const onSubmit = (data) => (post(url, data, setDataResponse), setCedulaPaciente(data.cedula));
+  
   useEffect(() => {
     if (dataResponse) {
       swal("Exelente", "Paciente creado", "success");
       setOpen(false);
+      setOpenRegCita(true);
     }
   }, [dataResponse]);
 
@@ -37,7 +40,8 @@ export default function FormRegistroUsuario({ setOpen }) {
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="cedula"
-          placeholder="Cedula"
+          value={cedulaPaciente ? cedulaPaciente : "Cedula"}
+          placeholder={cedulaPaciente ? cedulaPaciente : "Cedula"}
           ref={register}
         />
         <input

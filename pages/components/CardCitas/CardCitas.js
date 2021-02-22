@@ -16,7 +16,6 @@ const useStyles = makeStyles({
 export default function CardCitas({ data }) {
   const classes = useStyles();
 
-  console.log(data);
   return (
     <div className="flex flex-wrap justify-center">
       {data.map((item) => (
