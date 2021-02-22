@@ -1,0 +1,49 @@
+services:
+  - docker:dind
+
+stages:
+  - merge
+  - test_deploy_optica
+  - deploy_la_optica
+
+test_deploy_optica:
+  image: nikolaik/python-nodejs:latest
+  stage: test_deploy_optica
+  tags:
+    - aws
+  when: manual
+
+  script:
+    - cd coffe-shop
+    - yarn
+    #- echo $TEST_ENV > next.config.js;
+    - yarn build
+    #- yarn export
+    - tar czvf build.tar.gz build
+    - pip3 install awscli
+    - aws --version
+    - tar xzvf build.tar.gz
+    - cd build
+    - aws s3 cp --recursive . s3://optica-tebaida
+deploy_la_optica:
+  stage: deploy_la_optica
+  only:
+    - master
+  tags:
+    - aws
+  except:
+    changes:
+      - it/**/*
+  image: nikolaik/python-nodejs:latest
+  script:
+    - cd coffe-shop
+    - yarn
+    #- echo $PROD_ENV > next.config.js;
+    - yarn build
+    #- yarn export
+    - tar czvf build.tar.gz build
+    - pip3 install awscli
+    - aws --version
+    - tar xzvf build.tar.gz
+    - cd build
+    - aws s3 cp --recursive . s3://$S3_BUCKET_LA_TIENDA
