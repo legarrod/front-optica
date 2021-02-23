@@ -18,7 +18,7 @@ export default function CardCitas({ data }) {
 
   return (
     <div className="flex flex-wrap justify-center">
-      {data.map((item) => (
+      {data?.map((item) => (
         <div className="m-2" key={item.id_cita_paciente}>
           <Card className={classes.root} variant="outlined">
             <CardContent>

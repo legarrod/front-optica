@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "next build && next export",
+    "start": "next build",
+    "deploy": "aws s3 sync out/ s3://optica-tebaida --acl public-read"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",

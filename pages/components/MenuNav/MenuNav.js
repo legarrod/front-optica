@@ -17,6 +17,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
 import GroupIcon from "@material-ui/icons/Group";
+import Link from 'next/link' ;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -182,12 +183,19 @@ export default function MenuNav() {
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge color="secondary">
-                <AccountBalanceIcon fontSize="large" />
+              <Link href="/">
+          <a><AccountBalanceIcon fontSize="large" /></a>
+        </Link>
+              
               </Badge>
             </IconButton>
             <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge color="secondary">
-                <EnhancedEncryptionIcon fontSize="large" />
+              <Link href="/modulocitas">
+                <a>
+              <EnhancedEncryptionIcon fontSize="large"/> 
+              </a>
+              </Link>
               </Badge>
             </IconButton>
             <IconButton aria-label="show 4 new mails" color="inherit">

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { post } from "../../../api/AsyncHttpRequest";
 import swal from "sweetalert";
 import axios from "axios";
 import DayPickerInput from 'react-day-picker/DayPickerInput';
@@ -87,7 +86,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
       setOpen(false);
     }
   }, [dataResponse]);
-console.log( getMonth(fecha));
+
   return (
     <form
       className="flex flex-wrap justify-center"
