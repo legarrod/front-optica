@@ -10,5 +10,9 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes",
     API_GUARDAR_PACIENTE:
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/nuevo",
+    API_CITA_POR_PACIENTE:
+      "http://apioptica.recaudo.xyz/public/citas/api/citaporpaciente",
+
+      
   },
 };

@@ -137,18 +137,34 @@ export default function MenuNav() {
     >
       <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
+        <Link href="/">
+        <a>
           <Badge color="secondary">
             <AccountBalanceIcon />
           </Badge>
+          
+        </a></Link>
         </IconButton>
+        <Link href="/">
+        <a>
+        <p>Inicio</p>
+        </a></Link>
       </MenuItem>
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
+          <Badge color="secondary">
+          <Link href="/modulocitas">
+                <a>
+              <EnhancedEncryptionIcon/> 
+              </a>
+              </Link>
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <Link href="/modulocitas">
+                <a>
+        <p>Ver citas</p>
+        </a>
+              </Link>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -159,7 +175,7 @@ export default function MenuNav() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>Perfil</p>
       </MenuItem>
     </Menu>
   );
@@ -184,8 +200,8 @@ export default function MenuNav() {
             <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge color="secondary">
               <Link href="/">
-          <a><AccountBalanceIcon fontSize="large" /></a>
-        </Link>
+              <a><AccountBalanceIcon fontSize="large" /></a>
+            </Link>
               
               </Badge>
             </IconButton>

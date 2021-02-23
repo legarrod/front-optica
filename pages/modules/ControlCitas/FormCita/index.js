@@ -191,8 +191,8 @@ export default function index() {
           />
         </div>
 
-        <div className="flex flex-wrap w-full justify-end">
-          <div className="mx-5">
+        <div className="flex flex-wrap flex-col md:flex-row w-full justify-center md:justify-end">
+          <div className="mx-5 my-2">
             <Button
               variant="contained"
               color="secondary"
@@ -204,7 +204,7 @@ export default function index() {
             </Button>
           </div>
 
-          <div className="mx-5">
+          <div className="mx-5 my-2">
             <Button
               type="submit"
               variant="contained"

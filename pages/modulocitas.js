@@ -52,19 +52,25 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 
 export default function ModuloCitas() {
   const url = `${process.env.API_OBTENER_TODAS_LAS_CITAS_RESUMIDAS}`;
+  const urlAllInformation = `${process.env.API_OBTENER_TODAS_LAS_CITAS}`;
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const [open, setOpen] = useState(false);
   const [openRegCita, setOpenRegCita] = useState(false);
   const [cedulaPaciente, setCedulaPaciente] = useState();
   const [data, setData] = useState([]);
+  const [allData, setAllData] = useState([]);
   const classes = useStyles();
 
   const getDataEvent = () => {
     getData(url, setData);
   };
+  const getAllData = ()=>{
+    getData(urlAllInformation, setAllData);
+  }
 
   useEffect(() => {
     getDataEvent();
+    getAllData();
   }, []);
 
   const consultarCliente = () => {
@@ -110,7 +116,7 @@ export default function ModuloCitas() {
   const handleClose = () => {
     setOpen(false);
   };
-
+console.log(data);
   return (
     <div>
       <MenuNav />
@@ -127,7 +133,7 @@ export default function ModuloCitas() {
             Crear cita
           </Button>
         </div>
-        <CardCitas data={data}/>
+        <CardCitas data={data} allData={allData}/>
       </div>
       <Modal
         aria-labelledby="spring-modal-title"

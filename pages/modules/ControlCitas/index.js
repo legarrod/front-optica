@@ -2,11 +2,12 @@ import React from "react";
 import FormularioCitas from "./FormCita";
 import InformacionUsuario from "./InformacionUsuario/InformacionUsuario";
 
-export default function index() {
+export default function index({allData}) {
+  
   return (
     <div>
-      <InformacionUsuario />
-      <FormularioCitas />
+      <InformacionUsuario allData={allData}/>
+      <FormularioCitas allData={allData}/>
     </div>
   );
 }

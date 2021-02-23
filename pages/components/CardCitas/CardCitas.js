@@ -6,16 +6,15 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { getData } from "../../api/AsyncHttpRequest";
-
+import Link from 'next/link' ;
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
 });
 
-export default function CardCitas({ data }) {
+export default function CardCitas({ data, allData }) {
   const classes = useStyles();
-
   return (
     <div className="flex flex-wrap justify-center">
       {data?.map((item) => (
@@ -30,7 +29,11 @@ export default function CardCitas({ data }) {
               </Typography>
             </CardContent>
             <CardActions>
+            <Link href={`/citas/?${item.id_cita_paciente}`}>
+              <a>
               <Button size="small">Ir a consulta</Button>
+              </a>
+            </Link>  
             </CardActions>
           </Card>
         </div>
