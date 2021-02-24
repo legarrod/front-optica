@@ -12,6 +12,8 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/nuevo",
     API_CITA_POR_PACIENTE:
       "http://apioptica.recaudo.xyz/public/citas/api/citaporpaciente",
+    API_ELIMINAR_PACIENTE:
+      "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/delete",
 
       
   },

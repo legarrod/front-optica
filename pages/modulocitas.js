@@ -116,7 +116,7 @@ export default function ModuloCitas() {
   const handleClose = () => {
     setOpen(false);
   };
-console.log(data);
+
   return (
     <div>
       <MenuNav />

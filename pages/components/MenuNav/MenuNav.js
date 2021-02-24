@@ -161,11 +161,29 @@ export default function MenuNav() {
           </Badge>
         </IconButton>
         <Link href="/modulocitas">
-                <a>
-        <p>Ver citas</p>
-        </a>
-              </Link>
+          <a>
+            <p>Citas</p>
+          </a>
+        </Link>
       </MenuItem>
+
+      <MenuItem>
+        <IconButton aria-label="show 11 new notifications" color="inherit">
+          <Badge color="secondary">
+          <Link href="/modulousuarios">
+                <a>
+                <GroupIcon />
+              </a>
+              </Link>
+          </Badge>
+        </IconButton>
+        <Link href="/modulousuarios">
+          <a>
+            <p>Usuarios</p>
+          </a>
+        </Link>
+      </MenuItem>
+      
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -216,7 +234,12 @@ export default function MenuNav() {
             </IconButton>
             <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge color="secondary">
+                <Link href="/modulousuarios">
+                <a>
                 <GroupIcon fontSize="large" />
+                </a>
+                </Link>
+                
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
