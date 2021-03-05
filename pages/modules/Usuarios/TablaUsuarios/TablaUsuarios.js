@@ -56,6 +56,28 @@ const useStyles = makeStyles((theme)=>({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  modalContainer: {
+	display: 'none', 
+	position: 'fixed', 
+	zIndex: 1,
+	paddingTop: '100px',
+	left: 0,
+	top: 0,
+	width: '100%',
+	height: '100%',
+	overflow: 'auto',
+	backgroundColor: '#fefefe',
+	margin: 'auto',
+	padding: '20px',
+	border: '1px solid lightgray',
+	borderTop: '10px solid #58abb7',
+	color: '#aaaaaa',
+	float: 'right',
+	fontSize: '28px',
+	fontWeight: 'bold',
+	textDecoration: 'none',
+	cursor: 'pointer',
+}
 }));
 
 const Fade = React.forwardRef(function Fade(props, ref) {
@@ -85,13 +107,14 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 export default function CustomizedTables({allData}) {
   const classes = useStyles();
   const valuOpen = useRef();
-  const [open, setOpenVal] = useState(false);
+  const [open, setOpen] = useState(false);
+  const isOpen =  useRef(false);
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const rows = allData;
-  const [accion, setAccion] = useState();
+  const [accion, setAccion] = useState('');
   const [cedulaPaciente, setCedulaPaciente] = useState();
   const handleClose = () => {
-    setOpenVal(false);
+    setOpen(false);
   };
 
   const consultarCliente = () => {
@@ -121,7 +144,7 @@ export default function CustomizedTables({allData}) {
         if (paciente === "No existen paciente con esta cedula") {
           swal("Paciente no encontrado", "Vamos a crearlo", "error");
 		  //valuOpen.current = true; 
-		  setOpenVal(true);
+		  setOpen(true);
 		  setAccion('crear')
         } else {
           const name = paciente.nombre;
@@ -134,29 +157,8 @@ export default function CustomizedTables({allData}) {
         }
       });
   };
-	const actualizarCliente =(cc)=> {setOpenVal(true), setAccion('actualizar'), setCedulaPaciente(cc)};
 
-	const eliminarCliente =(cc)=> {
-	const url= `${process.env.API_ELIMINAR_PACIENTE}/${cc}`;
-	swal("Quiere eliminar este paciente?", "SI", "error")
-	.then(() => {
-		
-	  return fetch(url, {
-		method: 'DELETE',
-		headers: {
-			'Content-type': 'application/json',
-		   },
-		})
-			.then(res => res.text()) 
-			.then(res =>  {if (res === "Paciente eliminado correctamente") {
-						swal("Paciente eliminado correctamente", "OK", "success");
-					  } else {
-						swal("El paciente no existe", "OK", "success");
-					  }})
-	})
-	
-
-	};
+	const actualizarCliente =(cc)=> {setOpen(true), setAccion('actualizar'), setCedulaPaciente(cc)};
 	
   return (
 	<>
@@ -165,7 +167,7 @@ export default function CustomizedTables({allData}) {
 				variant="contained"
 				color="primary"
 				size="large"
-				className=""
+				className="rounded-sm"
 				onClick={() => consultarCliente()}
 				startIcon={<AddCircleOutlineIcon />}
 			>
@@ -193,7 +195,7 @@ export default function CustomizedTables({allData}) {
 				<StyledTableCell align="center">
 					<div className="flex flex-row">
 					<button><EditIcon onClick={() => actualizarCliente(row.cedula)}/></button>
-					<button><HighlightOffIcon onClick={() => eliminarCliente(row.cedula)}/></button>
+				
 					</div>
 				</StyledTableCell>
 				<StyledTableCell align="left">{row.cedula}</StyledTableCell>
@@ -210,6 +212,10 @@ export default function CustomizedTables({allData}) {
 		</Table>
 		</TableContainer>
 
+	
+			 
+		
+
 		<Modal
 			aria-labelledby="spring-modal-title"
 			aria-describedby="spring-modal-description"
@@ -220,16 +226,16 @@ export default function CustomizedTables({allData}) {
 			BackdropComponent={Backdrop}
 			BackdropProps={{
 			timeout: 500,}}>
-			<Fade in={open}>
+			
 				<div
 					className={`${classes.paper} mx-2 md:mx-20 flex flex-wrap justify-center`}
 				>
 					<h2 className="text-3xl" id="titulo-registro">
 					Registrar usuario
 					</h2>
-					<FormRegistroUsuario setOpenVal={setOpenVal} accion={accion}  setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
+					<FormRegistroUsuario setOpen={setOpen} accion={accion}  setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
 				</div>
-			</Fade>
+			
 		</Modal>
 	</>
   );
