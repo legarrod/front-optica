@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,6 +16,7 @@ import Button from "@material-ui/core/Button";
 import swal from "sweetalert";
 import { useSpring, animated } from "react-spring/web.cjs";
 import FormRegistroUsuario from "../../ControlCitas/FormRegistroUsuario/FormRegistroUsuario";
+import { getData, post } from '../../../api/AsyncHttpRequest';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -104,11 +105,12 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 	);
   });
 
+
+
 export default function CustomizedTables({allData}) {
   const classes = useStyles();
-  const valuOpen = useRef();
   const [open, setOpen] = useState(false);
-  const isOpen =  useRef(false);
+  const [dataUser, setDataUser] =useState();
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const rows = allData;
   const [accion, setAccion] = useState('');
@@ -119,7 +121,7 @@ export default function CustomizedTables({allData}) {
 
   const consultarCliente = () => {
     swal({
-      text: "Consultar cliente",
+      text: "Consultar paciente",
       content: "input",
       button: {
         text: "Buscar!",
@@ -143,9 +145,9 @@ export default function CustomizedTables({allData}) {
         }
         if (paciente === "No existen paciente con esta cedula") {
           swal("Paciente no encontrado", "Vamos a crearlo", "error");
-		  //valuOpen.current = true; 
 		  setOpen(true);
 		  setAccion('crear')
+
         } else {
           const name = paciente.nombre;
           const apellidos = paciente.apellidos;
@@ -158,8 +160,13 @@ export default function CustomizedTables({allData}) {
       });
   };
 
-	const actualizarCliente =(cc)=> {setOpen(true), setAccion('actualizar'), setCedulaPaciente(cc)};
-	
+	const actualizarCliente =(cc)=> {
+		let user = rows?.filter(item=> item.cedula === cc);
+		setDataUser(user && user[0])
+		setOpen(true), 
+		setAccion('actualizar'), 
+		setCedulaPaciente(cc)};
+
   return (
 	<>
 		<div className="mx-10 mb-5 flex flex-wrap justify-end">
@@ -233,7 +240,7 @@ export default function CustomizedTables({allData}) {
 					<h2 className="text-3xl" id="titulo-registro">
 					Registrar usuario
 					</h2>
-					<FormRegistroUsuario setOpen={setOpen} accion={accion}  setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
+					<FormRegistroUsuario setOpen={setOpen} accion={accion} dataUser={dataUser} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
 				</div>
 			
 		</Modal>

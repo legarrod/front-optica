@@ -1,6 +1,13 @@
 import React from "react";
 
+
+
+
 export default function InformacionUsuario({allData}) {
+ 
+  
+ 
+
   return (
     
     <div className="p-1 md:p-1 mx-2 md:m-5 flex flex-wrap w-full ">
@@ -34,6 +41,7 @@ export default function InformacionUsuario({allData}) {
           <p className="ml-3 text-lg">{allData?.cedula}</p>
         </div>
       </div>
+      
     </div>
   );
 }

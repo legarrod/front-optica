@@ -11,6 +11,8 @@ import Backdrop from "@material-ui/core/Backdrop";
 import { useSpring, animated } from "react-spring/web.cjs";
 import FormRegistroUsuario from "./modules/ControlCitas/FormRegistroUsuario/FormRegistroUsuario";
 import FormRegCita from "./modules/ControlCitas/FormRegCita/FormRegCita";
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import getDate from './utils/utils'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -51,7 +53,8 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 });
 
 export default function ModuloCitas() {
-  const url = `${process.env.API_OBTENER_TODAS_LAS_CITAS_RESUMIDAS}`;
+  let hoy = new Date();
+  const url = `${process.env.API_OBTENER_LAS_CITAS_POR_ESTADO}0`;
   const urlAllInformation = `${process.env.API_OBTENER_TODAS_LAS_CITAS}`;
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const [open, setOpen] = useState(false);
@@ -59,7 +62,10 @@ export default function ModuloCitas() {
   const [cedulaPaciente, setCedulaPaciente] = useState();
   const [data, setData] = useState([]);
   const [allData, setAllData] = useState([]);
+  const [accion, setAccion] = useState('');
   const classes = useStyles();
+  const [paciente, setPaciente] = useState({});
+  const [fechaFilter, setFechaFilter] = useState(getDate(hoy));
 
   const getDataEvent = () => {
     getData(url, setData);
@@ -100,13 +106,16 @@ export default function ModuloCitas() {
         if (paciente === "No existen paciente con esta cedula") {
           swal("Paciente no encontrado", "Vamos a crearlo", "error");
           setOpen(true);
+          setAccion('crear');
         } else {
-          const name = paciente.nombre;
-          const apellidos = paciente.apellidos;
-          const decula = paciente.cedula;
+          setPaciente({
+            nombre: paciente.nombre,
+            apellidos: paciente.apellidos,
+            cedula: paciente.cedula
+          })
           swal({
             title: "El paciente ya existe",
-            text: `${name} ${apellidos}`,
+            text: `${paciente.nombre} ${paciente.apellidos}`,
           });
           setOpenRegCita(true);
         }
@@ -121,7 +130,9 @@ export default function ModuloCitas() {
     <div>
       <MenuNav />
       <div className="mt-10">
+      
         <div className="mx-10 flex flex-wrap justify-end">
+        <DayPickerInput  onDayChange={day => setFechaFilter(getDate(day))} />
           <Button
             variant="contained"
             color="primary"
@@ -154,7 +165,7 @@ export default function ModuloCitas() {
             <h2 className="text-3xl" id="titulo-registro">
               Registrar usuario
             </h2>
-            <FormRegistroUsuario setOpen={setOpen} setOpenRegCita={setOpenRegCita} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
+            <FormRegistroUsuario setOpen={setOpen} accion={accion} setOpenRegCita={setOpenRegCita} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
           </div>
         </Fade>
       </Modal>

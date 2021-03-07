@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { post } from "../../../api/AsyncHttpRequest";
+import { post, put } from "../../../api/AsyncHttpRequest";
 import swal from "sweetalert";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -23,40 +23,41 @@ export default function FormRegistroUsuario({
   setCedulaPaciente,
   cedulaPaciente,
   accion,
+  dataUser
 }) {
   const classes = useStyles();
+  let hoy = new Date();
+  let fechaRegistro ={fecha_registro: hoy}
   const url = `${process.env.API_GUARDAR_PACIENTE}`;
+  const urlPut =`${process.env.API_ACTUALIZAR_INFORMACION_DEL_PACIENTE}`;
   const { register, handleSubmit, control } = useForm();
-  const [dataResponse, setDataResponse] = useState("");
-  const [ciudad, setCiudad] = useState(1);
-  const [state, setState] = React.useState({
-    id: "",
-    ciudad: "hai",
-  });
+  const [dataResponse, setDataResponse] = useState("");  
 
-  const handleChange = (event) => {
-    const name = event.target.value;
-    setCiudad(name);
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
+  const onSubmit = (data) => {
+    console.log(accion);
+    if (accion === 'actualizar') {
+      put(urlPut, data, setDataResponse)
+    }else if(accion === 'crear'){
+      post(url, Object.assign(data, fechaRegistro), setDataResponse)
+      setCedulaPaciente(data.cedula)
+    }
   };
 
-  const onSubmit = (data) => (
-    post(url, data, setDataResponse),
-    console.log(data),
-    setCedulaPaciente(data.cedula)
-  );
-
   useEffect(() => {
-    if (dataResponse) {
-      swal("Exelente", "Paciente creado", "success");
-      if (!accion) {
+ 
+      if (dataResponse === "Paciente agregado correctamente") {
+        swal("Exelente", "Paciente creado", "success");
         setOpen(false);
-        setOpenRegCita(true);
+        if (!accion) {
+          setOpen(false);
+          setOpenRegCita(true);
+        }
+      }else if(dataResponse.data === "Paciente actualizado correctamente"){
+        swal("Exelente", "Paciente actualizado correctamente", "success");
+        window.location.reload();
+        setOpen(false);
       }
-    }
+      
   }, [dataResponse]);
 
   return (
@@ -68,12 +69,14 @@ export default function FormRegistroUsuario({
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="nombre"
+          defaultValue={dataUser?.nombre}
           placeholder="Nombre"
           ref={register}
         />
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="apellidos"
+          defaultValue={dataUser?.apellidos}
           placeholder="Apellidos"
           ref={register}
         />
@@ -86,19 +89,22 @@ export default function FormRegistroUsuario({
         />
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="fechanacimiento"
-          placeholder="Fecha de Nacimiento"
+          name="fecha_nacimiento"
+          defaultValue={dataUser?.fecha_nacimiento}
+          placeholder="Año/Mes/Día"
           ref={register}
         />
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="celular"
+          defaultValue={dataUser?.celular}
           placeholder="Celular"
           ref={register}
         />
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="direccion"
+          defaultValue={dataUser?.direccion}
           placeholder="Dirección"
           ref={register}
         />
@@ -111,8 +117,7 @@ export default function FormRegistroUsuario({
                 native
                 name="ciudad"
                 ref={register}
-                value={state.age}
-                onChange={handleChange}
+                value={dataUser?.ciudad}
                 label="Ciudad"
                 inputProps={{
                   ciudad: "ciudad",
@@ -132,6 +137,7 @@ export default function FormRegistroUsuario({
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="ocupacion"
+          defaultValue={dataUser?.ocupacion}
           placeholder="Ocupación"
           ref={register}
         />

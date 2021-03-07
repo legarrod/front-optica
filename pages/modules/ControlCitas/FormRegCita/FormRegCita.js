@@ -4,8 +4,10 @@ import swal from "sweetalert";
 import axios from "axios";
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
+import getDate from "../../../utils/utils";
 
 export default function FormRegCita({ setOpen, cedulaPaciente }) {
+  let hoy = new Date();
   const url = `${process.env.API_REGISTRAR_NUEVA_CITA}`;
   const urlConsultarPaciente = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const [fecha, setFecha] = useState();
@@ -37,8 +39,8 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
           nombre_doctor: 1,
           fk_id_sede: 1,
           fk_id_estado: "",
-          fecha_creacion: "2015-02-11",
-          fecha_cita: "",
+          fecha_creacion: getDate(hoy),
+          fecha_cita: fecha,
           anamnesis: "",
           biomicrodcopia: "",
           od_rx_uso: "",
@@ -86,6 +88,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
       setOpen(false);
     }
   }, [dataResponse]);
+  
 
   return (
     <form
@@ -109,8 +112,8 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
         />
         <div className="">
         <p className="text-xl">Dia de la cita:</p>
-        <DayPickerInput onDayChange={day => setFecha(day)} />
-      </div>
+        <DayPickerInput onDayChange={day => setFecha(getDate(day))} />
+        </div>
       </div>
       
       <input

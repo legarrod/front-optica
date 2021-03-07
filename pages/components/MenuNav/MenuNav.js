@@ -18,6 +18,7 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
 import GroupIcon from "@material-ui/icons/Group";
 import Link from 'next/link' ;
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -227,7 +228,7 @@ export default function MenuNav() {
               <Badge color="secondary">
               <Link href="/modulocitas">
                 <a>
-              <EnhancedEncryptionIcon fontSize="large"/> 
+              <EventAvailableIcon fontSize="large"/> 
               </a>
               </Link>
               </Badge>
@@ -242,11 +243,7 @@ export default function MenuNav() {
                 
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge color="secondary">
-                <NotificationsIcon fontSize="large" />
-              </Badge>
-            </IconButton>
+           
             <IconButton
               edge="end"
               aria-label="account of current user"
