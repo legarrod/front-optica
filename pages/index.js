@@ -2,6 +2,7 @@ import Head from "next/head";
 import React from "react";
 import styles from "../styles/Home.module.css";
 import MenuNav from "./components/MenuNav/MenuNav";
+import CardIndex from "./components/CardIndex/CardIndex"
 export default function Home() {
   return (
     <div className="">
@@ -11,7 +12,7 @@ export default function Home() {
       </Head>
       <MenuNav />
       <main className={styles.main}>
-        <p className="text-3xl">Citas</p>
+        <CardIndex />
       </main>
 
       <footer className={styles.footer}></footer>
