@@ -20,6 +20,10 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/delete",
     API_ACTUALIZAR_INFORMACION_DEL_PACIENTE:
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/update/",
+    API_CREAR_PRODUCTO:
+      "http://apioptica.recaudo.xyz/public/productos/api/productos/addProduct",
+    API_OBTENER_TODOS_LOS_PRODUCTOS:
+      "http://apioptica.recaudo.xyz/public/productos/api/productos",
 
       
   },
