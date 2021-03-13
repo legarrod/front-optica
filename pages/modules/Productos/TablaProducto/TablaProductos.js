@@ -21,6 +21,7 @@ import FormCrearproducto from "../FormCrearProducto";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -85,16 +86,18 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 
 export default function CustomizedTableProducto() {
   const classes = useStyles();
-  const [dataUser, setDataUser] =useState();
-  const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
-  const [accion, setAccion] = useState('');
-  const [cedulaPaciente, setCedulaPaciente] = useState();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState();
   const urlGetProducts = `${process.env.API_OBTENER_TODOS_LOS_PRODUCTOS}`;
+  const urlUpdateProducts = `${process.env.API_ACTUALIZAR_TODOS_LOS_PRODUCTOS}`;
+  const urlDeleteProdcto = `${process.env.API_ELIMINAR_PRODUCTO}`;
   const [allProducts, setAllProducts] = useState();
-  const [obtenerData, setObtenerData] = useState();
+  const [obtenerDataImg, setObtenerDataImg] = useState(null);
+  const [codigoProducto, setCodigoProducto] = useState();
   const { register, handleSubmit } = useForm();
+  const [files, setFiles] = useState(null);
+  const [linkFoto, setLinkFoto] = useState();
+  const [viewUpdateInfo, setViewUpdateInfo] = useState(false);
 
   const handleClose = () => {
 	  setOpen(false);
@@ -105,37 +108,86 @@ export default function CustomizedTableProducto() {
   };
 
 
-  const getProduct = async (urlGetProducts, setAllProducts = null) => {
-	console.log(urlGetProducts);
-  try {
-	const data = await axios.get(urlGetProducts, setAllProducts);
-	if (data.data) {
-	  setAllProducts(data.data);
-	  
+  	const getProduct = async (urlGetProducts, setAllProducts = null) => {
+		try {
+			const data = await axios.get(urlGetProducts, setAllProducts);
+			if (data.data) {
+			setAllProducts(data.data);
+			
+			}
+		} catch (error) {
+			console.log(error);
+		}
+
 	}
-  } catch (error) {
-	console.log(error);
-  }
-  //return axios.post(url, formData, config);
-}
 
+	const remove=async(url)=> {
+		try {
+			const data = await axios.delete(url);
+			if (data.data ==="eliminado correctamente") {
+				getProduct(urlGetProducts, setAllProducts);	  
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-	const actualizarCliente =(value)=> {
-		console.log(value);
-		// let user = allProducts?.filter(item=> item.idproducto === value.idproducto);
-		//setDataUser(user && user[0])
-		setData(value)
-		setAccion('actualizar')
-		//mx-16(id)
+	const convertirBase =(archivos)=>{
+		Array.from(archivos).forEach( archivos => {
+			let reader = new FileReader();
+			reader.readAsDataURL(archivos);
+			reader.onload=function () {
+				let aux =[];
+				var base64 = reader.result;
+				aux=base64.split(',');
+				setFiles({	
+					imagen: aux[1],
+					})
+					// post(urlImg, {	
+					// 	idworker:idWorker,
+					// 	image: aux[1],
+					// 	activo: 1
+					// 	}, success)
+			}
+		})
+	}
+
+	const actualizarProducto =(value)=> {
+		setViewUpdateInfo(true)
+		setData(value);
+		setCodigoProducto(value.idproducto);
+		setLinkFoto(value.imagen);
+		setObtenerDataImg(null)
 	};
+	const eliminarProducto =(value)=> {
+		remove(`${urlDeleteProdcto}id=${value.idproducto}`)
+	};
+
+	const putProducto = async(url, params)=>{
+		try {
+			const data = await axios.put(url, params);
+			if (data) {
+				getProduct(urlGetProducts, setAllProducts)
+				setViewUpdateInfo(false)
+			}
+		  } catch (error) {
+			console.log(error);
+		  }
+	}
 	
+	const handlerViewImage =(row)=>{ 
+		setObtenerDataImg({img: row.imagen, name: row.nombre})
+		setViewUpdateInfo(false)
+	}
+
 	const refresData =()=>{
-		setObtenerData(getProduct(urlGetProducts, setAllProducts))
+		getProduct(urlGetProducts, setAllProducts)
 	}  
 	const onSubmit = (data) => {
-		let newdata = Object.assign(data, files);
-	   
-	  postProducto(url, data, succes)
+		console.log(files);
+		let dataExtra = {idproducto: parseInt(codigoProducto), imagen: files !== null ? files : linkFoto}
+		let newdata = Object.assign(data, files, dataExtra);
+		putProducto(urlUpdateProducts, newdata)
 	};
 
 	useEffect(() => {
@@ -174,13 +226,14 @@ export default function CustomizedTableProducto() {
 									<StyledTableRow key={row.id}>
 									<StyledTableCell align="center">
 										<div className="flex flex-row">
-										<button><EditIcon onClick={() => actualizarCliente(row)}/></button>
+										<button><EditIcon onClick={() => actualizarProducto(row)}/></button>
+										<button><DeleteForeverIcon onClick={() => eliminarProducto(row)}/></button>
 									
 										</div>
 									</StyledTableCell>
 									<StyledTableCell align="left">{row.nombre}</StyledTableCell>
 									<StyledTableCell align="left">{row.descripcion}</StyledTableCell>
-									<StyledTableCell align="left">foto</StyledTableCell>
+									<StyledTableCell align="left"><img className="h-14 w-auto rounded-full" src={row.imagen} onClick={()=>handlerViewImage(row)}/></StyledTableCell>
 									</StyledTableRow>
 								))} 
 								</TableBody>
@@ -188,8 +241,15 @@ export default function CustomizedTableProducto() {
 						</TableContainer>
 					</div>
 			</div>
-		
-		<div className="mx-5 flex flex-col w-full md:w-2/5 ">
+			{ obtenerDataImg !== null &&
+				<div className="mx-5 flex flex-col w-full md:w-2/5 mt-10 md:mt-0">
+					<p className="text-center text-blue-800 text-2xl font-semibold">{obtenerDataImg.name}</p>
+					<img className="h-80 w-auto border border-gray-700 shadow-lg" src={obtenerDataImg.img} alt="Optica" style={{objectFit: 'cover'}}/>
+				</div>
+			}
+
+		{
+			viewUpdateInfo && <div className="mx-5 flex flex-col w-full md:w-2/5 mt-10 md:mt-0">
 			<p className="text-2xl w-full ">Actualizar producto</p>
 			<form
 				className="flex flex-col w-9/12 mx-16 md:mx-0"
@@ -199,22 +259,20 @@ export default function CustomizedTableProducto() {
 				<input
 					className="border-2 border-gray-400 rounded-md m-3 text-xl"
 					name="codigo"
-					placeholder="Codigo"
-					value={data?.codigo}
+					disabled='true'
+					placeholder={data?.codigo}
 					ref={register}
 					/>
 					<input
 					className="border-2 border-gray-400 rounded-md m-3 text-xl"
 					name="nombre"
-					placeholder="Nombre"
-					value={data?.nombre}
+					placeholder={data?.nombre}
 					ref={register}
 					/>
 					<input
 					className="border-2 border-gray-400 rounded-md m-3 text-xl"
 					name="descripcion"
-					placeholder="Descripcion"
-					value={data?.descripcion}
+					placeholder={data?.descripcion}
 					ref={register}
 					/>
 				<div>
@@ -223,7 +281,8 @@ export default function CustomizedTableProducto() {
 						</label>
 						<input type="file" id="upload-button" style={{ display: 'none' }} onChange={(e)=>convertirBase(e.target.files)} />
 						<p className="ml-10 text-sm">Upload photo</p>
-					</div>
+						<img className="h-44" src={data?.imagen} />					
+				</div>
 			
 				
 				<input
@@ -234,6 +293,8 @@ export default function CustomizedTableProducto() {
 
 		</div>
 
+		}
+		
 		<Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"

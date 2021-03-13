@@ -24,6 +24,10 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/productos/api/productos/addProduct",
     API_OBTENER_TODOS_LOS_PRODUCTOS:
       "http://apioptica.recaudo.xyz/public/productos/api/productos",
+    API_ACTUALIZAR_TODOS_LOS_PRODUCTOS:
+      "http://apioptica.recaudo.xyz/public/productos/api/productos/update",
+    API_ELIMINAR_PRODUCTO:
+      "http://apioptica.recaudo.xyz/public/productos/api/productos/delete/",
 
       
   },
