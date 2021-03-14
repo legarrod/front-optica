@@ -100,7 +100,7 @@ export default function TablaClientesAbonos() {
 		pendiente: 200000,
 		totalDeuda: 400000,
 		totalAbonos: 200000,
-		abonos: [{fecha: '2021-30-01', abono: 20000}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 50000}, {fecha: '2021-29-10', abono: 30000}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 110000}, {fecha: '2021-29-10', abono: 85000}]
+		abonos: [{fecha: '2021-30-01', abono: 20000, nota: 'Aca se pone una nota de prueba',}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 50000}, {fecha: '2021-29-10', abono: 30000, nota: 'Aca se pone una nota de prueba'}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 110000}, {fecha: '2021-29-10', abono: 85000}]
 	},
 	{
 		cc: 124,
@@ -109,7 +109,7 @@ export default function TablaClientesAbonos() {
 		pendiente: 150000,
 		totalDeuda: 500000,
 		totalAbonos: 350000,
-		abonos: [{fecha: '2021-30-01', abono: 50000}, {fecha: '2021-30-05', abono: 80000}]
+		abonos: [{fecha: '2021-30-01', abono: 50000, nota: 'Aca se pone una nota de prueba',}, {fecha: '2021-30-05', abono: 80000}]
 	},
 	{
 		cc: 125,
@@ -118,7 +118,7 @@ export default function TablaClientesAbonos() {
 		pendiente: 200000,
 		totalDeuda: 320000,
 		totalAbonos: 120000,
-		abonos: [{fecha: '2021-30-01', abono: 70000}, {fecha: '2021-30-05', abono: 120000}, {fecha: '2021-30-02', abono: 70000}, {fecha: '2021-29-10', abono: 30000}, {fecha: '2021-30-02', abono: 60000}, {fecha: '2021-29-10', abono: 50000}]
+		abonos: [{fecha: '2021-30-01', abono: 70000, nota: 'Aca se pone una nota de prueba',}, {fecha: '2021-30-05', abono: 120000}, {fecha: '2021-30-02', abono: 70000}, {fecha: '2021-29-10', abono: 30000, nota: 'Aca se pone una nota de prueba'}, {fecha: '2021-30-02', abono: 60000}, {fecha: '2021-29-10', abono: 50000}]
 	},
 	{
 		cc: 126,
@@ -127,7 +127,7 @@ export default function TablaClientesAbonos() {
 		pendiente: 100000,
 		totalDeuda: 650000,
 		totalAbonos: 500000,
-		abonos: [{fecha: '2021-30-01', abono: 50000}]
+		abonos: [{fecha: '2021-30-01', abono: 50000, nota: 'Aca se pone una nota de prueba',}]
 	},
 ]
   const handleClose = () => {
@@ -230,7 +230,7 @@ export default function TablaClientesAbonos() {
   return (
 	< div className="flex flex-col md:flex-row w-full">
 			<div className="w-full px-8">
-				
+			<p className="text-2xl w-full text-center">Listado de clientes</p>
 				<div className="overflow-y-auto w-full mx-3 h-5/6">
 						<TableContainer component={Paper}>
 							<Table aria-label="customized table">
@@ -267,7 +267,7 @@ export default function TablaClientesAbonos() {
 				</div>
 			}
 
-			<div className="mx-5 flex flex-col w-full md:w-2/5 mt-10 md:mt-0">
+			<div className="mx-5 flex flex-col w-full md:w-4/5 mt-10 md:mt-0">
 			<p className="text-2xl w-full text-center">Total Abonos</p>
 			<div className="m-0 mb-5 flex flex-wrap justify-end">
 						<Button
@@ -282,7 +282,7 @@ export default function TablaClientesAbonos() {
 						</Button>
 				</div>
 
-			<div className='flex flex-col'>
+			<div className='flex flex-col mb-10'>
 				<div className='flex flex-row'>
 					<p className='text-base font-semibold'>Nombre:</p>
 					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.nombre}</p>
@@ -306,13 +306,15 @@ export default function TablaClientesAbonos() {
 							<TableRow>
 								<StyledTableCell align="center">Fecha</StyledTableCell>
 								<StyledTableCell align="center">Abono</StyledTableCell>
+								<StyledTableCell align="center">Nota</StyledTableCell>
 							</TableRow>
 							</TableHead>
 							<TableBody>
 							{data?.abonos?.map((row, index) => (
 								<StyledTableRow key={index}>
-									<StyledTableCell align="center">{row.fecha}</StyledTableCell>
-									<StyledTableCell align="center">{row.abono}</StyledTableCell>
+									<StyledTableCell align="center"><p className='w-20'>{row.fecha}</p></StyledTableCell>
+									<StyledTableCell align="center">$ {row.abono}</StyledTableCell>
+									<StyledTableCell align="center">{row.nota}</StyledTableCell>
 								</StyledTableRow>
 							))} 
 							</TableBody>
@@ -352,7 +354,12 @@ export default function TablaClientesAbonos() {
 					name="abono"
 					placeholder='Valor a registrar'
 					ref={register}
-					/>				
+					/>
+				<textarea className="border-b-4 border-2 w-full border-gray-400 rounded-md mb-3 px-2 h-20 shadow-lg" 
+						name="note" 
+						placeholder="Nota"
+						//onChange={(e)=> handleTextarea(e)}
+						ref={register}/>  				
 				<input
 					className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
 					type="submit"
