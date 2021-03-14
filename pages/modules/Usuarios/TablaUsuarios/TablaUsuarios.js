@@ -43,9 +43,6 @@ function createData(name, calories, fat, carbs, protein) {
 
 
 const useStyles = makeStyles((theme)=>({
-  table: {
-    minWidth: 700,
-  },
   modal: {
     display: "flex",
     alignItems: "center",
@@ -115,6 +112,7 @@ export default function CustomizedTables({allData}) {
   const rows = allData;
   const [accion, setAccion] = useState('');
   const [cedulaPaciente, setCedulaPaciente] = useState();
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -162,67 +160,69 @@ export default function CustomizedTables({allData}) {
 
 	const actualizarCliente =(cc)=> {
 		let user = rows?.filter(item=> item.cedula === cc);
+		
 		setDataUser(user && user[0])
 		setOpen(true), 
 		setAccion('actualizar'), 
 		setCedulaPaciente(cc)};
 
   return (
-	<>
-		<div className="mx-10 mb-5 flex flex-wrap justify-end">
-			<Button
-				variant="contained"
-				color="primary"
-				size="large"
-				className="rounded-sm"
-				onClick={() => consultarCliente()}
-				startIcon={<AddCircleOutlineIcon />}
-			>
-				Crear paciente
-			</Button>
-			</div>
-		<TableContainer component={Paper}>
-		<Table className={classes.table} aria-label="customized table">
-			<TableHead>
-			<TableRow>
-			<StyledTableCell align="center">Opciones</StyledTableCell>
-				<StyledTableCell align="center">Cedula</StyledTableCell>
-				<StyledTableCell align="center">Nombre</StyledTableCell>
-				<StyledTableCell align="center">Apellidos</StyledTableCell>
-				<StyledTableCell align="center">Fecha nacimiento</StyledTableCell>
-				<StyledTableCell align="center">Telefono</StyledTableCell>
-				<StyledTableCell align="center">Ocupacion</StyledTableCell>
-				<StyledTableCell align="center">Direccion</StyledTableCell>
-				<StyledTableCell align="center">Ciudad</StyledTableCell>
-			</TableRow>
-			</TableHead>
-			<TableBody>
-			{rows?.map((row) => (
-				<StyledTableRow key={row.id}>
-				<StyledTableCell align="center">
-					<div className="flex flex-row">
-					<button><EditIcon onClick={() => actualizarCliente(row.cedula)}/></button>
-				
-					</div>
-				</StyledTableCell>
-				<StyledTableCell align="left">{row.cedula}</StyledTableCell>
-				<StyledTableCell align="left">{row.nombre}</StyledTableCell>
-				<StyledTableCell align="left">{row.apellidos}</StyledTableCell>
-				<StyledTableCell align="left">{row.fecha_nacimiento}</StyledTableCell>
-				<StyledTableCell align="left">{row.celular}</StyledTableCell>
-				<StyledTableCell align="left">{row.ocupacion}</StyledTableCell>
-				<StyledTableCell align="left">{row.direccion}</StyledTableCell>
-				<StyledTableCell align="left">{row.nombre_ciudad}</StyledTableCell>
-				</StyledTableRow>
-			))}
-			</TableBody>
-		</Table>
-		</TableContainer>
-
 	
-			 
+	< div className="flex flex-col md:flex-row w-full">
+		<div className="w-full px-8">
+			<div className="m-0 mb-5 flex flex-wrap justify-end">
+				<Button
+					variant="contained"
+					color="primary"
+					size="large"
+					className="rounded-sm"
+					onClick={() => consultarCliente()}
+					startIcon={<AddCircleOutlineIcon />}
+				>
+					Crear paciente
+				</Button>
+			</div>
+			<div className="overflow-y-auto w-full mx-3 h-5/6">
+				<TableContainer component={Paper}>
+				<Table aria-label="customized table">
+					<TableHead>
+					<TableRow>
+					<StyledTableCell align="center">Opciones</StyledTableCell>
+						<StyledTableCell align="center">Cedula</StyledTableCell>
+						<StyledTableCell align="center">Nombre</StyledTableCell>
+						<StyledTableCell align="center">Apellidos</StyledTableCell>
+						<StyledTableCell align="center">Fecha nacimiento</StyledTableCell>
+						<StyledTableCell align="center">Telefono</StyledTableCell>
+						<StyledTableCell align="center">Ocupacion</StyledTableCell>
+						<StyledTableCell align="center">Direccion</StyledTableCell>
+						<StyledTableCell align="center">Ciudad</StyledTableCell>
+					</TableRow>
+					</TableHead>
+					<TableBody>
+					{rows?.map((row) => (
+						<StyledTableRow key={row.id}>
+						<StyledTableCell align="center">
+							<div className="flex flex-row">
+							<button><EditIcon onClick={() => actualizarCliente(row.cedula)}/></button>
+						
+							</div>
+						</StyledTableCell>
+						<StyledTableCell align="left">{row.cedula}</StyledTableCell>
+						<StyledTableCell align="left">{row.nombre}</StyledTableCell>
+						<StyledTableCell align="left">{row.apellidos}</StyledTableCell>
+						<StyledTableCell align="left">{row.fecha_nacimiento}</StyledTableCell>
+						<StyledTableCell align="left">{row.celular}</StyledTableCell>
+						<StyledTableCell align="left">{row.ocupacion}</StyledTableCell>
+						<StyledTableCell align="left">{row.direccion}</StyledTableCell>
+						<StyledTableCell align="left">{row.nombre_ciudad}</StyledTableCell>
+						</StyledTableRow>
+					))}
+					</TableBody>
+				</Table>
+				</TableContainer>
+			</div>
+		</div>
 		
-
 		<Modal
 			aria-labelledby="spring-modal-title"
 			aria-describedby="spring-modal-description"
@@ -244,7 +244,7 @@ export default function CustomizedTables({allData}) {
 				</div>
 			
 		</Modal>
-	</>
+	</div>	 
   );
 };
 

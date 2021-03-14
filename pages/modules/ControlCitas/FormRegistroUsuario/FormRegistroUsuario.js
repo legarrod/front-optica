@@ -61,91 +61,93 @@ export default function FormRegistroUsuario({
   }, [dataResponse]);
 
   return (
-    <form
-      className="flex flex-wrap justify-center"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="flex flex-wrap justify-center">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="nombre"
-          defaultValue={dataUser?.nombre}
-          placeholder="Nombre"
-          ref={register}
-        />
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="apellidos"
-          defaultValue={dataUser?.apellidos}
-          placeholder="Apellidos"
-          ref={register}
-        />
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="cedula"
-          placeholder="Cedula"
-          defaultValue={cedulaPaciente}
-          ref={register}
-        />
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="fecha_nacimiento"
-          defaultValue={dataUser?.fecha_nacimiento}
-          placeholder="Año/Mes/Día"
-          ref={register}
-        />
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="celular"
-          defaultValue={dataUser?.celular}
-          placeholder="Celular"
-          ref={register}
-        />
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="direccion"
-          defaultValue={dataUser?.direccion}
-          placeholder="Dirección"
-          ref={register}
-        />
-
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel htmlFor="outlined-age-native-simple">Ciudad</InputLabel>
-          <Controller
-            as={
-              <Select
-                native
-                name="ciudad"
-                ref={register}
-                value={dataUser?.ciudad}
-                label="Ciudad"
-                inputProps={{
-                  ciudad: "ciudad",
-                  id: "outlined-age-native-simple",
-                }}
-              >
-                <option aria-label="None" value="" />
-                <option value={1}>Armenia</option>
-                <option value={2}>Tebaida</option>
-              </Select>
-            }
-            name="ciudad"
-            control={control}
-            defaultValue={1}
+    
+      <form
+      className="flex flex-col w-9/12 mx-16 md:mx-0"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+     
+          <input
+            className="border-2 border-gray-400 rounded-md m-3 text-xl"
+            name="nombre"
+            defaultValue={dataUser?.nombre}
+            placeholder="Nombre"
+            ref={register}
           />
-        </FormControl>
+          <input
+            className="border-2 border-gray-400 rounded-md m-3 text-xl"
+            name="apellidos"
+            defaultValue={dataUser?.apellidos}
+            placeholder="Apellidos"
+            ref={register}
+          />
+          <input
+            className="border-2 border-gray-400 rounded-md m-3 text-xl"
+            name="cedula"
+            placeholder="Cedula"
+            defaultValue={cedulaPaciente}
+            ref={register}
+          />
+          <input
+            className="border-2 border-gray-400 rounded-md m-3 text-xl"
+            name="fecha_nacimiento"
+            defaultValue={dataUser?.fecha_nacimiento}
+            placeholder="Año/Mes/Día"
+            ref={register}
+          />
+          <input
+            className="border-2 border-gray-400 rounded-md m-3 text-xl"
+            name="celular"
+            defaultValue={dataUser?.celular}
+            placeholder="Celular"
+            ref={register}
+          />
+          <input
+            className="border-2 border-gray-400 rounded-md m-3 text-xl"
+            name="direccion"
+            defaultValue={dataUser?.direccion}
+            placeholder="Dirección"
+            ref={register}
+          />
+
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel htmlFor="outlined-age-native-simple">Ciudad</InputLabel>
+            <Controller
+              as={
+                <Select
+                  native
+                  name="ciudad"
+                  ref={register}
+                  value={dataUser?.ciudad}
+                  label="Ciudad"
+                  inputProps={{
+                    ciudad: "ciudad",
+                    id: "outlined-age-native-simple",
+                  }}
+                >
+                  <option aria-label="None" value="" />
+                  <option value={1}>Armenia</option>
+                  <option value={2}>Tebaida</option>
+                </Select>
+              }
+              name="ciudad"
+              control={control}
+              defaultValue={1}
+            />
+          </FormControl>
+          <input
+            className="border-2 border-gray-400 rounded-md m-3 text-xl"
+            name="ocupacion"
+            defaultValue={dataUser?.ocupacion}
+            placeholder="Ocupación"
+            ref={register}
+          />
+     
         <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="ocupacion"
-          defaultValue={dataUser?.ocupacion}
-          placeholder="Ocupación"
-          ref={register}
+          className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
+          type="submit"
         />
-      </div>
-      <input
-        className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
-        type="submit"
-      />
-    </form>
+      </form>
+ 
   );
 }

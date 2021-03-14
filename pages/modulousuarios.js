@@ -20,7 +20,12 @@ export default function modulousuarios() {
 	return (
 		<div>
 			<MenuNav />
-			<ModuloUsuarios allData={allData}/>
+			<div className="mt-10">
+          	<div className="px-3 sm:px-10 md:px-20">
+		  	<ModuloUsuarios allData={allData}/>
+          </div>
+		  </div>
+     
 		</div>
 	)
 }

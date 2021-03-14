@@ -39,6 +39,12 @@ export default function CardIndex() {
 			img: "https://cdn.pixabay.com/photo/2019/05/15/20/49/sunglasses-4205915_960_720.jpg",
 			path: "/productos"
 		},
+		{
+			title: "Registro de abonos",
+			description: "Aca encontramos un listado de todos los pacientes con informacion de abonos",
+			img: "https://cdn.pixabay.com/photo/2015/01/27/20/40/notebook-614213_960_720.jpg",
+			path: "/contabilidad"
+		},
 	]
   const classes = useStyles();
 

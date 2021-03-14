@@ -8,20 +8,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditIcon from '@material-ui/icons/Edit';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
+import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import Button from "@material-ui/core/Button";
 import swal from "sweetalert";
+import Modal from "@material-ui/core/Modal";
 import { useSpring, animated } from "react-spring/web.cjs";
-import FormRegistroUsuario from "../../ControlCitas/FormRegistroUsuario/FormRegistroUsuario";
-import { getData, post } from '../../../api/AsyncHttpRequest';
-import FormCrearproducto from "../FormCrearProducto";
 import axios from "axios";
+import Backdrop from "@material-ui/core/Backdrop";
 import { useForm } from "react-hook-form";
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -84,7 +78,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   });
 
 
-export default function CustomizedTableProducto() {
+export default function TablaClientesAbonos() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState();
@@ -94,16 +88,53 @@ export default function CustomizedTableProducto() {
   const [allProducts, setAllProducts] = useState();
   const [obtenerDataImg, setObtenerDataImg] = useState(null);
   const [codigoProducto, setCodigoProducto] = useState();
-  const { register, handleSubmit } = useForm();
   const [files, setFiles] = useState(null);
   const [linkFoto, setLinkFoto] = useState();
-  const [viewUpdateInfo, setViewUpdateInfo] = useState(false);
-
+  const { register, handleSubmit } = useForm();
+ 
+  let usuarios =[
+	{
+		cc: 123,
+		nombre: 'Juan Cardona',
+		estado: 'Pendiente',
+		pendiente: 200000,
+		totalDeuda: 400000,
+		totalAbonos: 200000,
+		abonos: [{fecha: '2021-30-01', abono: 20000}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 50000}, {fecha: '2021-29-10', abono: 30000}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 110000}, {fecha: '2021-29-10', abono: 85000}]
+	},
+	{
+		cc: 124,
+		nombre: 'Jorge Perez',
+		estado: 'Pendiente',
+		pendiente: 150000,
+		totalDeuda: 500000,
+		totalAbonos: 350000,
+		abonos: [{fecha: '2021-30-01', abono: 50000}, {fecha: '2021-30-05', abono: 80000}]
+	},
+	{
+		cc: 125,
+		nombre: 'Camila Henao',
+		estado: 'Pendiente',
+		pendiente: 200000,
+		totalDeuda: 320000,
+		totalAbonos: 120000,
+		abonos: [{fecha: '2021-30-01', abono: 70000}, {fecha: '2021-30-05', abono: 120000}, {fecha: '2021-30-02', abono: 70000}, {fecha: '2021-29-10', abono: 30000}, {fecha: '2021-30-02', abono: 60000}, {fecha: '2021-29-10', abono: 50000}]
+	},
+	{
+		cc: 126,
+		nombre: 'Rocio Cardona',
+		estado: 'Pendiente',
+		pendiente: 100000,
+		totalDeuda: 650000,
+		totalAbonos: 500000,
+		abonos: [{fecha: '2021-30-01', abono: 50000}]
+	},
+]
   const handleClose = () => {
 	  setOpen(false);
 	};
  
-  const consultarProducto = () => {
+  const crearAbono = () => {
           setOpen(true)
   };
 
@@ -112,8 +143,8 @@ export default function CustomizedTableProducto() {
 		try {
 			const data = await axios.get(urlGetProducts, setAllProducts);
 			if (data.data) {
-			setAllProducts(data.data);
-			
+			//setAllProducts(data.data);
+			setAllProducts(usuarios)
 			}
 		} catch (error) {
 			console.log(error);
@@ -153,7 +184,7 @@ export default function CustomizedTableProducto() {
 	}
 
 	const actualizarProducto =(value)=> {
-		setViewUpdateInfo(true)
+		
 		setData(value);
 		setCodigoProducto(value.idproducto);
 		setLinkFoto(value.imagen);
@@ -184,56 +215,44 @@ export default function CustomizedTableProducto() {
 		getProduct(urlGetProducts, setAllProducts)
 	}  
 	const onSubmit = (data) => {
-		console.log(files);
-		let dataExtra = {idproducto: parseInt(codigoProducto), imagen: files !== null ? files : linkFoto}
-		let newdata = Object.assign(data, files, dataExtra);
-		putProducto(urlUpdateProducts, newdata)
+		console.log(data);
+		// let dataExtra = {idproducto: parseInt(codigoProducto), imagen: files !== null ? files : linkFoto}
+		// let newdata = Object.assign(data, files, dataExtra);
+		// putProducto(urlUpdateProducts, newdata)
 	};
 
 	useEffect(() => {
 		getProduct(urlGetProducts, setAllProducts)
 		refresData();
 	}, [])
+	// INSERT INTO `detalle_factura` (`id_detalle`, `id_factura`, `id_producto`, `cantidad`, `valor`) VALUES ('01', '1', '14', '1', '1000'), ('02', '1', '29', '1', '2000');
 
   return (
 	< div className="flex flex-col md:flex-row w-full">
 			<div className="w-full px-8">
-				<div className="m-0 mb-5 flex flex-wrap justify-end">
-						<Button
-							variant="contained"
-							color="primary"
-							size="large"
-							className="rounded-sm"
-							onClick={() => consultarProducto()}
-							startIcon={<AddCircleOutlineIcon />}
-						>
-							Crear productos
-						</Button>
-				</div>
+				
 				<div className="overflow-y-auto w-full mx-3 h-5/6">
 						<TableContainer component={Paper}>
 							<Table aria-label="customized table">
 								<TableHead>
 								<TableRow>
-								<StyledTableCell align="center">Codigo</StyledTableCell>
+									<StyledTableCell align="center">Ver</StyledTableCell>
+									<StyledTableCell align="center">Cedula</StyledTableCell>
 									<StyledTableCell align="center">Nombre</StyledTableCell>
-									<StyledTableCell align="center">Descripcio</StyledTableCell>
-									<StyledTableCell align="center">Foto</StyledTableCell>
+									<StyledTableCell align="left">Estado</StyledTableCell>
 								</TableRow>
 								</TableHead>
 								<TableBody>
 								{allProducts?.map((row) => (
 									<StyledTableRow key={row.id}>
 									<StyledTableCell align="center">
-										<div className="flex flex-row">
-										<button><EditIcon onClick={() => actualizarProducto(row)}/></button>
-										<button><DeleteForeverIcon onClick={() => eliminarProducto(row)}/></button>
 									
-										</div>
+										<button><RemoveRedEyeIcon onClick={() => actualizarProducto(row)}/></button>
+									
 									</StyledTableCell>
-									<StyledTableCell align="left">{row.nombre}</StyledTableCell>
-									<StyledTableCell align="left">{row.descripcion}</StyledTableCell>
-									<StyledTableCell align="left"><img className="h-14 w-auto rounded-full" src={row.imagen} onClick={()=>handlerViewImage(row)}/></StyledTableCell>
+									<StyledTableCell align="center">{row.cc}</StyledTableCell>
+									<StyledTableCell align="center">{row.nombre}</StyledTableCell>
+									<StyledTableCell align="left"><p className='bg-red-400 p-2 w-40 text-center rounded-lg'>{row.estado}</p></StyledTableCell>
 									</StyledTableRow>
 								))} 
 								</TableBody>
@@ -248,53 +267,61 @@ export default function CustomizedTableProducto() {
 				</div>
 			}
 
-		{
-			viewUpdateInfo && <div className="mx-5 flex flex-col w-full md:w-2/5 mt-10 md:mt-0">
-			<p className="text-2xl w-full ">Actualizar producto</p>
-			<form
-				className="flex flex-col w-9/12 mx-16 md:mx-0"
-				onSubmit={handleSubmit(onSubmit)}
-				>
-			
-				<input
-					className="border-2 border-gray-400 rounded-md m-3 text-xl"
-					name="codigo"
-					disabled='true'
-					placeholder={data?.codigo}
-					ref={register}
-					/>
-					<input
-					className="border-2 border-gray-400 rounded-md m-3 text-xl"
-					name="nombre"
-					placeholder={data?.nombre}
-					ref={register}
-					/>
-					<input
-					className="border-2 border-gray-400 rounded-md m-3 text-xl"
-					name="descripcion"
-					placeholder={data?.descripcion}
-					ref={register}
-					/>
-				<div>
-						<label htmlFor="upload-button">
-						<CloudDownloadIcon className="ml-10" style={{ fontSize: 50 }}/>
-						</label>
-						<input type="file" id="upload-button" style={{ display: 'none' }} onChange={(e)=>convertirBase(e.target.files)} />
-						<p className="ml-10 text-sm">Upload photo</p>
-						<img className="h-44" src={data?.imagen} />					
+			<div className="mx-5 flex flex-col w-full md:w-2/5 mt-10 md:mt-0">
+			<p className="text-2xl w-full text-center">Total Abonos</p>
+			<div className="m-0 mb-5 flex flex-wrap justify-end">
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							className="rounded-sm"
+							onClick={() => crearAbono()}
+							startIcon={<AddCircleOutlineIcon />}
+						>
+							Crear abono
+						</Button>
 				</div>
-			
-				
-				<input
-					className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
-					type="submit"
-				/>
-			</form>
+
+			<div className='flex flex-col'>
+				<div className='flex flex-row'>
+					<p className='text-base font-semibold'>Nombre:</p>
+					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.nombre}</p>
+				</div>
+				<div className='flex flex-row'>
+					<p className='text-base font-semibold'>Total deuda:</p>
+					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.totalDeuda}</p>
+				</div>
+				<div className='flex flex-row'>
+					<p className='text-base font-semibold'>Pendiente por pagar:</p>
+					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.pendiente}</p>
+				</div>
+				<div className='flex flex-row'>
+					<p className='text-base font-semibold'>Total abonado:</p>
+					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.totalDeuda}</p>
+				</div>
+				<div className="overflow-y-auto w-full mx-3 h-60">
+					<TableContainer component={Paper}>
+						<Table className={classes.table} size="small" aria-label="a dense table">
+							<TableHead>
+							<TableRow>
+								<StyledTableCell align="center">Fecha</StyledTableCell>
+								<StyledTableCell align="center">Abono</StyledTableCell>
+							</TableRow>
+							</TableHead>
+							<TableBody>
+							{data?.abonos?.map((row, index) => (
+								<StyledTableRow key={index}>
+									<StyledTableCell align="center">{row.fecha}</StyledTableCell>
+									<StyledTableCell align="center">{row.abono}</StyledTableCell>
+								</StyledTableRow>
+							))} 
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</div>
+			</div>
 
 		</div>
-
-		}
-		
 		<Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
@@ -309,18 +336,34 @@ export default function CustomizedTableProducto() {
       >
         <Fade in={open}>
           <div
-            className={`${classes.paper} mx-2 md:mx-20 flex flex-col justify-center`}
+            className={`${classes.paper} mx-2 md:mx-20 flex flex-col px-20`}
           >
-            <h2 className="text-3xl" id="titulo-registro">
-              Registrar Producto
+            <h2 className="text-3xl text-center" id="titulo-registro">
+              Registrar abono
             </h2>
 			<div className="">
-				<FormCrearproducto setOpen={setOpen} refresData={refresData}/>
+			<form
+				className="flex flex-col w-9/12 mx-16 "
+				onSubmit={handleSubmit(onSubmit)}
+				>
+			
+				<input
+					className="border-2 border-gray-400 rounded-md m-3 text-xl pl-2"
+					name="abono"
+					placeholder='Valor a registrar'
+					ref={register}
+					/>				
+				<input
+					className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
+					type="submit"
+				/>
+			</form>
 			</div>
             
           </div>
         </Fade>
       </Modal>
+		
 	</div>
   );
 };

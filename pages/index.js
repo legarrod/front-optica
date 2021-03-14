@@ -12,7 +12,10 @@ export default function Home() {
       </Head>
       <MenuNav />
       <main className={styles.main}>
-        <CardIndex />
+        <div className="px-2 md:px-20">
+          <CardIndex />
+        </div>
+        
       </main>
 
       <footer className={styles.footer}></footer>
