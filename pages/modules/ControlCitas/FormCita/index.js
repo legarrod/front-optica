@@ -294,11 +294,11 @@ console.log(informacionCita);
         </div>
 
         <div className="flex flex-wrap  md:flex-row w-full justify-center md:justify-end">
-        <select className="border-2 p-2 bg-white border-gray-400 rounded-md text-xl" name="fk_id_estado" ref={register}>
-          <option value={0}>Re-abrir</option>
-          <option value={1}>Consultado</option>
-          <option value={2}>Cancelar</option>
-        </select>
+          <select className="border-2 p-2 bg-white border-gray-400 rounded-md text-xl" name="fk_id_estado" ref={register}>
+            <option value={0}>Re-abrir</option>
+            <option value={1}>Consultado</option>
+            <option value={2}>Cancelar</option>
+          </select>
           <div className="mx-5 my-2">
             <Button
               variant="contained"

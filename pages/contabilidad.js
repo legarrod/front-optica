@@ -14,8 +14,21 @@ export default function Productos() {
 	return (
 		<div>
         <MenuNav />
-        <div className="mt-10">
+        <div className="mt-15">
+       
           <div className="px-3 sm:px-10 md:px-20">
+          <div className="m-0 mb-5 flex flex-wrap justify-end">
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							className="rounded-sm"
+							onClick={() => crearAbono()}
+							startIcon={<AddCircleOutlineIcon />}
+						>
+							Generar factura
+						</Button>
+				</div>
             <TablaClientesAbonos/>
           </div>
         
