@@ -62,7 +62,7 @@ export default function TablaCitas({data}) {
 				</TableRow>
 				</TableHead>
 				<TableBody>
-				{data.length > 0 && data?.map((row, index) => (
+				{data && data?.map((row, index) => (
 					<StyledTableRow key={index}>
 						<StyledTableCell align="left"><p className=''> {`${row.nombre} ${row.apellidos}`}</p></StyledTableCell>
 						<StyledTableCell align="center">{row.fecha_cita}</StyledTableCell>

@@ -169,7 +169,7 @@ const resetearFecha = ()=>{
           
         </div>
         {/* <CardCitas data={data} allData={allData}/> */}
-        <TablaCitas data={data} />
+        <TablaCitas data={data && data} />
       </div>
       <Modal
         aria-labelledby="spring-modal-title"

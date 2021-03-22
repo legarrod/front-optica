@@ -294,7 +294,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 			</div>
 			}
 			{
-				viewFactura && <Factura facturaPersona={facturaPersona} detalleFactura={detalleFactura}/>
+				viewFactura && <Factura facturaPersona={facturaPersona && facturaPersona[0]} detalleFactura={detalleFactura}/>
 			// 	<div id='factura' className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
 			// 	 <div className="m-0 mb-5 flex flex-wrap justify-end">
 			// 		<Button

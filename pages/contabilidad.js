@@ -7,7 +7,7 @@ import Link from 'next/link' ;
 import axios from "axios";
 import CachedIcon from '@material-ui/icons/Cached';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
-import {ExportCSV} from './modules/Contabilidad/ExportCSV';
+import ExportCSV from './modules/Contabilidad/ExportCSV';
 
 export default function Productos() {
 	const urlObtenerFacturaPersona = `${process.env.API_OBTENER_FACTURA_PERSONA}`;

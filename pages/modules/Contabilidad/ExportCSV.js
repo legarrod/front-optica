@@ -4,8 +4,7 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import axios from "axios";
 
-
-export const ExportCSV = ({fileName}) => {
+export default function ExportCSV({fileName}){
 
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
@@ -36,11 +35,11 @@ export const ExportCSV = ({fileName}) => {
         const data = new Blob([excelBuffer], {type: fileType});
         FileSaver.saveAs(data, fileName + fileExtension);
     }
-useEffect(() => {
-	if (response) {
-		exportToCSV(csvData, fileName)
-	}	
-}, [response, csvData])
+	useEffect(() => {
+		if (response) {
+			exportToCSV(csvData, fileName)
+		}	
+	}, [response, csvData])
     return (
 		<Button
 		  variant="contained"

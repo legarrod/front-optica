@@ -15,7 +15,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import getDate from '../../../utils/utils';
-import getIdFactura from '../../../utils/getIdFactura';
 import { useRouter } from 'next/router';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -30,7 +29,7 @@ const useStyles = makeStyles({
 		border: '2px solid #000',
 	  },
   });
-  
+
   function createData(name, calories, fat, carbs, protein) {
 	return { name, calories, fat, carbs, protein };
   }
@@ -45,6 +44,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   const { register, handleSubmit } = useForm();
   const urlGetPacientes = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const urlPosTFactura = `${process.env.API_CREAR_FACTURA}`;
+  const url = `${process.env.API_OBTENER_ID_FACTURA}`;
   const urlGetProductos = `${process.env.API_OBTENER_TODOS_LOS_PRODUCTOS}`;
   const urlPostDetalleFactura = `${process.env.API_CREAR_DETALLE_FACTURA}`;
   const [listadoProductos, setListadoProductos] = useState([]);
@@ -54,7 +54,6 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   const [selectedPaciente, setSelectedPaciente] = useState({});
   const [price, setPrice] =useState();
   const [cantidad, setCantidad] =useState(1);
-  const [dataProductDetail, setDataProductDetail] =useState([]);
   const [invoiceData, setInvoiceData]=useState({});
   const [total, setTotal]=useState(0);
   const [detailInvoice, setDetailInvoice]=useState([]);
@@ -62,16 +61,13 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   const [facturaPendiente, setFacturaPendiente] = useState(false);
   const classes = useStyles();
   const [idFactura, setIdFactura] =useState(0);
-  const [numeroFac, setNumeroFac]=useState('');
-  const [dataSubmit, setDataSubmit] =useState();
+  const [numeroFac, setNumeroFac]=useState();
   const [copyDetalle, setcopyDetalle] =useState([]);
   const [dataResponse, setDataResponse]=useState();
   const [facturaOk, setFacturaOk] =useState();
-  const [dataResponseDetalle, setDataResponseDetalle]=useState();
   const [sinInternet, setSinInternet] =useState(false);
-  const [contador, setContador] = useState(0);
 
-  
+
  const getProductos = async (urlGetProductos, setListadoProductos) => {
 	try {
 	  const { data } = await axios.get(urlGetProductos);
@@ -93,15 +89,11 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
       console.log(error);
     }
   };
-  const postDetalle = async (url, formData = null, setDataResponseDetalle = null) => {
-	  
+  const postDetalle = async (url, formData = null) => {
+
     try {
       const data = await axios.post(url, formData);
       if (data.data.data === true) {
-		
-        setDataResponseDetalle(data.data);
-		
-		
 		localStorage.removeItem('copyDetalle')
       }
     } catch (error) {
@@ -111,12 +103,12 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
 
 const calculateTotal =(price)=>{
 	let subTotal = total + parseInt(price);
-		setTotal(subTotal);	
+		setTotal(subTotal);
 }
 
 const createDetail =(data)=>{
 	setDetailInvoice([
-		...detailInvoice, 
+		...detailInvoice,
 		data
 	])
 }
@@ -131,12 +123,11 @@ const createDetail =(data)=>{
 			estado_factura: estado,
 			observaciones: data.observaciones,
 		}
-		setDataSubmit(newData)
 		setcopyDetalle(detailInvoice.map(item => ({id_factura: idFactura, id_producto: parseInt(item.id), cantidad: parseInt(item.cantidad), valor_producto: parseInt(item.price)})));
 		localStorage.setItem('copyDetalle', JSON.stringify(copyDetalle))
 		localStorage.setItem('respaldoFactura', JSON.stringify(newData))
 		localStorage.setItem('facturaSinGuardar', true)
-		postFactura(urlPosTFactura, newData, setDataResponse)		
+		postFactura(urlPosTFactura, newData, setDataResponse)
 	};
 
 	const handleTextarea = (e)=>{
@@ -162,7 +153,7 @@ const createDetail =(data)=>{
 	}
 	const handlerAddProductDetail =(e)=>{
 		let detail = e.target.value
-		
+
 		//setDataProductDetail(Object.assign(selectedProduct, {price: price}))
 		createDetail(Object.assign(selectedProduct, {cantidad: cantidad, price: price}))
 		calculateTotal(price * cantidad);
@@ -178,14 +169,24 @@ const createDetail =(data)=>{
 		let data = detailInvoice.map(item => ({id_factura: idFactura, id_producto: parseInt(item.id), cantidad: parseInt(item.cantidad), valor_producto: parseInt(item.price)}))
 		//for (const i  of copyDetalle) {
 			//console.log(data.length);
-			
+
 		for (const i  of data) {
 			num = num +1;
-			postDetalle(urlPostDetalleFactura, i, setDataResponseDetalle)
-		}			
+			postDetalle(urlPostDetalleFactura, i)
+		}
 		if (num === data.length) {
 			router.push('/contabilidad');
-		}		
+		}
+	};
+
+	const getIdFactura = async (url, setIdFactura, setFacturaOk)=>{
+		try {
+		  const { data } = await axios.get(url);
+		  setIdFactura(data.data[0].id)
+		  setFacturaOk(true);
+		} catch (error) {
+		  console.log(error.message);
+		}  
 	};
 
 	const validacionesStatus =(dataResponse)=>{
@@ -197,7 +198,10 @@ const createDetail =(data)=>{
 		localStorage.removeItem('dataDetallefactura');
 		localStorage.removeItem('facturaSinGuardar');
 		localStorage.removeItem('respaldoFactura');
-		getIdFactura(numeroFac, setIdFactura, setFacturaOk);		
+		getIdFactura(`${url}${numFactura}`, setIdFactura, setFacturaOk);
+		}
+		if (facturaOk) {
+			saveDetalleFactura()
 		}
 	}
 
@@ -206,16 +210,12 @@ useEffect(() => {
 		getProductos(urlGetProductos, setListadoProductos);
 		getProductos(urlGetPacientes, setListadoPacientes);
 		validacionesStatus(dataResponse);
-		
-	if (facturaOk) {
-		saveDetalleFactura()
-	}
 	} else {
 		setSinInternet(true)
 		//router.push('/')
 	}
-	
-}, [urlGetProductos, setListadoProductos, dataResponse, facturaOk])
+
+}, [urlGetProductos, setListadoProductos, dataResponse])
 
   return (
 	  <div className="flex flex-col md:flex-row">
@@ -248,8 +248,8 @@ useEffect(() => {
 					value={data?.valor_factura}
 					ref={register}
 				/> */}
-				<textarea className="border-b-4 border-2 w-full sm:w-80 border-gray-400 rounded-md my-3 sm:m-3  sm:mx-3 px-2 h-16 shadow-lg" 
-					name="observaciones" 
+				<textarea className="border-b-4 border-2 w-full sm:w-80 border-gray-400 rounded-md my-3 sm:m-3  sm:mx-3 px-2 h-16 shadow-lg"
+					name="observaciones"
 					placeholder="Observaciones"
 					onChange={(e)=> handleTextarea(e)}
 					ref={register}/>
@@ -259,9 +259,9 @@ useEffect(() => {
 					<option value={1}>Pagada</option>
 					<option value={2}>Cancelada</option>
 				</select>
-				
+
 			</div>
-			
+
 			</div>
 
 			<div>
@@ -293,7 +293,7 @@ useEffect(() => {
 											<AddCircleIcon className="" style={{fontSize: 30}} onClick={(e)=>handlerAddProductDetail(e)}/>
 										</div>
 			}
-			
+
 			</div>
 			{
 				facturaPendiente === false && !sinInternet ? <div className='w-full flex '>
@@ -327,7 +327,7 @@ useEffect(() => {
 				<div className="flex flex-row mx-5">
 					<p className="font-semibold text-lg">No. Factura:</p>
 					<p className="text-lg ml-3">{invoiceData.numero_factura}</p>
-				</div>				
+				</div>
 			</div>
 			<div className='mt-10'>
 			<div style={{ height: 400, width: '100%' }}>

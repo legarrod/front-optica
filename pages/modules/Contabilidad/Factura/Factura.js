@@ -70,40 +70,43 @@ export default function Factura({facturaPersona, detalleFactura}) {
 					
 				</div>
 				<div className='flex flex-col mb-10'>
-					<div className="flex flex-row justify-between">
-						<div className='mx-1'>
-							<div className='flex flex-row'>
-							<p className='text-sm font-semibold w-16'>Nombre:</p>
-							<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.paciente}</p>
+				{
+						facturaPersona && <div className="flex flex-row justify-between">
+							<div className='mx-1'>
+								<div className='flex flex-row'>
+								<p className='text-sm font-semibold w-16'>Nombre:</p>
+								<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona?.paciente}</p>
+								</div>
+								<div className='flex flex-row'>
+									<p className='text-sm font-semibold w-16'>Cedula:</p>
+									<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona?.cedula}</p>
+								</div>
+								<div className='flex flex-row'>
+									<p className='text-sm font-semibold w-16'>Direccion:</p>
+									<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona?.direccion}</p>
+								</div>
+								<div className='flex flex-row'>
+									<p className='text-sm font-semibold w-16'>Telefono:</p>
+									<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona?.celular}</p>
+								</div>
 							</div>
-							<div className='flex flex-row'>
-								<p className='text-sm font-semibold w-16'>Cedula:</p>
-								<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.cedula}</p>
-							</div>
-							<div className='flex flex-row'>
-								<p className='text-sm font-semibold w-16'>Direccion:</p>
-								<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.direccion}</p>
-							</div>
-							<div className='flex flex-row'>
-								<p className='text-sm font-semibold w-16'>Telefono:</p>
-								<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.celular}</p>
+							<div>
+								<div className='flex flex-row'>
+									<p className='text-sm font-semibold w-12'>Factura:</p>
+									<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona?.numero_factura}</p>
+								</div>
+								<div className='flex flex-row'>
+									<p className='text-sm font-semibold w-12'>Fecha:</p>
+									<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona?.fecha_creacion}</p>
+								</div>
+								<div className='flex flex-row'>
+									<p className='text-sm font-semibold w-12'>Nota:</p>
+									<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona?.nota ? facturaPersona?.nota : "No hay nota para esta factura"}</p>
+								</div>
 							</div>
 						</div>
-						<div>
-							<div className='flex flex-row'>
-								<p className='text-sm font-semibold w-12'>Factura:</p>
-								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.numero_factura}</p>
-							</div>
-							<div className='flex flex-row'>
-								<p className='text-sm font-semibold w-12'>Fecha:</p>
-								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.fecha_creacion}</p>
-							</div>
-							<div className='flex flex-row'>
-								<p className='text-sm font-semibold w-12'>Nota:</p>
-								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.nota ? facturaPersona[0]?.nota : "No hay nota para esta factura"}</p>
-							</div>
-						</div>
-					</div>
+						}
+					
 					<div className="overflow-y-auto ml-0 pr-2 w-full mx-3 h-60 mt-5">
 						<TableContainer component={Paper}>
 							<Table className={classes.table} size="small" aria-label="a dense table">
@@ -115,7 +118,7 @@ export default function Factura({facturaPersona, detalleFactura}) {
 								</TableRow>
 								</TableHead>
 								<TableBody>
-								{detalleFactura.length > 0 && detalleFactura?.map((row, index) => (
+								{detalleFactura && detalleFactura?.map((row, index) => (
 									<StyledTableRow key={index}>
 										<StyledTableCell align="center"><p className='w-20'>{row.nombre}</p></StyledTableCell>
 										<StyledTableCell align="center">$ {row.cantidad}</StyledTableCell>
@@ -128,7 +131,7 @@ export default function Factura({facturaPersona, detalleFactura}) {
 					</div>
 					<div className='flex flex-row w-full justify-end'>
 						<p className='text-base font-semibold'>Total:</p>
-						<p className="text-base font-semibold mr-4 ml-3 text-gray-700">{facturaPersona[0]?.valor_total ? `$ ` + facturaPersona[0]?.valor_total : `$ 0` }</p>
+						<p className="text-base font-semibold mr-4 ml-3 text-gray-700">{facturaPersona?.valor_total ? `$ ` + facturaPersona?.valor_total : `$ 0` }</p>
 					</div>
 				</div>
 			</div>
