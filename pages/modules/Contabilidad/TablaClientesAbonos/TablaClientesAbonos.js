@@ -16,6 +16,10 @@ import { useSpring, animated } from "react-spring/web.cjs";
 import axios from "axios";
 import Backdrop from "@material-ui/core/Backdrop";
 import { useForm } from "react-hook-form";
+import getDate from "../../../utils/utils";
+import LocalPrintshopIcon from '@material-ui/icons/LocalPrintshop';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import Factura from "../Factura/Factura"
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -78,160 +82,117 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   });
 
 
-export default function TablaClientesAbonos() {
+export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
+	let hoy = new Date();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState();
-  const urlGetProducts = `${process.env.API_OBTENER_TODOS_LOS_PRODUCTOS}`;
-  const urlUpdateProducts = `${process.env.API_ACTUALIZAR_TODOS_LOS_PRODUCTOS}`;
-  const urlDeleteProdcto = `${process.env.API_ELIMINAR_PRODUCTO}`;
-  const [allProducts, setAllProducts] = useState();
-  const [obtenerDataImg, setObtenerDataImg] = useState(null);
-  const [codigoProducto, setCodigoProducto] = useState();
-  const [files, setFiles] = useState(null);
-  const [linkFoto, setLinkFoto] = useState();
+  const [dataInfo, setDataInfo] = useState();
+  const urlAgregarAbono = `${process.env.API_REGISTRAR_ABONO}`;
+  const urlObtenerFacturas = `${process.env.API_OBTENER_FACTURAS}`;
+  const urlObtenerFacturaPersona = `${process.env.API_OBTENER_FACTURA_PERSONA}`;
+  const urlObtenerDetallePorFactura = `${process.env.API_OBTENER_DETALLER_POR_FACTURA}`;
+  const urlObtenerAbonosFactura = `${process.env.API_OBTENER_ABONOS_POR_FACTURA}`;
+  const [dataResponse, setDataResponse] = useState();
+  const [allAbonos, setAllAbonos] = useState();
+  const [facturaPersona, setFacturaPersona] = useState({});
+  const [detalleFactura, setDetalleFactura] = useState([]);
   const { register, handleSubmit } = useForm();
- 
-  let usuarios =[
-	{
-		cc: 123,
-		nombre: 'Juan Cardona',
-		estado: 'Pendiente',
-		pendiente: 200000,
-		totalDeuda: 400000,
-		totalAbonos: 200000,
-		abonos: [{fecha: '2021-30-01', abono: 20000, nota: 'Aca se pone una nota de prueba',}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 50000}, {fecha: '2021-29-10', abono: 30000, nota: 'Aca se pone una nota de prueba'}, {fecha: '2021-30-05', abono: 20000}, {fecha: '2021-30-02', abono: 110000}, {fecha: '2021-29-10', abono: 85000}]
-	},
-	{
-		cc: 124,
-		nombre: 'Jorge Perez',
-		estado: 'Pendiente',
-		pendiente: 150000,
-		totalDeuda: 500000,
-		totalAbonos: 350000,
-		abonos: [{fecha: '2021-30-01', abono: 50000, nota: 'Aca se pone una nota de prueba',}, {fecha: '2021-30-05', abono: 80000}]
-	},
-	{
-		cc: 125,
-		nombre: 'Camila Henao',
-		estado: 'Pendiente',
-		pendiente: 200000,
-		totalDeuda: 320000,
-		totalAbonos: 120000,
-		abonos: [{fecha: '2021-30-01', abono: 70000, nota: 'Aca se pone una nota de prueba',}, {fecha: '2021-30-05', abono: 120000}, {fecha: '2021-30-02', abono: 70000}, {fecha: '2021-29-10', abono: 30000, nota: 'Aca se pone una nota de prueba'}, {fecha: '2021-30-02', abono: 60000}, {fecha: '2021-29-10', abono: 50000}]
-	},
-	{
-		cc: 126,
-		nombre: 'Rocio Cardona',
-		estado: 'Pendiente',
-		pendiente: 100000,
-		totalDeuda: 650000,
-		totalAbonos: 500000,
-		abonos: [{fecha: '2021-30-01', abono: 50000, nota: 'Aca se pone una nota de prueba',}]
-	},
-]
+ const [temConsultaAbono, setTemConsultaAbono] = useState();
+ const [viewDetalleAbonos, setViewDetalleAbonos] = useState(false);
+ const [viewFactura, setViewFactura] = useState(false);
+ const [cedulaTemp, setCedulaTemp] =useState();
+  
   const handleClose = () => {
 	  setOpen(false);
 	};
  
-  const crearAbono = () => {
-          setOpen(true)
-  };
-
-
-  	const getProduct = async (urlGetProducts, setAllProducts = null) => {
+	const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
 		try {
-			const data = await axios.get(urlGetProducts, setAllProducts);
-			if (data.data) {
-			//setAllProducts(data.data);
-			setAllProducts(usuarios)
-			}
-		} catch (error) {
-			console.log(error);
-		}
-
-	}
-
-	const remove=async(url)=> {
-		try {
-			const data = await axios.delete(url);
-			if (data.data ==="eliminado correctamente") {
-				getProduct(urlGetProducts, setAllProducts);	  
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	}
-
-	const convertirBase =(archivos)=>{
-		Array.from(archivos).forEach( archivos => {
-			let reader = new FileReader();
-			reader.readAsDataURL(archivos);
-			reader.onload=function () {
-				let aux =[];
-				var base64 = reader.result;
-				aux=base64.split(',');
-				setFiles({	
-					imagen: aux[1],
-					})
-					// post(urlImg, {	
-					// 	idworker:idWorker,
-					// 	image: aux[1],
-					// 	activo: 1
-					// 	}, success)
-			}
-		})
-	}
-
-	const actualizarProducto =(value)=> {
-		
-		setData(value);
-		setCodigoProducto(value.idproducto);
-		setLinkFoto(value.imagen);
-		setObtenerDataImg(null)
-	};
-	const eliminarProducto =(value)=> {
-		remove(`${urlDeleteProdcto}id=${value.idproducto}`)
-	};
-
-	const putProducto = async(url, params)=>{
-		try {
-			const data = await axios.put(url, params);
+			const data = await axios.get(urlObtenerFacturas, setAllInvoices);
 			if (data) {
-				getProduct(urlGetProducts, setAllProducts)
-				setViewUpdateInfo(false)
+			//setAllProducts(data.data);
+			setAllInvoices(data.data.data)
 			}
-		  } catch (error) {
+		} catch (error) {
 			console.log(error);
+		}
+
+	}
+	const getAbonos = async (urlObtenerAbonosFactura, setAllAbonos = null) => {
+		try {
+			const data = await axios.get(urlObtenerAbonosFactura);
+			if (data) {
+			//setAllProducts(data.data);
+			setAllAbonos(data.data.data)
+			}
+		} catch (error) {
+			console.log(error);
+		}
+
+	}
+	const postAbono = async (url, formData = null, setDataResponse = null) => {
+
+		try {
+		  const data = await axios.post(url, formData);
+		  if (data) {
+			setDataResponse(data.data);
 		  }
-	}
+		} catch (error) {
+		  console.log(error);
+		}
+	  };
 	
-	const handlerViewImage =(row)=>{ 
-		setObtenerDataImg({img: row.imagen, name: row.nombre})
-		setViewUpdateInfo(false)
-	}
+
+	const verListadoAbonos =(value)=> {
+		getAbonos(`${urlObtenerAbonosFactura}${value.id}`, setAllAbonos);
+		setTemConsultaAbono(`${urlObtenerAbonosFactura}${value.id}`)
+		setDataInfo(value);
+		setViewFactura(false)
+		setViewDetalleAbonos(true);	
+	};
 
 	const refresData =()=>{
-		getProduct(urlGetProducts, setAllProducts)
+		getInvoices(urlObtenerFacturas, setAllInvoices);
 	}  
+
 	const onSubmit = (data) => {
-		console.log(data);
-		// let dataExtra = {idproducto: parseInt(codigoProducto), imagen: files !== null ? files : linkFoto}
-		// let newdata = Object.assign(data, files, dataExtra);
-		// putProducto(urlUpdateProducts, newdata)
+		let dataSaved = {
+			fk_id_factura: parseInt(dataInfo.id),
+			valor_abono: parseInt(data.abono),
+			fecha_abono: getDate(hoy),
+			usuario_registro_abono: 1,
+			nota_abono: data.note,
+		};
+		postAbono(urlAgregarAbono, dataSaved, setDataResponse);
 	};
 
+	const handlerBuscarFactura = (data)=>{
+		setCedulaTemp(data.cedula);
+		getInvoices(`${urlObtenerFacturaPersona}${data.cedula}`, setFacturaPersona);
+		setViewFactura(true);
+		setViewDetalleAbonos(false)
+	}
+	const handlerImprimirFactura =()=>{
+		window.print()
+	}
+	
 	useEffect(() => {
-		getProduct(urlGetProducts, setAllProducts)
 		refresData();
-	}, [])
-	// INSERT INTO `detalle_factura` (`id_detalle`, `id_factura`, `id_producto`, `cantidad`, `valor`) VALUES ('01', '1', '14', '1', '1000'), ('02', '1', '29', '1', '2000');
-
+		if (dataResponse?.data === true ) {
+			setOpen(false);
+			getAbonos(temConsultaAbono, setAllAbonos);
+		}
+		
+		if (facturaPersona.length >=0) {
+			getInvoices(`${urlObtenerDetallePorFactura}${facturaPersona[0].id}`, setDetalleFactura);
+		}
+	}, [dataResponse, temConsultaAbono, facturaPersona])
+	
   return (
-	< div className="flex flex-col md:flex-row w-full">
-			<div className="w-full px-8">
-			<p className="text-2xl w-full text-center">Listado de clientes</p>
-				<div className="overflow-y-auto w-full mx-3 h-5/6">
+	< div className="flex flex-col flex-wrap lg:flex-nowrap md:flex-row w-full">
+			<div className="w-full px-1 sm:px-8">
+				<p className="text-2xl w-full text-center mb-2">Facturas pendientes</p>
+				<div className="overflow-y-auto mx-0 w-full sm:mx-3 h-5/6">
 						<TableContainer component={Paper}>
 							<Table aria-label="customized table">
 								<TableHead>
@@ -243,16 +204,15 @@ export default function TablaClientesAbonos() {
 								</TableRow>
 								</TableHead>
 								<TableBody>
-								{allProducts?.map((row) => (
-									<StyledTableRow key={row.id}>
+								{allInvoices?.map((row, index) => (
+									<StyledTableRow key={index}>
 									<StyledTableCell align="center">
-									
-										<button><RemoveRedEyeIcon onClick={() => actualizarProducto(row)}/></button>
-									
+										<button><RemoveRedEyeIcon onClick={() => verListadoAbonos(row)}/></button>
+										<button><CloudDownloadIcon onClick={() => handlerBuscarFactura(row)}/></button>
 									</StyledTableCell>
-									<StyledTableCell align="center">{row.cc}</StyledTableCell>
-									<StyledTableCell align="center">{row.nombre}</StyledTableCell>
-									<StyledTableCell align="left"><p className='bg-red-400 p-2 w-40 text-center rounded-lg'>{row.estado}</p></StyledTableCell>
+									<StyledTableCell align="center">{row.cedula}</StyledTableCell>
+									<StyledTableCell align="center">{row.paciente}</StyledTableCell>
+									<StyledTableCell align="left"><p className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'}>{row.estado}</p></StyledTableCell>
 									</StyledTableRow>
 								))} 
 								</TableBody>
@@ -260,70 +220,160 @@ export default function TablaClientesAbonos() {
 						</TableContainer>
 				</div>
 			</div>
-			{ obtenerDataImg !== null &&
-				<div className="mx-5 flex flex-col w-full md:w-2/5 mt-10 md:mt-0">
-					<p className="text-center text-blue-800 text-2xl font-semibold">{obtenerDataImg.name}</p>
-					<img className="h-80 w-auto border border-gray-700 shadow-lg" src={obtenerDataImg.img} alt="Optica" style={{objectFit: 'cover'}}/>
+			{
+				viewDetalleAbonos && 
+				<div className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
+				{
+					dataInfo?.valor_factura > dataInfo?.total_deuda && dataInfo?.estado !== 'Pagada' && <div className="m-0 mb-5 flex flex-wrap justify-end">
+					<Button
+					className="text-base"
+						variant="contained"
+						color="primary"
+						size="large"
+						className="rounded-sm"
+						onClick={() => setOpen(true)}
+						startIcon={<AddCircleOutlineIcon />}
+					>
+						Crear abono
+					</Button>
 				</div>
-			}
+				}
+				
 
-			<div className="mx-5 flex flex-col w-full md:w-4/5 mt-10 md:mt-0">
-			<p className="text-2xl w-full text-center">Total Abonos</p>
-			<div className="m-0 mb-5 flex flex-wrap justify-end">
-						<Button
-							variant="contained"
-							color="primary"
-							size="large"
-							className="rounded-sm"
-							onClick={() => crearAbono()}
-							startIcon={<AddCircleOutlineIcon />}
-						>
-							Crear abono
-						</Button>
-				</div>
-
-			<div className='flex flex-col mb-10'>
-				<div className='flex flex-row'>
-					<p className='text-base font-semibold'>Nombre:</p>
-					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.nombre}</p>
-				</div>
-				<div className='flex flex-row'>
-					<p className='text-base font-semibold'>Total deuda:</p>
-					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.totalDeuda}</p>
-				</div>
-				<div className='flex flex-row'>
-					<p className='text-base font-semibold'>Pendiente por pagar:</p>
-					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.pendiente}</p>
-				</div>
-				<div className='flex flex-row'>
-					<p className='text-base font-semibold'>Total abonado:</p>
-					<p className="text-xs ml-3 mt-1 text-gray-700">{data?.totalDeuda}</p>
-				</div>
-				<div className="overflow-y-auto w-full mx-3 h-60">
-					<TableContainer component={Paper}>
-						<Table className={classes.table} size="small" aria-label="a dense table">
-							<TableHead>
-							<TableRow>
-								<StyledTableCell align="center">Fecha</StyledTableCell>
-								<StyledTableCell align="center">Abono</StyledTableCell>
-								<StyledTableCell align="center">Nota</StyledTableCell>
-							</TableRow>
-							</TableHead>
-							<TableBody>
-							{data?.abonos?.map((row, index) => (
-								<StyledTableRow key={index}>
-									<StyledTableCell align="center"><p className='w-20'>{row.fecha}</p></StyledTableCell>
-									<StyledTableCell align="center">$ {row.abono}</StyledTableCell>
-									<StyledTableCell align="center">{row.nota}</StyledTableCell>
-								</StyledTableRow>
-							))} 
-							</TableBody>
-						</Table>
-					</TableContainer>
+				<div className='flex flex-col mb-10'>
+					<div className="flex flex-row justify-between">
+						<div>
+							<div className='flex flex-row'>
+							<p className='text-base font-semibold'>Nombre:</p>
+							<p className="text-xs ml-3 mt-1 text-gray-700">{dataInfo?.paciente}</p>
+							</div>
+							<div className='flex flex-row'>
+								<p className='text-base font-semibold'>Total deuda:</p>
+								<p className="text-xs ml-3 mt-1 text-gray-700">$ {dataInfo?.valor_factura}</p>
+							</div>
+							<div className='flex flex-row'>
+								<p className='text-base font-semibold'>Total abonado:</p>
+								<p className="text-xs ml-3 mt-1 text-gray-700">$ {dataInfo?.total_abonos ? dataInfo?.total_abonos : '---'}</p>
+							</div>
+							<div className='flex flex-row'>
+								<p className='text-base font-semibold'>Pendiente por pagar:</p>
+								<p className="text-xs ml-3 mt-1 text-gray-700">$ {dataInfo?.total_deuda ? dataInfo?.total_deuda : '---'}</p>
+							</div>
+						</div>
+						<div>
+						<div className='flex flex-row'>
+								<p className='text-base font-semibold'>Nota:</p>
+								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{dataInfo?.nota ? dataInfo?.nota : "No hay nota para esta factura"}</p>
+							</div>
+						</div>
+					</div>
+					<p className="text-2xl w-full text-center">Total Abonos</p>
+					<div className="overflow-y-auto ml-0 pr-2 w-full mx-3 h-60">
+						<TableContainer component={Paper}>
+							<Table className={classes.table} size="small" aria-label="a dense table">
+								<TableHead>
+								<TableRow>
+									<StyledTableCell align="center">Fecha</StyledTableCell>
+									<StyledTableCell align="center">Abono</StyledTableCell>
+									<StyledTableCell align="center">Nota</StyledTableCell>
+								</TableRow>
+								</TableHead>
+								<TableBody>
+								{allAbonos?.map((row, index) => (
+									<StyledTableRow key={index}>
+										<StyledTableCell align="center"><p className='w-20'>{row.fecha}</p></StyledTableCell>
+										<StyledTableCell align="center">$ {row.valor}</StyledTableCell>
+										<StyledTableCell align="center">{row.nota}</StyledTableCell>
+									</StyledTableRow>
+								))} 
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</div>
 				</div>
 			</div>
-
-		</div>
+			}
+			{
+				viewFactura && <Factura facturaPersona={facturaPersona} detalleFactura={detalleFactura}/>
+			// 	<div id='factura' className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
+			// 	 <div className="m-0 mb-5 flex flex-wrap justify-end">
+			// 		<Button
+			// 		className="text-base"
+			// 			variant="contained"
+			// 			color="primary"
+			// 			size="large"
+			// 			className="rounded-sm"
+			// 			onClick={() => handlerImprimirFactura()}
+			// 			startIcon={<LocalPrintshopIcon />}
+			// 		>
+						
+			// 		</Button>
+			// 	</div>
+			// 	<div className='flex flex-col mb-10'>
+			// 		<div className="flex flex-row justify-between">
+			// 			<div className='mx-1'>
+			// 				<div className='flex flex-row'>
+			// 				<p className='text-sm font-semibold w-16'>Nombre:</p>
+			// 				<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.paciente}</p>
+			// 				</div>
+			// 				<div className='flex flex-row'>
+			// 					<p className='text-sm font-semibold w-16'>Cedula:</p>
+			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.cedula}</p>
+			// 				</div>
+			// 				<div className='flex flex-row'>
+			// 					<p className='text-sm font-semibold w-16'>Direccion:</p>
+			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.direccion}</p>
+			// 				</div>
+			// 				<div className='flex flex-row'>
+			// 					<p className='text-sm font-semibold w-16'>Telefono:</p>
+			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.celular}</p>
+			// 				</div>
+			// 			</div>
+			// 			<div>
+			// 				<div className='flex flex-row'>
+			// 					<p className='text-sm font-semibold w-12'>Factura:</p>
+			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.numero_factura}</p>
+			// 				</div>
+			// 				<div className='flex flex-row'>
+			// 					<p className='text-sm font-semibold w-12'>Fecha:</p>
+			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.fecha_creacion}</p>
+			// 				</div>
+			// 				<div className='flex flex-row'>
+			// 					<p className='text-sm font-semibold w-12'>Nota:</p>
+			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.nota ? facturaPersona[0]?.nota : "No hay nota para esta factura"}</p>
+			// 				</div>
+			// 			</div>
+			// 		</div>
+			// 		<div className="overflow-y-auto ml-0 pr-2 w-full mx-3 h-60 mt-5">
+			// 			<TableContainer component={Paper}>
+			// 				<Table className={classes.table} size="small" aria-label="a dense table">
+			// 					<TableHead>
+			// 					<TableRow>
+			// 						<StyledTableCell align="center">Nombre</StyledTableCell>
+			// 						<StyledTableCell align="center">Cantidad</StyledTableCell>
+			// 						<StyledTableCell align="center">Sub total</StyledTableCell>
+			// 					</TableRow>
+			// 					</TableHead>
+			// 					<TableBody>
+			// 					{detalleFactura.length > 0 && detalleFactura?.map((row, index) => (
+			// 						<StyledTableRow key={index}>
+			// 							<StyledTableCell align="center"><p className='w-20'>{row.nombre}</p></StyledTableCell>
+			// 							<StyledTableCell align="center">$ {row.cantidad}</StyledTableCell>
+			// 							<StyledTableCell align="center">{row.valor_producto}</StyledTableCell>
+			// 						</StyledTableRow>
+			// 					))} 
+			// 					</TableBody>
+			// 				</Table>
+			// 			</TableContainer>
+			// 		</div>
+			// 		<div className='flex flex-row w-full justify-end'>
+			// 			<p className='text-base font-semibold'>Total:</p>
+			// 			<p className="text-base font-semibold mr-4 ml-3 text-gray-700">{facturaPersona[0]?.valor_total ? `$ ` + facturaPersona[0]?.valor_total : `$ 0` }</p>
+			// 		</div>
+			// 	</div>
+			// </div>
+			}
+			
 		<Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"

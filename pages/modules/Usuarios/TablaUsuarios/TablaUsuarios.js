@@ -104,12 +104,12 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 
 
 
-export default function CustomizedTables({allData}) {
+export default function CustomizedTables({listaPacientes, getAllData}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [dataUser, setDataUser] =useState();
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
-  const rows = allData;
+  const rows = listaPacientes;
   const [accion, setAccion] = useState('');
   const [cedulaPaciente, setCedulaPaciente] = useState();
 
@@ -165,7 +165,6 @@ export default function CustomizedTables({allData}) {
 		setOpen(true), 
 		setAccion('actualizar'), 
 		setCedulaPaciente(cc)};
-
   return (
 	
 	< div className="flex flex-col md:flex-row w-full">
@@ -199,7 +198,7 @@ export default function CustomizedTables({allData}) {
 					</TableRow>
 					</TableHead>
 					<TableBody>
-					{rows?.map((row) => (
+					{rows?.length >0 && rows?.map((row) => (
 						<StyledTableRow key={row.id}>
 						<StyledTableCell align="center">
 							<div className="flex flex-row">
@@ -240,7 +239,7 @@ export default function CustomizedTables({allData}) {
 					<h2 className="text-3xl" id="titulo-registro">
 					Registrar usuario
 					</h2>
-					<FormRegistroUsuario setOpen={setOpen} accion={accion} dataUser={dataUser} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
+					<FormRegistroUsuario setOpen={setOpen} accion={accion} dataUser={dataUser} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente} getAllData={getAllData}/>
 				</div>
 			
 		</Modal>

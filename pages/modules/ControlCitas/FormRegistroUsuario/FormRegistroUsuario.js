@@ -23,7 +23,8 @@ export default function FormRegistroUsuario({
   setCedulaPaciente,
   cedulaPaciente,
   accion,
-  dataUser
+  dataUser,
+  getAllData
 }) {
   const classes = useStyles();
   let hoy = new Date();
@@ -49,6 +50,7 @@ export default function FormRegistroUsuario({
         swal("Exelente", "Paciente creado", "success");
         setOpen(false);
         if (!accion) {
+          getAllData();
           setOpen(false);
           setOpenRegCita(true);
         }

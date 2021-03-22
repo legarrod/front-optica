@@ -14,11 +14,21 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import getDate from '../../../utils/utils';
+import getIdFactura from '../../../utils/getIdFactura';
+import { useRouter } from 'next/router';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles({
 	table: {
 	  minWidth: 650,
 	},
+	paper: {
+		position: 'absolute',
+		width: 400,
+		backgroundColor: '#ffffff',
+		border: '2px solid #000',
+	  },
   });
   
   function createData(name, calories, fat, carbs, protein) {
@@ -27,56 +37,81 @@ const useStyles = makeStyles({
 
 
 export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
+	const router = useRouter()
   let hoy = new Date();
   //const url = `${process.env.API_REGISTRAR_NUEVA_CITA}`;
   const [data, setData] = useState();
   const [valueTextarea, setValueTextarea]=useState();
   const { register, handleSubmit } = useForm();
   const urlGetPacientes = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
+  const urlPosTFactura = `${process.env.API_CREAR_FACTURA}`;
   const urlGetProductos = `${process.env.API_OBTENER_TODOS_LOS_PRODUCTOS}`;
-  const [listadoProductos, setListadoProductos] = useState();
-  const [listadoPacientes, setListadoPacientes] = useState();
+  const urlPostDetalleFactura = `${process.env.API_CREAR_DETALLE_FACTURA}`;
+  const [listadoProductos, setListadoProductos] = useState([]);
+  const [listadoPacientes, setListadoPacientes] = useState([]);
   const [viewInputsNewProducts, setViewInputsNewProducts] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState({});
   const [selectedPaciente, setSelectedPaciente] = useState({});
   const [price, setPrice] =useState();
-  const [cantidad, setCantidad] =useState();
+  const [cantidad, setCantidad] =useState(1);
   const [dataProductDetail, setDataProductDetail] =useState([]);
   const [invoiceData, setInvoiceData]=useState({});
   const [total, setTotal]=useState(0);
   const [detailInvoice, setDetailInvoice]=useState([]);
+  const [estado, setEstado] = useState('Pendiente');
+  const [facturaPendiente, setFacturaPendiente] = useState(false);
   const classes = useStyles();
+  const [idFactura, setIdFactura] =useState(0);
+  const [numeroFac, setNumeroFac]=useState('');
+  const [dataSubmit, setDataSubmit] =useState();
+  const [copyDetalle, setcopyDetalle] =useState([]);
+  const [dataResponse, setDataResponse]=useState();
+  const [facturaOk, setFacturaOk] =useState();
+  const [dataResponseDetalle, setDataResponseDetalle]=useState();
+  const [sinInternet, setSinInternet] =useState(false);
+  const [contador, setContador] = useState(0);
+
   
  const getProductos = async (urlGetProductos, setListadoProductos) => {
 	try {
 	  const { data } = await axios.get(urlGetProductos);
-	  if (data) {
-		setListadoProductos(data);
+	  if (data.status_code === 200) {
+		setListadoProductos(data.data);
 	  }
 	} catch (error) {
 	  console.log(error.message);
 	}
   };
 
-//   const postCita = async (url, formData = null, setDataResponse = null) => {
-//     console.log(url);
-//     console.log(formData);
-//     try {
-//       const data = await axios.post(url, formData);
-//       console.log(data);
-//       if (data.data === "Paciente agregado correctamente") {
-//         setDataResponse(data.statusText);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//     //return axios.post(url, formData, config);
-//   };
+  const postFactura = async (url, formData = null, setDataResponse = null) => {
+    try {
+      const data = await axios.post(url, formData);
+      if (data.data.data === true) {
+        setDataResponse(data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const postDetalle = async (url, formData = null, setDataResponseDetalle = null) => {
+	  
+    try {
+      const data = await axios.post(url, formData);
+      if (data.data.data === true) {
+		
+        setDataResponseDetalle(data.data);
+		
+		
+		localStorage.removeItem('copyDetalle')
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 const calculateTotal =(price)=>{
-	//let total = price;
 	let subTotal = total + parseInt(price);
-		setTotal(subTotal)
-	
+		setTotal(subTotal);	
 }
 
 const createDetail =(data)=>{
@@ -86,8 +121,22 @@ const createDetail =(data)=>{
 	])
 }
 
-	const onSubmit = (data) => { 
-		console.log(data);
+	const onSubmit = (data) => {
+		setNumeroFac(data.numero_factura);
+		let newData = {
+			valor_factura: total,
+			fechasalida: getDate(hoy),
+			cc_usuario: data.id_paciente ? parseInt(data.id_paciente) : 0,
+			numero_factura: data.numero_factura,
+			estado_factura: estado,
+			observaciones: data.observaciones,
+		}
+		setDataSubmit(newData)
+		setcopyDetalle(detailInvoice.map(item => ({id_factura: idFactura, id_producto: parseInt(item.id), cantidad: parseInt(item.cantidad), valor_producto: parseInt(item.price)})));
+		localStorage.setItem('copyDetalle', JSON.stringify(copyDetalle))
+		localStorage.setItem('respaldoFactura', JSON.stringify(newData))
+		localStorage.setItem('facturaSinGuardar', true)
+		postFactura(urlPosTFactura, newData, setDataResponse)		
 	};
 
 	const handleTextarea = (e)=>{
@@ -102,36 +151,83 @@ const createDetail =(data)=>{
 	}
 	const handlerSlectPaciente =(e)=>{
 		let index = e.target.selectedIndex;
-
 		setSelectedPaciente({id: e.target.value, name:e.target.options[index].text})
-
+	}
+	const handlerSlectEstado =(e)=>{
+		let index = e.target.selectedIndex;
+		setEstado(e.target.options[index].text)
+	}
+	const handlerReenviar =()=>{
+		console.log('reenviado...');
 	}
 	const handlerAddProductDetail =(e)=>{
 		let detail = e.target.value
+		
 		//setDataProductDetail(Object.assign(selectedProduct, {price: price}))
 		createDetail(Object.assign(selectedProduct, {cantidad: cantidad, price: price}))
 		calculateTotal(price * cantidad);
 	}
+	const handlerQuitarProducto = (row)=>{
+		const nuevoDetalle = detailInvoice.filter(producto => producto.id !== row.id);
+		setDetailInvoice(nuevoDetalle);
+		let subTotal = total - parseInt(row.price);
+		setTotal(subTotal);
+	}
+	const saveDetalleFactura = ()=>{
+	let num = 0;
+		let data = detailInvoice.map(item => ({id_factura: idFactura, id_producto: parseInt(item.id), cantidad: parseInt(item.cantidad), valor_producto: parseInt(item.price)}))
+		//for (const i  of copyDetalle) {
+			//console.log(data.length);
+			
+		for (const i  of data) {
+			num = num +1;
+			postDetalle(urlPostDetalleFactura, i, setDataResponseDetalle)
+		}			
+		if (num === data.length) {
+			router.push('/contabilidad');
+		}		
+	};
+
+	const validacionesStatus =(dataResponse)=>{
+		if (dataResponse?.status_code !== 200) {
+		setFacturaPendiente(localStorage.getItem('facturaSinGuardar') ? JSON.parse(localStorage.getItem('facturaSinGuardar')) : false)
+		}
+
+		if (dataResponse?.status_code === 200) {
+		localStorage.removeItem('dataDetallefactura');
+		localStorage.removeItem('facturaSinGuardar');
+		localStorage.removeItem('respaldoFactura');
+		getIdFactura(numeroFac, setIdFactura, setFacturaOk);		
+		}
+	}
 
 useEffect(() => {
-	getProductos(urlGetProductos, setListadoProductos);
-	getProductos(urlGetPacientes, setListadoPacientes);
+	if(navigator.onLine) {
+		getProductos(urlGetProductos, setListadoProductos);
+		getProductos(urlGetPacientes, setListadoPacientes);
+		validacionesStatus(dataResponse);
+		
+	if (facturaOk) {
+		saveDetalleFactura()
+	}
+	} else {
+		setSinInternet(true)
+		//router.push('/')
+	}
 	
-console.log(listadoPacientes);
-}, [urlGetProductos, setListadoProductos, invoiceData])
-  
+}, [urlGetProductos, setListadoProductos, dataResponse, facturaOk])
 
   return (
 	  <div className="flex flex-col md:flex-row">
 		<form
-			className="flex flex-wrap justify-center flex-col w-full md:w-2/3"
+			className="flex flex-wrap mt-5 flex-col w-full md:w-2/3"
 			onSubmit={handleSubmit(onSubmit)}
 		>
 			<div>
-			<select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80" name="id_producto" ref={register} onClick={(e) => handlerSlectPaciente(e)}>
+			<select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80" name="id_paciente" ref={register} onClick={(e) => handlerSlectPaciente(e)}>
 				{
-				listadoPacientes && listadoPacientes[0]?.map(item=>(
-						<option value={item.idproducto}>{item.nombre}</option>
+				listadoPacientes.length >0 && listadoPacientes?.map(item=>(
+						<option value={item.id}>{item.nombre}</option>
 					))
 				}
 			</select>
@@ -158,7 +254,7 @@ console.log(listadoPacientes);
 					onChange={(e)=> handleTextarea(e)}
 					ref={register}/>
 
-				<select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80" name="fk_id_estado" ref={register}>
+				<select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80" name="fk_id_estado" ref={register} onClick={(e) => handlerSlectEstado(e)}>
 					<option value={0}>Pendiente</option>
 					<option value={1}>Pagada</option>
 					<option value={2}>Cancelada</option>
@@ -171,7 +267,7 @@ console.log(listadoPacientes);
 			<div>
 			<select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80" name="id_producto" ref={register} onClick={(e) => handlerSlectProducto(e)}>
 				{
-					listadoProductos?.map(item=>(
+				listadoProductos.length >0 && listadoProductos?.map(item=>(
 						<option value={item.idproducto}>{item.nombre}</option>
 					))
 				}
@@ -199,17 +295,28 @@ console.log(listadoPacientes);
 			}
 			
 			</div>
-			<div className='w-full flex '>
+			{
+				facturaPendiente === false && !sinInternet ? <div className='w-full flex '>
 				<input
 				className="bg-red-600 py-1 mx-2 px-10 rounded-md text-white font-semibold"
 				value='Cancelar'
 				type="submit"
 				/>
 				<input
-				className="bg-blue-700 py-1 mx-2 px-10 rounded-md text-white font-semibold"
-				type="submit"
+				className={detailInvoice.length > 0 && invoiceData.numero_factura !== undefined && invoiceData.numero_factura !== '' ?'bg-blue-700 py-1 mx-2 px-10 rounded-md text-white font-semibold' : 'bg-gray-400 py-1 mx-2 px-10 rounded-md text-white font-semibold' } disabled={detailInvoice.length > 0 && invoiceData.numero_factura !== undefined && invoiceData.numero_factura !== '' ? false :true} type="submit"
 				/>
-			</div>
+			</div> :''
+			}
+			{
+				facturaPendiente === true && <button
+				className="bg-red-600 py-1 mx-2 px-10 rounded-md text-white font-semibold"
+				onClick={()=>handlerReenviar()}
+				type='button'
+				>Tienes una factura pendiente</button>
+			}
+			{
+				sinInternet &&  <div className='bg-white  w-64 h-64 flex flex-col' ><center><CircularProgress /></center><p className='text-center'>Lo sentimos no tienes Internet</p></div>
+			}
 		</form>
 		<div className="w-full border border-gray-500 rounded-lg p-5 my-5">
 			<div className='flex flex-wrap'>
@@ -220,12 +327,7 @@ console.log(listadoPacientes);
 				<div className="flex flex-row mx-5">
 					<p className="font-semibold text-lg">No. Factura:</p>
 					<p className="text-lg ml-3">{invoiceData.numero_factura}</p>
-				</div>
-				<div className="flex flex-row my-3 w-11/12">
-					<p className="font-semibold text-lg">Observaciones:</p>
-					<p className="text-lg ml-3">{invoiceData.observaciones}</p>
-				</div>
-				
+				</div>				
 			</div>
 			<div className='mt-10'>
 			<div style={{ height: 400, width: '100%' }}>
@@ -249,7 +351,7 @@ console.log(listadoPacientes);
 						<TableCell align="right">{row.cantidad}</TableCell>
 						<TableCell align="right">{row.price}</TableCell>
 						<TableCell align="right">{row.cantidad * row.price} </TableCell>
-						<TableCell align="right"><DeleteForeverIcon className="" style={{fontSize: 20}}/></TableCell>
+						<TableCell align="right"><DeleteForeverIcon className="" style={{fontSize: 20}} onClick={()=> handlerQuitarProducto(row)}/></TableCell>
 						</TableRow>
 					))}
 					</TableBody>
@@ -267,13 +369,16 @@ console.log(listadoPacientes);
 					</div></>)
 				} */}
 			</div>
-			
+			<div className="flex flex-row my-3 w-11/12">
+				<p className="font-semibold text-lg">Observaciones:</p>
+				<p className="text-xs ml-3 text-gray-600 border w-56 h-16 rounded-lg p-2">{invoiceData.observaciones}</p>
+			</div>
 			<div className='flex flex-row justify-end items-end'>
 				<p className='text-2xl'>Total</p>
 				<p className='text-2xl mx-5'>$ {total}</p>
 			</div>
-			
 		</div>
+
 	</div>
   );
 }

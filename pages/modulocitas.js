@@ -12,7 +12,8 @@ import { useSpring, animated } from "react-spring/web.cjs";
 import FormRegistroUsuario from "./modules/ControlCitas/FormRegistroUsuario/FormRegistroUsuario";
 import FormRegCita from "./modules/ControlCitas/FormRegCita/FormRegCita";
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import getDate from './utils/utils'
+import getDate from './utils/utils';
+import TablaCitas from './modules/ControlCitas/TablaCitas/TablaCitas'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -57,6 +58,7 @@ export default function ModuloCitas() {
   const url = `${process.env.API_OBTENER_LAS_CITAS_POR_ESTADO}0`;
   const urlAllInformation = `${process.env.API_OBTENER_TODAS_LAS_CITAS}`;
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
+  const urlCitasPorFecha = `${process.env.API_OBTENER_LAS_CITAS_POR_FECHA}`;
   const [open, setOpen] = useState(false);
   const [openRegCita, setOpenRegCita] = useState(false);
   const [cedulaPaciente, setCedulaPaciente] = useState();
@@ -73,7 +75,14 @@ export default function ModuloCitas() {
   const getAllData = ()=>{
     getData(urlAllInformation, setAllData);
   }
-
+const resetearFecha = ()=>{
+  getDataEvent();
+};
+  const handlerCitasPorFecha =(day)=>{
+    //setFechaFilter(getDate(day))
+    getData(`${urlCitasPorFecha}${getDate(day)}`, setData);
+  };
+  
   useEffect(() => {
     getDataEvent();
     getAllData();
@@ -131,20 +140,36 @@ export default function ModuloCitas() {
       <MenuNav />
       <div className="mt-10">
       
-        <div className="mx-10 flex flex-wrap justify-end">
-        <DayPickerInput  onDayChange={day => setFechaFilter(getDate(day))} />
+        <div className="mx-10 flex flex-wrap justify-between">
+        
           <Button
             variant="contained"
             color="primary"
             size="large"
-            className=""
             onClick={() => consultarCliente()}
             startIcon={<AddCircleOutlineIcon />}
           >
             Crear cita
           </Button>
+          <div className="mx-0 mt-3 md:mx-5 md:mr-0 flex flex-wrap items-center">
+            <p className="mr-5">Selecciona una fecha</p>
+            <DayPickerInput style={{border: '2px gray solid'}} onDayChange={day => handlerCitasPorFecha(day)} /> 
+            <div className="ml-0 sm:ml-2 mt-2 sm:mt-0"> 
+              <Button
+            variant="contained"
+            color="primary"
+            onClick={() => resetearFecha()}
+            
+          >
+            Resetear fecha
+          </Button>
+            </div>
+            
+          </div>
+          
         </div>
-        <CardCitas data={data} allData={allData}/>
+        {/* <CardCitas data={data} allData={allData}/> */}
+        <TablaCitas data={data} />
       </div>
       <Modal
         aria-labelledby="spring-modal-title"
@@ -189,7 +214,7 @@ export default function ModuloCitas() {
             <h2 className="text-3xl" id="titulo-registro">
               Crear cita
             </h2>
-            <FormRegCita setOpen={setOpenRegCita} cedulaPaciente={cedulaPaciente}/>
+            <FormRegCita setOpen={setOpenRegCita} cedulaPaciente={cedulaPaciente}  getDataEvent={ getDataEvent}/>
           </div>
         </Fade>
       </Modal>

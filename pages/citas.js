@@ -9,8 +9,6 @@ export default function citas() {
   const ruta = useRouter()
   const idCita= Object.keys(ruta.query)[0];
   
-
-
   const getAllData = (idCita)=>{
     if (idCita) {
       const url = `${process.env.API_CITA_POR_PACIENTE}/${idCita}`;

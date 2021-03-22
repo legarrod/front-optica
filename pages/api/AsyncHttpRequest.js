@@ -3,8 +3,8 @@ import axios from "axios";
 export const getData = async (url, setData) => {
   try {
     const { data } = await axios.get(url);
-    if (data) {
-      setData(data[0]);
+    if (data.status_code === 200) {
+      setData(data.data);
     }
   } catch (error) {
     console.log(error.message);

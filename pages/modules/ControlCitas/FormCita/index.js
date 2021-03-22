@@ -12,6 +12,7 @@ import { useForm, Controller } from "react-hook-form";
 import getDate from '../../../utils/utils'
 import {post, put} from '../../../api/AsyncHttpRequest'
 import swal from "sweetalert";
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +65,6 @@ export default function index(allData) {
     
   }, [dataResponse])
  
-console.log(informacionCita);
   return (
     <div className="border-2 rounded-lg border-gray-300 p-2 mx-2 md:m-5">
       <p className="text-2xl text-center mb-3">Cuadro clínico</p>
@@ -300,7 +300,9 @@ console.log(informacionCita);
             <option value={2}>Cancelar</option>
           </select>
           <div className="mx-5 my-2">
-            <Button
+          <Link href={`/modulocitas`}>
+							<a>
+              <Button
               variant="contained"
               color="secondary"
               size="large"
@@ -309,6 +311,9 @@ console.log(informacionCita);
             >
               Cancelar
             </Button>
+							</a>
+							</Link>
+           
           </div>
 
           <div className="mx-5 my-2">

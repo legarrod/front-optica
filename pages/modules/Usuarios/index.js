@@ -2,10 +2,10 @@ import React from 'react'
 
 import TablaUsuarios from "./TablaUsuarios/TablaUsuarios"
 
-export default function moduloUsuarios({allData}) {
+export default function moduloUsuarios({listaPacientes, getAllData}) {
 	return (
 	
-		<TablaUsuarios allData={allData}/>
+		<TablaUsuarios listaPacientes={listaPacientes} getAllData={getAllData}/>
 
 	
 	)

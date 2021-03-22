@@ -56,5 +56,22 @@ f.getTime(); // 1517326210999 (Tiempo Unix)
 		}
 	}
 
-	return `${year}/${mes}/${dia}`;
+	return `${year}-${mes}-${dia}`;
+}
+
+export function getHour(date) {
+	const f = new Date(date);
+
+let diaSemana = f.getDay(); // 2 (Martes)
+let dia = f.getDate(); // 30
+let mes = f.getMonth() + 1; // 0 (Enero)
+let year = f.getFullYear(); // 2018
+let hora = f.getHours(); // 15
+let minuto = f.getMinutes(); // 30
+f.getSeconds(); // 10
+f.getMilliseconds(); // 999
+f.getTimezoneOffset(); // 0
+f.getTime(); // 1517326210999 (Tiempo Unix)
+
+	return `${hora}:${minuto}`;
 }

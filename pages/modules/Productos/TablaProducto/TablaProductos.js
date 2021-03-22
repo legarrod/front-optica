@@ -91,7 +91,7 @@ export default function CustomizedTableProducto() {
   const urlGetProducts = `${process.env.API_OBTENER_TODOS_LOS_PRODUCTOS}`;
   const urlUpdateProducts = `${process.env.API_ACTUALIZAR_TODOS_LOS_PRODUCTOS}`;
   const urlDeleteProdcto = `${process.env.API_ELIMINAR_PRODUCTO}`;
-  const [allProducts, setAllProducts] = useState();
+  const [allProducts, setAllProducts] = useState([]);
   const [obtenerDataImg, setObtenerDataImg] = useState(null);
   const [codigoProducto, setCodigoProducto] = useState();
   const { register, handleSubmit } = useForm();
@@ -111,8 +111,8 @@ export default function CustomizedTableProducto() {
   	const getProduct = async (urlGetProducts, setAllProducts = null) => {
 		try {
 			const data = await axios.get(urlGetProducts, setAllProducts);
-			if (data.data) {
-			setAllProducts(data.data);
+			if (data.data.status_code === 200) {
+			setAllProducts(data.data.data);
 			
 			}
 		} catch (error) {
@@ -184,7 +184,6 @@ export default function CustomizedTableProducto() {
 		getProduct(urlGetProducts, setAllProducts)
 	}  
 	const onSubmit = (data) => {
-		console.log(files);
 		let dataExtra = {idproducto: parseInt(codigoProducto), imagen: files !== null ? files : linkFoto}
 		let newdata = Object.assign(data, files, dataExtra);
 		putProducto(urlUpdateProducts, newdata)
@@ -218,11 +217,11 @@ export default function CustomizedTableProducto() {
 								<StyledTableCell align="center">Codigo</StyledTableCell>
 									<StyledTableCell align="center">Nombre</StyledTableCell>
 									<StyledTableCell align="center">Descripcio</StyledTableCell>
-									<StyledTableCell align="center">Foto</StyledTableCell>
+									{/* <StyledTableCell align="center">Foto</StyledTableCell> */}
 								</TableRow>
 								</TableHead>
 								<TableBody>
-								{allProducts?.map((row) => (
+								{allProducts.length >0 && allProducts?.map((row) => (
 									<StyledTableRow key={row.id}>
 									<StyledTableCell align="center">
 										<div className="flex flex-row">
@@ -233,7 +232,7 @@ export default function CustomizedTableProducto() {
 									</StyledTableCell>
 									<StyledTableCell align="left">{row.nombre}</StyledTableCell>
 									<StyledTableCell align="left">{row.descripcion}</StyledTableCell>
-									<StyledTableCell align="left"><img className="h-14 w-auto rounded-full" src={row.imagen} onClick={()=>handlerViewImage(row)}/></StyledTableCell>
+									{/* <StyledTableCell align="left"><img className="h-14 w-auto rounded-full" src={row.imagen} onClick={()=>handlerViewImage(row)}/></StyledTableCell> */}
 									</StyledTableRow>
 								))} 
 								</TableBody>
@@ -275,14 +274,14 @@ export default function CustomizedTableProducto() {
 					placeholder={data?.descripcion}
 					ref={register}
 					/>
-				<div>
+				{/* <div>
 						<label htmlFor="upload-button">
 						<CloudDownloadIcon className="ml-10" style={{ fontSize: 50 }}/>
 						</label>
 						<input type="file" id="upload-button" style={{ display: 'none' }} onChange={(e)=>convertirBase(e.target.files)} />
 						<p className="ml-10 text-sm">Upload photo</p>
 						<img className="h-44" src={data?.imagen} />					
-				</div>
+				</div> */}
 			
 				
 				<input

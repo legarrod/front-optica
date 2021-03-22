@@ -6,25 +6,24 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import getDate from "../../../utils/utils";
 
-export default function FormRegCita({ setOpen, cedulaPaciente }) {
+export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) {
   let hoy = new Date();
   const url = `${process.env.API_REGISTRAR_NUEVA_CITA}`;
   const urlConsultarPaciente = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const [fecha, setFecha] = useState();
   const [data, setData] = useState();
   const [idPaciente, setIdPaciente] = useState();
+  const [horaCita, setHoraCita] = useState();
+  const hora = ['09:00 am', '09:30 am', '10:00 am', '10:30 am', '11:00 am', '11:30 am', '12:00 pm', '12:30 pm', '01:00 pm', '01:30 pm', '02:00 pm', '02:30 pm', '03:00 pm', '03:30 pm', '04:00 pm', '04:30 pm', '05:00 pm', '05:30 pm']
   
   const { register, handleSubmit } = useForm();
   const [dataResponse, setDataResponse] = useState("");
 
   const postCita = async (url, formData = null, setDataResponse = null) => {
-    console.log(url);
-    console.log(formData);
     try {
       const data = await axios.post(url, formData);
-      console.log(data);
-      if (data.data === "Paciente agregado correctamente") {
-        setDataResponse(data.statusText);
+      if (data.data.status_code === 200) {
+        setDataResponse(data.data.status_code);
       }
     } catch (error) {
       console.log(error);
@@ -41,6 +40,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
           fk_id_estado: "",
           fecha_creacion: getDate(hoy),
           fecha_cita: fecha,
+          hora: horaCita,
           anamnesis: "",
           biomicrodcopia: "",
           od_rx_uso: "",
@@ -67,6 +67,10 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
     postCita(url, newData, setDataResponse)
   };
 
+  const handlerSlectHora = (e)=>{
+    setHoraCita(e.target.value);
+  }
+
   const obtenerPaciente = async (urlConsultarPaciente, cedulaPaciente, setData) => {
     let urlN = `${urlConsultarPaciente}/${cedulaPaciente}`
     try {
@@ -86,6 +90,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
     if (dataResponse) {
       swal("Exelente", "Se ha registrado una nueva cita", "success");
       setOpen(false);
+      getDataEvent();
     }
   }, [dataResponse]);
   
@@ -110,10 +115,20 @@ export default function FormRegCita({ setOpen, cedulaPaciente }) {
           value={data?.apellidos}
           ref={register}
         />
-        <div className="">
-        <p className="text-xl">Dia de la cita:</p>
-        <DayPickerInput onDayChange={day => setFecha(getDate(day))} />
+        <div className="flex flex-wrap mb-2 items-center">
+        <p className="text-xl mr-3">Dia de la cita:</p>
+        <DayPickerInput style={{border: '1px gray solid'}} onDayChange={day => setFecha(getDate(day))} />
         </div>
+        <div>
+        <select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80" name="hora" ref={register} onClick={(e) => handlerSlectHora(e)}>
+				{
+					hora?.map(item=>(
+						<option value={item}>{item}</option>
+					))
+				}
+			</select>
+        </div>
+        
       </div>
       
       <input

@@ -112,13 +112,13 @@ export default function FormCrearProducto({ setOpen, refresData }) {
           value={data?.descripcion}
           ref={register}
         />
-       <div>
+       {/* <div>
 			<label htmlFor="upload-button">
 			<CloudDownloadIcon className="ml-10" style={{ fontSize: 50 }}/>
 			</label>
 			<input type="file" id="upload-button" style={{ display: 'none' }} onChange={(e)=>convertirBase(e.target.files)} />
 			<p className="ml-10 text-sm">Upload photo</p>
-		</div>
+		</div> */}
   
       
       <input
