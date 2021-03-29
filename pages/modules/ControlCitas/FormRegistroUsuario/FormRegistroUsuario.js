@@ -49,6 +49,7 @@ export default function FormRegistroUsuario({
       if (dataResponse === "Paciente agregado correctamente") {
         swal("Exelente", "Paciente creado", "success");
         setOpen(false);
+        getAllData();
         if (!accion) {
           getAllData();
           setOpen(false);
