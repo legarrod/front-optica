@@ -154,7 +154,9 @@ const resetearFecha = ()=>{
 
   return (
     <div>
-      <MenuNav />
+      {
+        user && <div className="m-0">
+             <MenuNav />
       <div className="mt-10">
       
         <div className="mx-10 flex flex-wrap justify-between">
@@ -235,6 +237,9 @@ const resetearFecha = ()=>{
           </div>
         </Fade>
       </Modal>
+        </div>
+      }
+     
     </div>
   );
 }

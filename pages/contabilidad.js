@@ -61,7 +61,9 @@ export default function Productos() {
 	
 	return (
 		<div>
-        <MenuNav />
+			{
+				user && <div className='m-0'>
+					<MenuNav />
         <div className="mt-15">
        
           <div className="px-3 sm:px-10 md:px-20">
@@ -103,6 +105,8 @@ export default function Productos() {
           </div>
         
         </div>
+				</div>
+			}
 		</div>
 	)
 }

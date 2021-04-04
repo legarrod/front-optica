@@ -51,9 +51,10 @@ export default function LoginForm() {
 
   return (
     <form
-      className="flex flex-col w-80 justify-center"
+      className="flex flex-col w-80 justify-center bg-white p-10 rounded-xl"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <p className='text-black text-center text-xl'>Iniciar sesión</p>
     
 	  <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"

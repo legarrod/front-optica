@@ -35,9 +35,13 @@ export default function citas() {
  
   return (
     <div>
+      {
+        user && <div className="m-0">
       <MenuNav />
-
       <ModuloCitas allData={allData[0]}/>
+        </div>
+      }
+      
     </div>
   );
 }
