@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import CardCitas from "./components/CardCitas/CardCitas";
 import Button from "@material-ui/core/Button";
 import { getData } from "./api/AsyncHttpRequest";
 import MenuNav from "./components/MenuNav/MenuNav";
@@ -14,6 +13,10 @@ import FormRegCita from "./modules/ControlCitas/FormRegCita/FormRegCita";
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import getDate from './utils/utils';
 import TablaCitas from './modules/ControlCitas/TablaCitas/TablaCitas'
+
+import {useRouter} from "next/router"
+import useAuth from '../hooks/useAuth';
+import {getLogin} from './api/user';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -69,6 +72,12 @@ export default function ModuloCitas() {
   const [paciente, setPaciente] = useState({});
   const [fechaFilter, setFechaFilter] = useState(getDate(hoy));
 
+  const [user, setUser] = useState(undefined);
+  const router = useRouter();
+  const {auth} = useAuth(); 
+  
+
+
   const getDataEvent = () => {
     getData(url, setData);
   };
@@ -84,6 +93,8 @@ const resetearFecha = ()=>{
   };
   
   useEffect(() => {
+    const response = getLogin();
+       setUser(response) 
     getDataEvent();
     getAllData();
   }, []);
@@ -134,6 +145,12 @@ const resetearFecha = ()=>{
   const handleClose = () => {
     setOpen(false);
   };
+
+    
+  if (user === undefined) return null;
+  if (!auth && !user) {
+    router.replace("./login")
+  }
 
   return (
     <div>

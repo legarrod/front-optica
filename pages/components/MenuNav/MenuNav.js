@@ -4,21 +4,19 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
 import GroupIcon from "@material-ui/icons/Group";
 import Link from 'next/link' ;
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import {useRouter} from "next/router"
+import PhonelinkOffIcon from '@material-ui/icons/PhonelinkOff';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -88,6 +86,7 @@ export default function MenuNav() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const router = useRouter();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -101,9 +100,18 @@ export default function MenuNav() {
   };
 
   const handleMenuClose = () => {
+    localStorage.removeItem('isLogin')
     setAnchorEl(null);
     handleMobileMenuClose();
+    router.replace("./login")
   };
+
+  const handleClose =()=>{
+    localStorage.removeItem('isLogin')
+    setAnchorEl(null);
+    handleMobileMenuClose();
+    router.replace("./login")
+  }
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -120,8 +128,8 @@ export default function MenuNav() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
+      <MenuItem onClick={handleClose}>Salir</MenuItem>
     </Menu>
   );
 
@@ -195,6 +203,18 @@ export default function MenuNav() {
           <AccountCircle />
         </IconButton>
         <p>Perfil</p>
+      </MenuItem>
+
+      <MenuItem onClick={handleClose}>
+      <IconButton
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+         <PhonelinkOffIcon/>
+        </IconButton>
+        <p>Salir</p>
       </MenuItem>
     </Menu>
   );

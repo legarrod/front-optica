@@ -3,8 +3,16 @@ import ModuloUsuarios from "./modules/Usuarios"
 import MenuNav from "./components/MenuNav/MenuNav";
 import { getData } from "./api/AsyncHttpRequest";
 
+import {useRouter} from "next/router"
+import useAuth from '../hooks/useAuth';
+import {getLogin} from './api/user';
+
 export default function modulousuarios() {
 	const [listaPacientes, setListaPacientes] = useState([]);
+
+	const [user, setUser] = useState(undefined);
+	const router = useRouter();
+	const {auth} = useAuth(); 
   
 	const getAllData = ()=>{
 		const url = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
@@ -12,9 +20,15 @@ export default function modulousuarios() {
 	}
   
 	useEffect(() => {
+		const response = getLogin();
+		setUser(response)  
 	  getAllData();
 	}, []);
-	
+
+	if (user === undefined) return null;
+	if (!auth && !user) {
+	  router.replace("./login")
+	}
 	return (
 		<div>
 			<MenuNav />

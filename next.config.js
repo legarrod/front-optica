@@ -47,9 +47,9 @@ module.exports = {
     API_OBTENER_DETALLER_POR_FACTURA:
       "http://localhost/back-optica/public/contabilidad/api/detallefactura/",
     API_EXPORTAR:
-      "http://localhost/back-optica/public/contabilidad/api/exportar"
-      
-
+      "http://localhost/back-optica/public/contabilidad/api/exportar",
+    API_LOGIN:
+      "http://localhost/back-optica/public/usuarios/api/usuariologin"
       
   },
 };

@@ -52,8 +52,8 @@ export default function CardIndex() {
 	  <div className="flex flex-wrap">
 		  {
 		  data.map((item, index) => (
-			 <Link href={item.path}>
-				<Card className={classes.root} key={index}>
+			 <Link href={item.path} key={index}>
+				<Card className={classes.root} >
 				
 				<CardActionArea>
 					<CardMedia

@@ -8,6 +8,10 @@ import axios from "axios";
 import CachedIcon from '@material-ui/icons/Cached';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
 import ExportCSV from './modules/Contabilidad/ExportCSV';
+import {useRouter} from "next/router"
+import useAuth from '../hooks/useAuth';
+import {getLogin} from './api/user';
+
 
 export default function Productos() {
 	const urlObtenerFacturaPersona = `${process.env.API_OBTENER_FACTURA_PERSONA}`;
@@ -15,6 +19,10 @@ export default function Productos() {
 	const [allInvoices, setAllInvoices] = useState([]);
 	const [cedulaBuscar, setCedulaBuscar] = useState();
 	const [buscando, setBuscando] = useState();
+
+	const [user, setUser] = useState(undefined);
+  const router = useRouter();
+  const {auth} = useAuth(); 
 
 	const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
 		try {
@@ -38,11 +46,18 @@ export default function Productos() {
 	}
 
 	useEffect(() => {
+		const response = getLogin();
+		setUser(response) 
 		buscando && getInvoices(`${urlObtenerFacturaPersona}${cedulaBuscar}`, setAllInvoices);
 		!buscando && getInvoices(urlObtenerFacturas, setAllInvoices);
 	}, [cedulaBuscar, buscando])
 
 	const fileName = 'Optica Quindiana'
+
+	if (user === undefined) return null;
+  if (!auth && !user) {
+    router.replace("./login")
+  }
 	
 	return (
 		<div>
