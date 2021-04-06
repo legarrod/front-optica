@@ -198,7 +198,7 @@ const createDetail =(data)=>{
 		localStorage.removeItem('dataDetallefactura');
 		localStorage.removeItem('facturaSinGuardar');
 		localStorage.removeItem('respaldoFactura');
-		getIdFactura(`${url}${numFactura}`, setIdFactura, setFacturaOk);
+		getIdFactura(`${url}${invoiceData.numero_factura}`, setIdFactura, setFacturaOk);
 		}
 		if (facturaOk) {
 			saveDetalleFactura()
