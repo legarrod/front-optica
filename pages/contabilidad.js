@@ -11,6 +11,7 @@ import ExportCSV from './modules/Contabilidad/ExportCSV';
 import {useRouter} from "next/router"
 import useAuth from '../hooks/useAuth';
 import {getLogin} from './api/user';
+import ResumenHistoria from './modules/ControlCitas/ResumenHistoria/ResumenHistoria'
 
 
 export default function Productos() {
@@ -19,6 +20,7 @@ export default function Productos() {
 	const [allInvoices, setAllInvoices] = useState([]);
 	const [cedulaBuscar, setCedulaBuscar] = useState();
 	const [buscando, setBuscando] = useState();
+	const [verHistoria, setVerHistoria] = useState(false)
 
 	const [user, setUser] = useState(undefined);
   const router = useRouter();
@@ -57,6 +59,10 @@ export default function Productos() {
 	if (user === undefined) return null;
   if (!auth && !user) {
     router.replace("./login")
+  }
+
+  const handlerVerHistoria =()=>{
+	setVerHistoria(true)
   }
 	
 	return (
@@ -98,14 +104,32 @@ export default function Productos() {
 		>
 			Refrescar
 		</Button>
+		<div className='mx-2'>
+			<Button
+		  variant="contained"
+		  color="primary"
+		  size="large"
+		  className="rounded-sm"
+		  style={{ marginTop: 4}}
+		  onClick={()=>handlerVerHistoria()}
+		>
+			Ver historia
+		</Button>
+		</div>
 		
+
 		<ExportCSV fileName={fileName} />
-			</div>
+
+		</div>
             <TablaClientesAbonos allInvoices={allInvoices} setAllInvoices={setAllInvoices}/>
-          </div>
+        </div>
         
         </div>
 				</div>
+			}
+
+			{
+				verHistoria && <ResumenHistoria setVerHistoria={setVerHistoria}/>
 			}
 		</div>
 	)

@@ -209,7 +209,7 @@ const resetearFecha = ()=>{
             <h2 className="text-3xl" id="titulo-registro">
               Registrar usuario
             </h2>
-            <FormRegistroUsuario setOpen={setOpen} accion={accion} setOpenRegCita={setOpenRegCita} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente}/>
+            <FormRegistroUsuario setOpen={setOpen} accion={accion} setOpenRegCita={setOpenRegCita} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente} getAllData={getAllData}/>
           </div>
         </Fade>
       </Modal>
