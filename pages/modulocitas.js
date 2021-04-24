@@ -71,6 +71,7 @@ export default function ModuloCitas() {
   const classes = useStyles();
   const [paciente, setPaciente] = useState({});
   const [fechaFilter, setFechaFilter] = useState(getDate(hoy));
+  const [dateContainer, setDateContainer] = useState(true);
 
   const [user, setUser] = useState(undefined);
   const router = useRouter();
@@ -90,6 +91,7 @@ const resetearFecha = ()=>{
   const handlerCitasPorFecha =(day)=>{
     //setFechaFilter(getDate(day))
     getData(`${urlCitasPorFecha}${getDate(day)}`, setData);
+    setDateContainer(false);
   };
   
   useEffect(() => {
@@ -186,7 +188,7 @@ const resetearFecha = ()=>{
             variant="contained"
             color="primary"
             onClick={() => resetearFecha()}
-            
+            disabled={dateContainer}
           >
             Resetear fecha
           </Button>
