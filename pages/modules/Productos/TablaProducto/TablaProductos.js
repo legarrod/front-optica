@@ -205,8 +205,8 @@ export default function CustomizedTableProducto() {
 							Crear productos
 						</Button>
 				</div>
-				<div className="overflow-y-auto w-full mx-3 h-5/6">
-						<TableContainer component={Paper}>
+				<div className="overflow-y-auto w-full mx-3 ">
+						<TableContainer className="h-96" component={Paper}>
 							<Table aria-label="customized table">
 								<TableHead>
 								<TableRow>

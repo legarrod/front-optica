@@ -28,7 +28,8 @@ export default function Productos() {
 
 	const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
 		try {
-			const data = await axios.get(urlObtenerFacturas, setAllInvoices);
+			const data = await axios.get(urlObtenerFacturas);
+			console.log(data);
 			if (data) {
 			//setAllProducts(data.data);
 			setAllInvoices(data.data.data)
@@ -39,6 +40,7 @@ export default function Productos() {
 	}
 
 	const refresData =()=>{
+		setBuscando(false)
 		getInvoices(urlObtenerFacturas, setAllInvoices);
 	} 
 
@@ -99,8 +101,8 @@ export default function Productos() {
 		  size="large"
 		  className="rounded-sm"
 		  style={{ marginTop: 4}}
-		  startIcon={<CachedIcon 
-		  onClick={()=>refresData()}/>}
+		  onClick={()=>refresData()}
+		  startIcon={<CachedIcon/>}
 		>
 			Refrescar
 		</Button>

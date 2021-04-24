@@ -16,17 +16,6 @@ export default function FormCrearProducto({ setOpen, refresData }) {
   const [dataResponse, setDataResponse] = useState("");
 
   const postProducto = async (url, formData = null, succes = null) => {
-    let codigo = document.getElementById("codigo").value;
-    let nombre = document.getElementById("nombre").value;
-    let descripcion = document.getElementById("descripcion").value;
-    if (codigo === "" || nombre === "" || descripcion === "") {
-      swal({
-        text: "Por favor complete todos los campos",
-        button: {
-          text: "De acuerdo!",
-        }
-      })
-    } else {
       try {
         const data = await axios.post(url, formData);
        
@@ -43,19 +32,29 @@ export default function FormCrearProducto({ setOpen, refresData }) {
         console.log(error);
       }
       //return axios.post(url, formData);
-    }
+    
   };
 
  const succes =(data)=>{
-   console.log(data);
   setDataResponse(data)
   refresData();
  };
 
   const onSubmit = (data) => {
+    let codigo = document.getElementById("codigo").value;
+    let nombre = document.getElementById("nombre").value;
+    let descripcion = document.getElementById("descripcion").value;
 	  let newdata = Object.assign(data, files);
-	 
+    if (codigo === "" || nombre === "" || descripcion === "") {
+      swal({
+        text: "Por favor complete todos los campos",
+        button: {
+          text: "De acuerdo!",
+        }
+      })
+    } else {
     postProducto(url, data, succes)
+    }
   };
 
 //   const obtenerPaciente = async (urlConsultarPaciente, cedulaPaciente, setData) => {
