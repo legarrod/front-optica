@@ -70,7 +70,7 @@ export default function ModuloCitas() {
   const [accion, setAccion] = useState('');
   const classes = useStyles();
   const [paciente, setPaciente] = useState({});
-  const [fechaFilter, setFechaFilter] = useState(getDate(hoy));
+
 
   const [user, setUser] = useState(undefined);
   const router = useRouter();

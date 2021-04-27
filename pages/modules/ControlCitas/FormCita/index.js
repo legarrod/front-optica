@@ -1,16 +1,11 @@
 import React, {useState, useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
 import BlockIcon from "@material-ui/icons/Block";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import getDate from '../../../utils/utils'
-import {post, put} from '../../../api/AsyncHttpRequest'
+import { put} from '../../../api/AsyncHttpRequest'
 import swal from "sweetalert";
 import Link from 'next/link';
 
@@ -34,17 +29,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function index(allData) {
-  let idCita = parseInt(allData?.allData?.id_cita_paciente);
   let informacionCita = allData?.allData;
   const url = `${process.env.API_ACTUALIZAR_CITA}/`;
-  const [dataResponse, setDataResponse] = useState("");
+const [disbledButton, setDisbledButton] = useState(false)
   const classes = useStyles();
   let hoy = new Date();
-  const { register, handleSubmit, control } = useForm();
-  const [state, setState] = React.useState({
-    id: "",
-    ciudad: "hai",
-  });
+  const { register, handleSubmit } = useForm();
+
   const defaultInfo = {
     nombre_doctor: 1,
     fk_id_sede: 1,
@@ -54,16 +45,17 @@ export default function index(allData) {
     id_cita_paciente: parseInt(allData?.allData?.id_cita_paciente)
   }
 
-  const onSubmit = (data) => (
-    put(url, Object.assign(data, defaultInfo), setDataResponse)
-  )
-
-  useEffect(() => {
-    if (dataResponse) {
-      swal("Exelente", "Cita Actualizada con exito!", "success");
+  const setDataResponse = (data)=>{
+    if (data?.data) {
+      setDisbledButton(false)
+      swal("Exelente", "Cita Actualizada con exito!", "success")
     }
-    
-  }, [dataResponse])
+  }
+
+  const onSubmit = (data) =>{
+    setDisbledButton(true)
+    put(url, Object.assign(data, defaultInfo), setDataResponse)
+  }
  
   return (
     <div className="border-2 rounded-lg border-gray-300 p-2 mx-2 md:m-5">
@@ -72,219 +64,326 @@ export default function index(allData) {
       className="flex flex-wrap justify-center"
       onSubmit={handleSubmit(onSubmit)}
     >
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="anamnesis"
-          defaultValue={informacionCita?.anamnesis}
-          placeholder="Anamnesis"
-          ref={register}
-        />          
+     {/* -------------------------------------------------------------- */}
+     <div className="hidden sm:flex sm:flex-col">
+          <div className="flex flex-row justify-center items-center">
+          <p className="text-lg mr-3 text-black uppercase transform hidden sm:block -rotate-90 sm:rotate-0">Lejos</p>
+            <div className="m-0 flex flex-col justify-end ">
+            <p className="text-black text-xl font-semibold text-center uppercase">OJO</p>
+              <input
+              disabled
+                className="border-2 text-black w-32 border-white text-center m-1 text-lg p-1"
+                placeholder="Derecho"
+              />          
+              <input
+              disabled
+                className="border-2 text-black w-32 border-white text-center m-1 text-lg p-1"
+                placeholder="Izquierdo"
+              />
+            </div>
         </div>
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="biomicrodcopia"
-          defaultValue={informacionCita?.biomicrodcopia}
-          placeholder="Biomicrodcopia"
-          ref={register}
-        />
+        <div className="flex flex-row justify-center items-center">
+        <p className="text-lg mr-3 text-black transform hidden sm:block -rotate-90 sm:rotate-0 uppercase">Cerca</p>
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+            disabled
+                className="border-2 text-black w-32 border-white text-center m-1 text-lg p-1"
+                placeholder="Derecho"
+              />
+            <input
+            disabled
+              className="border-2 text-black w-32 border-white text-center m-1 text-lg p-1"
+              placeholder="Izquierdo"
+            />
+          </div>
         </div>
+        <div className="flex flex-row justify-center items-center">
+        <p className="text-lg m-0 text-black transform hidden sm:block -rotate-90 sm:rotate-0 uppercase">Actual</p>
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+            disabled
+              className="border-2 text-black w-32 border-white text-center m-1 text-lg p-1"
+              placeholder="Derecho"
+            />
+    
+            <input
+            disabled
+              className="border-2 text-black w-32 border-white text-center m-1 text-lg p-1"
+              placeholder="Izquierdo"
+            />
+          </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_rx_uso"
-          defaultValue={informacionCita?.od_rx_uso}
-          placeholder="OD rx en uso"
-          ref={register}
-        />
         </div>
+      </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_rx_uso"
-          defaultValue={informacionCita?.oi_rx_uso}
-          placeholder="OI rx en uso"
-          ref={register}
-        />
+        {/* -------------------------------------------------------------- */}
+        {/* -------------------------------------------------------------- */}
+      <div className="flex flex-col">
+          <div className="flex flex-row justify-center items-center">
+             <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+            <div className="m-0 flex flex-col justify-end ">
+            <p className="text-black text-xl font-semibold text-center uppercase">Esferico</p>
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_esferico_derecho"
+                defaultValue={informacionCita?.lejos_esferico_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />          
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_esferico_izquierdo"
+                defaultValue={informacionCita?.lejos_esferico_izquierdo}
+                placeholder="Izquierdo"
+                ref={register}
+              />
+            </div>
         </div>
+        <div className="flex flex-row justify-center items-center">
+          <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="cerca_esferico_derecho"
+                defaultValue={informacionCita?.cerca_esferico_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="cerca_esferico_izquierdo"
+              defaultValue={informacionCita?.cerca_esferico_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
+        </div>
+        <div className="flex flex-row justify-center items-center">
+         <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_esferico_derecho"
+              defaultValue={informacionCita?.actual_esferico_derecho}
+              placeholder="Derecho"
+              ref={register}
+            />
+    
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_esferico_izquierdo"
+              defaultValue={informacionCita?.actual_esferico_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_ap"
-          defaultValue={informacionCita?.oi_ap}
-          placeholder="OI ap"
-          ref={register}
-        />
         </div>
+      </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_af"
-          defaultValue={informacionCita?.oi_af}
-          placeholder="OI af"
-          ref={register}
-        />
-        </div>
+        {/* -------------------------------------------------------------- */}
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_ap"
-          defaultValue={informacionCita?.od_ap}
-          placeholder="OI ap"
-          ref={register}
-        />
-        </div>
+      
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_af"
-          defaultValue={informacionCita?.od_af}
-          placeholder="OI af"
-          ref={register}
-        />
+       {/* -------------------------------------------------------------- */}
+      <div className="flex flex-col">
+          <div className="flex flex-row justify-center items-center">
+ <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+            <div className="m-0 flex flex-col justify-end ">
+            <p className="text-black text-xl font-semibold text-center uppercase">Cilindro</p>
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_cilindro_derecho"
+                defaultValue={informacionCita?.lejos_cilindro_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />          
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_cilindro_izquierdo"
+                defaultValue={informacionCita?.lejos_cilindro_izquierdo}
+                placeholder="Izquierdo"
+                ref={register}
+              />
+            </div>
         </div>
+        <div className="flex flex-row justify-center items-center">
+   <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="cerca_cilindro_derecho"
+                defaultValue={informacionCita?.cerca_cilindro_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="cerca_cilindro_izquierdo"
+              defaultValue={informacionCita?.cerca_cilindro_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
+        </div>
+        <div className="flex flex-row justify-center items-center">
+         <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p>  
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_cilindro_derecho"
+              defaultValue={informacionCita?.actual_cilindro_derecho}
+              placeholder="Derecho"
+              ref={register}
+            />
+    
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_cilindro_izquierdo"
+              defaultValue={informacionCita?.actual_cilindro_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_avvlsc"
-          defaultValue={informacionCita?.od_avvlsc}
-          placeholder="OD avvlsc"
-          ref={register}
-        />
         </div>
+      </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_avvpsc"
-          defaultValue={informacionCita?.od_avvpsc}
-          placeholder="OD avvpsc"
-          ref={register}
-        />
+        {/* -------------------------------------------------------------- */}
+        {/* -------------------------------------------------------------- */}
+      <div className="flex flex-col">
+          <div className="flex flex-row justify-center items-center">
+            <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+            <div className="m-0 flex flex-col justify-end ">
+            <p className="text-black text-xl font-semibold text-center uppercase">Eje</p>
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_eje_derecho"
+                defaultValue={informacionCita?.lejos_eje_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />          
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_eje_izquierdo"
+                defaultValue={informacionCita?.lejos_eje_izquierdo}
+                placeholder="Izquierdo"
+                ref={register}
+              />
+            </div>
         </div>
+        <div className="flex flex-row justify-center items-center">
+   <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="cerca_eje_derecho"
+                defaultValue={informacionCita?.cerca_eje_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="cerca_eje_izquierdo"
+              defaultValue={informacionCita?.cerca_eje_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
+        </div>
+        <div className="flex flex-row justify-center items-center">
+          <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_eje_derecho"
+              defaultValue={informacionCita?.actual_eje_derecho}
+              placeholder="Derecho"
+              ref={register}
+            />
+    
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_eje_izquierdo"
+              defaultValue={informacionCita?.actual_eje_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_avccvt"
-          defaultValue={informacionCita?.od_avccvt}
-          placeholder="OD avccvt"
-          ref={register}
-        />
         </div>
+      </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_avccvp"
-          defaultValue={informacionCita?.od_avccvp}
-          placeholder="OD avccvp"
-          ref={register}
-        />
+        {/* -------------------------------------------------------------- */}
+         {/* -------------------------------------------------------------- */}
+      <div className="flex flex-col">
+      <div className="flex flex-row justify-center items-center">
+            <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+            <div className="m-0 flex flex-col justify-end ">
+            <p className="text-black text-xl font-semibold text-center uppercase">A.V.</p>
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_av_derecho"
+                defaultValue={informacionCita?.lejos_av_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />          
+              <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_av_izquierdo"
+                defaultValue={informacionCita?.lejos_av_izquierdo}
+                placeholder="Izquierdo"
+                ref={register}
+              />
+            </div>
         </div>
+        <div className="flex flex-row justify-center items-center">
+   <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="cerca_av_derecho"
+                defaultValue={informacionCita?.cerca_av_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="cerca_av_izquierdo"
+              defaultValue={informacionCita?.cerca_av_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
+        </div>
+        <div className="flex flex-row justify-center items-center">
+          <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_av_derecho"
+              defaultValue={informacionCita?.actual_av_derecho}
+              placeholder="Derecho"
+              ref={register}
+            />
+    
+            <input
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_av_izquierdo"
+              defaultValue={informacionCita?.actual_av_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_refraccion"
-          defaultValue={informacionCita?.od_refraccion}
-          placeholder="OD refracción"
-          ref={register}
-        />
         </div>
+      </div>
 
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="od_rx_final"
-          defaultValue={informacionCita?.od_rx_final}
-          placeholder="OD rx final"
-          ref={register}
-        />
-        </div>
-
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_avvlsc"
-          defaultValue={informacionCita?.oi_avvlsc}
-          placeholder="OI avvlsc"
-          ref={register}
-        />
-        </div>
-
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_avvpsc"
-          defaultValue={informacionCita?.oi_avvpsc}
-          placeholder="OI avvpsc"
-          ref={register}
-        />
-        </div>
-
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_avccvt"
-          defaultValue={informacionCita?.oi_avccvt}
-          placeholder="OI avccvt"
-          ref={register}
-        />
-        </div>
-
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_avccvp"
-          defaultValue={informacionCita?.oi_avccvp}
-          placeholder="OI avccvp"
-          ref={register}
-        />
-        </div>
-
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_refraccion"
-          defaultValue={informacionCita?.oi_refraccion}
-          placeholder="OI refracción"
-          ref={register}
-        />
-        </div>
-
-        <div className="mx-1 my-1">
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="oi_rx_final"
-          defaultValue={informacionCita?.oi_rx_final}
-          placeholder="OI rx final"
-          ref={register}
-        />
-        </div>
-
-        <div className="mx-1 my-1">
-        <input
-        type="number"
-          className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
-          name="valor_cita"
-          defaultValue={informacionCita?.valor_cita}
-          placeholder="Valor cita"
-          ref={register}
-        />
-        </div>
+        {/* -------------------------------------------------------------- */}
 
         <div className="mx-1 my-1 md:w-full">
           <input
-            className="border-2 h-20 md:w-full border-gray-400 rounded-md m-3 text-xl p-3"
+            className="border-2 h-20 md:w-full border-gray-400 rounded-md  text-xl p-3"
             name="observaciones"
             defaultValue={informacionCita?.observaciones}
             placeholder="Observaciones"
@@ -294,7 +393,18 @@ export default function index(allData) {
         </div>
 
         <div className="flex flex-wrap  md:flex-row w-full justify-center md:justify-end">
-          <select className="border-2 p-2 bg-white border-gray-400 rounded-md text-xl" name="fk_id_estado" ref={register}>
+          <div className="mx-1 my-1 flex flex-col sm:flex-row justify-center items-center">
+          <p className="text-sm m-0 text-black uppercase">Valor cita</p> 
+            <input
+            type="number"
+              className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
+              name="valor_cita"
+              defaultValue={informacionCita?.valor_cita}
+              placeholder="Valor cita"
+              ref={register}
+            />
+          </div>
+          <select className="border-2 sm:mt-5 h-12 bg-white border-gray-400 rounded-md text-xl" name="fk_id_estado" ref={register}>
             <option value={0}>Re-abrir</option>
             <option value={1}>Consultado</option>
             <option value={2}>Cancelar</option>
@@ -318,6 +428,7 @@ export default function index(allData) {
 
           <div className="mx-5 my-2">
             <Button
+            disabled={disbledButton}
               type="submit"
               variant="contained"
               color="primary"
