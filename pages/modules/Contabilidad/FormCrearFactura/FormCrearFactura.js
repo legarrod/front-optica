@@ -67,7 +67,6 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   const [facturaOk, setFacturaOk] =useState();
   const [sinInternet, setSinInternet] =useState(false);
 
-
  const getProductos = async (urlGetProductos, setListadoProductos) => {
 	try {
 	  const { data } = await axios.get(urlGetProductos);
@@ -78,13 +77,27 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
 	  console.log(error.message);
 	}
   };
+const success =(data)=>{
+	console.log(data);
+	if(data.data.data === true){
+		swal({
+            text: "Bien hecho, se ha creado una nueva factura",
+            button: {
+              text: "De acuerdo!",
+            }
+          })
+		  localStorage.removeItem('respaldoFactura');
+		  localStorage.removeItem('facturaSinGuardar');
+		  setFacturaPendiente(false)
+		  router.push('/contabilidad')
+	}
 
-  const postFactura = async (url, formData = null, setDataResponse = null) => {
+}
+  const postFactura = async (url, formData = null, success = null) => {
     try {
       const data = await axios.post(url, formData);
-      if (data.data.data === true) {
-        setDataResponse(data.data);
-      }
+        success(data);
+
     } catch (error) {
       console.log(error);
     }
@@ -127,7 +140,7 @@ const createDetail =(data)=>{
 		localStorage.setItem('copyDetalle', JSON.stringify(copyDetalle))
 		localStorage.setItem('respaldoFactura', JSON.stringify(newData))
 		localStorage.setItem('facturaSinGuardar', true)
-		postFactura(urlPosTFactura, newData, setDataResponse)
+		postFactura(urlPosTFactura, newData, success)
 	};
 
 	const handleTextarea = (e)=>{
@@ -149,6 +162,8 @@ const createDetail =(data)=>{
 		setEstado(e.target.options[index].text)
 	}
 	const handlerReenviar =()=>{
+		let backup = JSON.parse(localStorage.getItem('respaldoFactura'))
+		postFactura(urlPosTFactura, backup, success)
 		console.log('reenviado...');
 	}
 	const handlerAddProductDetail =(e)=>{

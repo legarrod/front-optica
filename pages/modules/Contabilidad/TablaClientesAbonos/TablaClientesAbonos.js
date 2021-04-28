@@ -20,7 +20,8 @@ import getDate from "../../../utils/utils";
 import LocalPrintshopIcon from '@material-ui/icons/LocalPrintshop';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Factura from "../Factura/Factura"
-import { put} from '../../../api/AsyncHttpRequest'
+import { put, remove} from '../../../api/AsyncHttpRequest'
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -83,7 +84,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   });
 
 
-export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
+export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAllInvoices}) {
 	let hoy = new Date();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -92,6 +93,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
   const urlObtenerFacturas = `${process.env.API_OBTENER_FACTURAS}`;
   const urlObtenerFacturaPersona = `${process.env.API_OBTENER_FACTURA_PERSONA}`;
   const urlObtenerDetallePorFactura = `${process.env.API_OBTENER_DETALLER_POR_FACTURA}`;
+  const urlRemove = `${process.env.API_ELIMINAR_FACTURA}`;
   const urlActualizarStado = `${process.env.API_ACTUALIZAR_ESTADO_CITA}`;
   const urlObtenerAbonosFactura = `${process.env.API_OBTENER_ABONOS_POR_FACTURA}`;
   const [dataResponse, setDataResponse] = useState();
@@ -108,6 +110,19 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 	  setOpen(false);
 	};
  
+	const responseCallback = (response)=>{
+		if (response.data === 'Factura eliminada correctamente') {
+			swal({
+				text: response.data,
+				button: {
+				  text: "De acuerdo!",
+				}
+			  })
+			  getAllInvoices(urlObtenerFacturas, setAllInvoices);
+		}
+
+	}
+
 	const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
 		try {
 			const data = await axios.get(urlObtenerFacturas, setAllInvoices);
@@ -177,9 +192,14 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 	const handlerImprimirFactura =()=>{
 		window.print()
 	}
-const callbackResponse =(data)=>{
-	refresData()
-}
+	const callbackResponse =(data)=>{
+		refresData()
+	}
+
+	const eliminarFactura =(idFactura)=>{
+		let id = parseInt(idFactura.id)
+		remove(`${urlRemove}${id}`, responseCallback)
+	}
 	const handlerSaveState =(data)=>{
 		let index = data.e.target.selectedIndex;
 		let newData = {estado: data.e.target.options[index].text, id_factura: parseInt(data.row.id)}
@@ -187,7 +207,7 @@ const callbackResponse =(data)=>{
 		// put(url, Object.assign(data, defaultInfo), setDataResponse)
 		put(urlActualizarStado, newData, callbackResponse)
 		
-}	
+	}	
 	useEffect(() => {
 		refresData();
 		if (dataResponse?.data === true ) {
@@ -221,11 +241,12 @@ const callbackResponse =(data)=>{
 									<StyledTableCell align="center">
 										<button><RemoveRedEyeIcon onClick={() => verListadoAbonos(row)}/></button>
 										<button><CloudDownloadIcon onClick={() => handlerBuscarFactura(row)}/></button>
+										<button><DeleteIcon onClick={() => eliminarFactura(row)}/></button>
 									</StyledTableCell>
 									<StyledTableCell align="center">{row.cedula}</StyledTableCell>
 									<StyledTableCell align="center">{row.paciente}</StyledTableCell>
 									{/* /<StyledTableCell align="left"><p className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'}>{row.estado}</p></StyledTableCell> */}
-									<select className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg my-3' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'} name="fk_id_estado" ref={register} onChange={(e)=>handlerSaveState({row, e})}>
+									<select className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg my-3' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg my-3': 'bg-red-400 p-2 w-28 text-center rounded-lg my-3'} name="fk_id_estado" ref={register} onChange={(e)=>handlerSaveState({row, e})}>
 										<option selected="true" disabled="disabled">{row.estado}</option>
 										<option value={0}>Pendiente</option>
 										<option value={1}>Pagada</option>

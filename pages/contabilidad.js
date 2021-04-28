@@ -29,7 +29,6 @@ export default function Productos() {
 	const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
 		try {
 			const data = await axios.get(urlObtenerFacturas);
-			console.log(data);
 			if (data) {
 			//setAllProducts(data.data);
 			setAllInvoices(data.data.data)
@@ -123,7 +122,7 @@ export default function Productos() {
 		<ExportCSV fileName={fileName} />
 
 		</div>
-            <TablaClientesAbonos allInvoices={allInvoices} setAllInvoices={setAllInvoices}/>
+            <TablaClientesAbonos allInvoices={allInvoices} setAllInvoices={setAllInvoices} getAllInvoices={getInvoices}/>
         </div>
         
         </div>
