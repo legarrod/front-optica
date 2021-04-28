@@ -128,8 +128,15 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
     })
       .then((name) => {
         setCedulaPaciente(name);
-        if (!name) throw null;
-
+        if (!name){
+			swal({
+			  text: "Por favor ingrese un número de cedula",
+			  button: {
+				text: "De acuerdo!",
+			  }
+			})
+			throw null;
+		  }
         return fetch(`${urlCitas}/${name}`);
       })
       .then((results) => {

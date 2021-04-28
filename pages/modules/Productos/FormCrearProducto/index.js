@@ -16,17 +16,34 @@ export default function FormCrearProducto({ setOpen, refresData }) {
   const [dataResponse, setDataResponse] = useState("");
 
   const postProducto = async (url, formData = null, succes = null) => {
-    try {
-      const data = await axios.post(url, formData);
-     
-      if (data.data === "agregado correctamente") {
-
-        succes(data.statusText);
+    let codigo = document.getElementById("codigo").value;
+    let nombre = document.getElementById("nombre").value;
+    let descripcion = document.getElementById("descripcion").value;
+    if (codigo === "" || nombre === "" || descripcion === "") {
+      swal({
+        text: "Por favor complete todos los campos",
+        button: {
+          text: "De acuerdo!",
+        }
+      })
+    } else {
+      try {
+        const data = await axios.post(url, formData);
+       
+        if (data.data === "agregado correctamente") {
+          swal({
+            text: "Bien hecho, se ha creado el producto",
+            button: {
+              text: "De acuerdo!",
+            }
+          })
+          succes(data.statusText);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+      //return axios.post(url, formData);
     }
-    //return axios.post(url, formData);
   };
 
  const succes =(data)=>{
@@ -84,7 +101,6 @@ export default function FormCrearProducto({ setOpen, refresData }) {
 	
   }, [dataResponse]);
   
-
   return (
     <form
       className="flex flex-col w-80 justify-center"
@@ -94,6 +110,7 @@ export default function FormCrearProducto({ setOpen, refresData }) {
 	  <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="codigo"
+          id="codigo"
           placeholder="Codigo"
           value={data?.codigo}
           ref={register}
@@ -101,6 +118,7 @@ export default function FormCrearProducto({ setOpen, refresData }) {
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="nombre"
+          id="nombre"
           placeholder="Nombre"
           value={data?.nombre}
           ref={register}
@@ -108,6 +126,7 @@ export default function FormCrearProducto({ setOpen, refresData }) {
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="descripcion"
+          id="descripcion"
           placeholder="Descripcion"
           value={data?.descripcion}
           ref={register}
