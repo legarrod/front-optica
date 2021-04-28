@@ -15,16 +15,26 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
   const [idPaciente, setIdPaciente] = useState();
   const [horaCita, setHoraCita] = useState();
   const hora = ['09:00 am', '09:30 am', '10:00 am', '10:30 am', '11:00 am', '11:30 am', '12:00 pm', '12:30 pm', '01:00 pm', '01:30 pm', '02:00 pm', '02:30 pm', '03:00 pm', '03:30 pm', '04:00 pm', '04:30 pm', '05:00 pm', '05:30 pm']
-  
+  const [disabledButton, setDisabledButton] = useState(false)
   const { register, handleSubmit } = useForm();
-  const [dataResponse, setDataResponse] = useState("");
 
-  const postCita = async (url, formData = null, setDataResponse = null) => {
+
+  const setDataResponse =(data)=>{
+ 
+    if (data.data.data === true) {
+      swal("Exelente", "Se ha registrado una nueva cita", "success");
+      setOpen(false);
+      getDataEvent();
+      setDisabledButton(false)
+    }
+  }
+
+  const postCita = async (url, formData = null) => {
     try {
       const data = await axios.post(url, formData);
-      if (data.data.status_code === 200) {
-        setDataResponse(data.data.status_code);
-      }
+      
+        setDataResponse(data);
+    
     } catch (error) {
       console.log(error);
     }
@@ -32,7 +42,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
   };
 
   const onSubmit = (data) => {
-    
+    setDisabledButton(true)
     let newData = {
           fk_id_paciente: parseInt(idPaciente),
           nombre_doctor: 1,
@@ -41,26 +51,30 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
           fecha_creacion: getDate(hoy),
           fecha_cita: fecha,
           hora: horaCita,
-          anamnesis: "",
-          biomicrodcopia: "",
-          od_rx_uso: "",
-          oi_rx_uso: "",
-          oi_ap: "",
-          oi_af: "",
-          od_ap: "",
-          od_af: "",
-          od_avvlsc: "",
-          od_avvpsc: "",
-          od_avccvt: "",
-          od_avccvp: "",
-          od_refraccion: "",
-          od_rx_final: "",
-          oi_avvlsc: "",
-          oi_avvpsc: "",
-          oi_avccvt: "",
-          oi_avccvp: "",
-          oi_refraccion: "",
-          oi_rx_final: "",
+          actual_av_derecho: "",
+          actual_av_izquierdo: "",
+          actual_cilindro_derecho: "",
+          actual_cilindro_izquierdo: "",
+          actual_eje_derecho: "",
+          actual_eje_izquierdo: "",
+          actual_esferico_derecho: "",
+          actual_esferico_izquierdo: "",
+          cerca_av_derecho: "",
+          cerca_av_izquierdo: "",
+          cerca_cilindro_derecho: "",
+          cerca_cilindro_izquierdo: "",
+          cerca_eje_derecho: "",
+          cerca_eje_izquierdo: "",
+          cerca_esferico_derecho: "",
+          cerca_esferico_izquierdo: "",
+          lejos_av_derecho: "",
+          lejos_av_izquierdo: "",
+          lejos_cilindro_derecho: "",
+          lejos_cilindro_izquierdo: "",
+          lejos_eje_derecho: "",
+          lejos_eje_izquierdo: "",
+          lejos_esferico_derecho: "",
+          lejos_esferico_izquierdo: "",
           valor_cita: "",
           observaciones: ""
       }
@@ -75,7 +89,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
     let urlN = `${urlConsultarPaciente}/${cedulaPaciente}`
     try {
       const { data } = await axios.get(urlN);
-      
+     
       if (data) {
         setData(data);
         setIdPaciente(data.id)
@@ -87,12 +101,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
 
   useEffect(() => {
     obtenerPaciente(urlConsultarPaciente, cedulaPaciente, setData)
-    if (dataResponse) {
-      swal("Exelente", "Se ha registrado una nueva cita", "success");
-      setOpen(false);
-      getDataEvent();
-    }
-  }, [dataResponse]);
+  }, []);
   
 
   return (
@@ -105,14 +114,14 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="nombre"
           placeholder="Nombre"
-          value={data?.nombre}
+          defaultValue={data?.nombre}
           ref={register}
         />
         <input
           className="border-2 border-gray-400 rounded-md m-3 text-xl"
           name="apellidos"
           placeholder="Apellidos"
-          value={data?.apellidos}
+          defaultValue={data?.apellidos}
           ref={register}
         />
         <div className="flex flex-wrap mb-2 items-center">
@@ -132,6 +141,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
       </div>
       
       <input
+      disabled={disabledButton}
         className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
         type="submit"
       />

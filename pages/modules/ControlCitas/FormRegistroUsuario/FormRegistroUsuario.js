@@ -32,36 +32,40 @@ export default function FormRegistroUsuario({
   const url = `${process.env.API_GUARDAR_PACIENTE}`;
   const urlPut =`${process.env.API_ACTUALIZAR_INFORMACION_DEL_PACIENTE}`;
   const { register, handleSubmit, control } = useForm();
-  const [dataResponse, setDataResponse] = useState("");  
+  const [disabledButton, setDisabledButton] = useState(false)
+  
+  const setDataResponse =(data)=>{
+    setDisabledButton(false)
+    if (data.data === "Paciente agregado correctamente") {
+      swal("Exelente", "Paciente creado", "success");
+      
+      setOpen(false);
+      getAllData();
+      if (!accion) {
+        getAllData();
+        setOpen(false);
+        setOpenRegCita(true);
+      }
+    }else if(data.data === "Paciente actualizado correctamente"){
+      swal("Exelente", "Paciente actualizado correctamente", "success");
+      getAllData();
+      setOpen(false);
+    }
+
+  }
 
   const onSubmit = (data) => {
-    console.log(accion);
+   
     if (accion === 'actualizar') {
+      setDisabledButton(true)
       put(urlPut, data, setDataResponse)
     }else if(accion === 'crear'){
+      setDisabledButton(true)
       post(url, Object.assign(data, fechaRegistro), setDataResponse)
       setCedulaPaciente(data.cedula)
     }
   };
 
-  useEffect(() => {
- 
-      if (dataResponse === "Paciente agregado correctamente") {
-        swal("Exelente", "Paciente creado", "success");
-        setOpen(false);
-        getAllData();
-        if (!accion) {
-          getAllData();
-          setOpen(false);
-          setOpenRegCita(true);
-        }
-      }else if(dataResponse.data === "Paciente actualizado correctamente"){
-        swal("Exelente", "Paciente actualizado correctamente", "success");
-        window.location.reload();
-        setOpen(false);
-      }
-      
-  }, [dataResponse]);
 
   return (
     
@@ -146,7 +150,8 @@ export default function FormRegistroUsuario({
             ref={register}
           />
      
-        <input
+     <input
+          disabled={disabledButton}
           className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
           type="submit"
         />

@@ -14,9 +14,9 @@ export const getData = async (url, setData) => {
 export const post = async (url, formData = null, setDataResponse = null) => {
   try {
     const data = await axios.post(url, formData, setDataResponse);
-    if (data.data === "Paciente agregado correctamente") {
-      setDataResponse(data.data);
-    }
+  
+      setDataResponse(data);
+
   } catch (error) {
     console.log(error);
   }
@@ -26,10 +26,8 @@ export const post = async (url, formData = null, setDataResponse = null) => {
 export const put = async (url, params = null, setDataResponse = null) => {
   try {
     const data = await axios.put(url, params, setDataResponse);
-
-    if (data.data === "Cita actualizada correctamente" || data.data === "Paciente actualizado correctamente") {
       setDataResponse(data);
-    }
+   
   } catch (error) {
     console.log(error);
   }

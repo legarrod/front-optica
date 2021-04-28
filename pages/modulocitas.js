@@ -73,6 +73,7 @@ export default function ModuloCitas() {
   const [fechaFilter, setFechaFilter] = useState(getDate(hoy));
   const [dateContainer, setDateContainer] = useState(true);
 
+
   const [user, setUser] = useState(undefined);
   const router = useRouter();
   const {auth} = useAuth(); 

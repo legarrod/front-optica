@@ -87,88 +87,115 @@ export default function ResumenHistoria({setVerHistoria}) {
 											/> 
 										</div>
 									</div>
-									<div className="flex flex-wrap "> 
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">Anamnesis:</p>
-											<p>{citaPaciente.anamnesis}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">Biomicrodcopia:</p>
-											<p>{citaPaciente.biomicrodcopia}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_rx_uso:</p>
-											<p>{citaPaciente.od_rx_uso}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_rx_uso:</p>
-											<p>{citaPaciente.oi_rx_uso}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_ap:</p>
-											<p>{citaPaciente.oi_ap}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_af:</p>
-											<p>{citaPaciente.oi_af}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_ap:</p>
-											<p>{citaPaciente.od_ap}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_af:</p>
-											<p>{citaPaciente.od_af}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_avvlsc:</p>
-											<p>{citaPaciente.od_avvlsc}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_avvpsc:</p>
-											<p>{citaPaciente.od_avvpsc}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_avccvt:</p>
-											<p>{citaPaciente.od_avccvt}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_avccvp:</p>
-											<p>{citaPaciente.od_avccvp}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_refraccion:</p>
-											<p>{citaPaciente.od_refraccion}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">od_rx_final:</p>
-											<p>{citaPaciente.od_rx_final}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_avvlsc:</p>
-											<p>{citaPaciente.oi_avvlsc}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_avvpsc:</p>
-											<p>{citaPaciente.oi_avvpsc}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_avccvt	:</p>
-											<p>{citaPaciente.oi_avccvt	}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_avccvp:</p>
-											<p>{citaPaciente.oi_avccvp}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_refraccion:</p>
-											<p>{citaPaciente.oi_refraccion}</p>
-										</div>
-										<div className="flex flex-row m-1">
-											<p className="text-xs font-semibold mr-2">oi_rx_final:</p>
-											<p>{citaPaciente.oi_rx_final}</p>
+									<div className="grid grid-cols-1 md:grid-cols-2 "> 
+										<div className="flex flex-col justify-center items-start">
+											<div className="flex flex-row m-1 ">
+													<p className="text-xs font-semibold mr-2">Esferico lejos derecho:</p>
+													<p className="text-xs ">{citaPaciente.lejos_esferico_derecho}</p>
+												</div>
+												<div className="flex flex-row m-1 justify-center items-center">
+													<p className="text-xs font-semibold mr-2">Esferico lejos izquiero:</p>
+													<p className="text-xs ">{citaPaciente.lejos_esferico_izquierdo}</p>
+												</div>
+												<div className="flex flex-row m-1 justify-center items-center">
+													<p className="text-xs font-semibold mr-2">Esferico cerca derecho:</p>
+													<p className="text-xs ">{citaPaciente.cerca_esferico_derecho}</p>
+												</div>
+												<div className="flex flex-row m-1 justify-center items-center">
+													<p className="text-xs font-semibold mr-2">Esferico cerca izquiero:</p>
+													<p className="text-xs ">{citaPaciente.cerca_esferico_izquierdo}</p>
+												</div>
+												<div className="flex flex-row m-1 justify-center items-center">
+													<p className="text-xs font-semibold mr-2">Esferico actual derecho:</p>
+													<p className="text-xs ">{citaPaciente.actual_esferico_derecho}</p>
+												</div>
+												<div className="flex flex-row m-1 justify-center items-center">
+													<p className="text-xs font-semibold mr-2">Esferico actual izquiero:</p>
+													<p className="text-xs ">{citaPaciente.actual_esferico_izquierdo}</p>
+											</div>
+										
 										</div>
 
+										<div className="flex flex-col justify-center items-start">
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Cilindrico lejos derecho:</p>
+												<p className="text-xs ">{citaPaciente.lejos_cilindro_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Cilindrico lejos izquiero:</p>
+												<p className="text-xs ">{citaPaciente.lejos_cilindro_izquierdo}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Cilindrico cerca derecho:</p>
+												<p className="text-xs ">{citaPaciente.cerca_cilindro_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Cilindrico cerca izquiero:</p>
+												<p className="text-xs ">{citaPaciente.cerca_cilindro_izquierdo}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Cilindrico actual derecho:</p>
+												<p className="text-xs ">{citaPaciente.actual_cilindro_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Cilindrico actual izquiero:</p>
+												<p className="text-xs ">{citaPaciente.actual_cilindro_izquierdo}</p>
+											</div>
+										</div>
+										
+										<div className="flex flex-col justify-center items-start">
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Eje lejos derecho:</p>
+												<p className="text-xs ">{citaPaciente.lejos_eje_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Eje lejos izquiero:</p>
+												<p className="text-xs ">{citaPaciente.lejos_eje_izquierdo}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Eje cerca derecho:</p>
+												<p className="text-xs ">{citaPaciente.cerca_eje_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Eje cerca izquiero:</p>
+												<p className="text-xs ">{citaPaciente.cerca_eje_izquierdo}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Eje actual derecho:</p>
+												<p className="text-xs ">{citaPaciente.actual_eje_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">Eje actual izquiero:</p>
+												<p className="text-xs ">{citaPaciente.ctual_eje_izquierdo}</p>
+											</div>
+										</div>
+										<div className="flex flex-col justify-center items-start">
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V lejos derecho:</p>
+												<p className="text-xs ">{citaPaciente.lejos_av_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V lejos izquiero:</p>
+												<p className="text-xs ">{citaPaciente.lejos_av_izquierdo}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V cerca derecho:</p>
+												<p className="text-xs ">{citaPaciente.cerca_av_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V cerca izquiero:</p>
+												<p className="text-xs ">{citaPaciente.cerca_av_izquierdo}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V actual derecho:</p>
+												<p className="text-xs ">{citaPaciente.actual_av_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V actual izquiero:</p>
+												<p className="text-xs ">{citaPaciente.actual_av_izquierdo}</p>
+											</div>
+
+										</div>
 									</div>
 									
 								</div>

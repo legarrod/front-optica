@@ -9,18 +9,14 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditIcon from '@material-ui/icons/Edit';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
-import swal from "sweetalert";
 import { useSpring, animated } from "react-spring/web.cjs";
-import FormRegistroUsuario from "../../ControlCitas/FormRegistroUsuario/FormRegistroUsuario";
-import { getData, post } from '../../../api/AsyncHttpRequest';
+
 import FormCrearproducto from "../FormCrearProducto";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const StyledTableCell = withStyles((theme) => ({
