@@ -20,6 +20,7 @@ import getDate from "../../../utils/utils";
 import LocalPrintshopIcon from '@material-ui/icons/LocalPrintshop';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Factura from "../Factura/Factura"
+import { put} from '../../../api/AsyncHttpRequest'
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -91,6 +92,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
   const urlObtenerFacturas = `${process.env.API_OBTENER_FACTURAS}`;
   const urlObtenerFacturaPersona = `${process.env.API_OBTENER_FACTURA_PERSONA}`;
   const urlObtenerDetallePorFactura = `${process.env.API_OBTENER_DETALLER_POR_FACTURA}`;
+  const urlActualizarStado = `${process.env.API_ACTUALIZAR_ESTADO_CITA}`;
   const urlObtenerAbonosFactura = `${process.env.API_OBTENER_ABONOS_POR_FACTURA}`;
   const [dataResponse, setDataResponse] = useState();
   const [allAbonos, setAllAbonos] = useState();
@@ -175,7 +177,17 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 	const handlerImprimirFactura =()=>{
 		window.print()
 	}
-	
+const callbackResponse =(data)=>{
+	refresData()
+}
+	const handlerSaveState =(data)=>{
+		let index = data.e.target.selectedIndex;
+		let newData = {estado: data.e.target.options[index].text, id_factura: parseInt(data.row.id)}
+
+		// put(url, Object.assign(data, defaultInfo), setDataResponse)
+		put(urlActualizarStado, newData, callbackResponse)
+		
+}	
 	useEffect(() => {
 		refresData();
 		if (dataResponse?.data === true ) {
@@ -192,7 +204,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 	< div className="flex flex-col flex-wrap lg:flex-nowrap md:flex-row w-full">
 			<div className="w-full px-1 sm:px-8">
 				<p className="text-2xl w-full text-center mb-2">Facturas pendientes</p>
-				<div className="overflow-y-auto mx-0 w-full sm:mx-3 h-5/6">
+				<div className="overflow-y-auto mx-0 w-full sm:mx-3 h-96">
 						<TableContainer component={Paper}>
 							<Table aria-label="customized table">
 								<TableHead>
@@ -212,7 +224,13 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 									</StyledTableCell>
 									<StyledTableCell align="center">{row.cedula}</StyledTableCell>
 									<StyledTableCell align="center">{row.paciente}</StyledTableCell>
-									<StyledTableCell align="left"><p className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'}>{row.estado}</p></StyledTableCell>
+									{/* /<StyledTableCell align="left"><p className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'}>{row.estado}</p></StyledTableCell> */}
+									<select className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg my-3' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'} name="fk_id_estado" ref={register} onChange={(e)=>handlerSaveState({row, e})}>
+										<option selected="true" disabled="disabled">{row.estado}</option>
+										<option value={0}>Pendiente</option>
+										<option value={1}>Pagada</option>
+										<option value={2}>Cancelada</option>
+									</select>
 									</StyledTableRow>
 								))} 
 								</TableBody>
@@ -225,6 +243,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 				<div className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
 				{
 					dataInfo?.valor_factura > dataInfo?.total_deuda && dataInfo?.estado !== 'Pagada' && <div className="m-0 mb-5 flex flex-wrap justify-end">
+				
 					<Button
 					className="text-base"
 						variant="contained"

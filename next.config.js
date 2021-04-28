@@ -51,7 +51,8 @@ module.exports = {
     API_LOGIN:
       "http://apioptica.recaudo.xyz/public/usuarios/api/usuariologin",
     API_CITAS_POR_CEDULA:
-      "http://apioptica.recaudo.xyz/public/citas/api/citaporcedula/"
-      
+      "http://apioptica.recaudo.xyz/public/citas/api/citaporcedula/",
+    API_ACTUALIZAR_ESTADO_CITA:
+      "http://apioptica.recaudo.xyz/public/contabilidad/api/facturas/actualizarestado/",
   },
 };
