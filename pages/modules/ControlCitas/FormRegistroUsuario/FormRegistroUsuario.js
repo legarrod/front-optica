@@ -38,7 +38,6 @@ export default function FormRegistroUsuario({
     setDisabledButton(false);
     if (data.data === "Paciente agregado correctamente") {
       swal("Exelente", "Paciente creado", "success");
-
       setOpen(false);
       getAllData();
       if (!accion) {
@@ -54,13 +53,14 @@ export default function FormRegistroUsuario({
   };
 
   const onSubmit = (data) => {
+
     if (accion === "actualizar") {
       setDisabledButton(true);
-      put(urlPut, data, setDataResponse);
+      put(urlPut, {...data, id: parseInt(dataUser.id)}, setDataResponse);
     } else if (accion === "crear") {
       setDisabledButton(true);
       let nombre = document.getElementById("nombre").value;
-      let apellidos = document.getElementById("apellidos").value;
+      //let apellidos = document.getElementById("apellidos").value;
       let cedula = document.getElementById("cedula").value;
       let fechaNacimiento = document.getElementById("fecha_nacimiento").value;
       let celular = document.getElementById("celular").value;
@@ -69,7 +69,7 @@ export default function FormRegistroUsuario({
       let ocupacion = document.getElementById("ocupacion").value;
       if (
         nombre === "" ||
-        apellidos === "" ||
+        // apellidos === "" ||
         cedula === "" ||
         fechaNacimiento === "" ||
         celular === "" ||
@@ -81,14 +81,16 @@ export default function FormRegistroUsuario({
           button: {
             text: "De acuerdo!",
           },
+          
         });
+        setDisabledButton(false);
       } else {
         post(url, Object.assign(data, fechaRegistro), setDataResponse);
         setCedulaPaciente(data.cedula);
       }
     }
   };
-
+console.log(dataUser);
   return (
     <form
       className="flex flex-col w-9/12 mx-16 md:mx-0"
@@ -99,17 +101,17 @@ export default function FormRegistroUsuario({
         name="nombre"
         id="nombre"
         defaultValue={dataUser?.nombre}
-        placeholder="Nombre"
+        placeholder="Nombre completo"
         ref={register}
       />
-      <input
+      {/* <input
         className="border-2 border-gray-400 rounded-md m-3 text-xl"
         name="apellidos"
         id="apellidos"
         defaultValue={dataUser?.apellidos}
         placeholder="Apellidos"
         ref={register}
-      />
+      /> */}
       <input
         className="border-2 border-gray-400 rounded-md m-3 text-xl"
         name="cedula"
@@ -179,8 +181,8 @@ export default function FormRegistroUsuario({
       />
 
       <input
-        // disabled={disabledButton}
-        className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
+        disabled={disabledButton}
+        className={disabledButton ? "bg-gray-500 py-1 px-5 rounded-md text-white font-semibold" : "bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"}
         type="submit"
       />
     </form>

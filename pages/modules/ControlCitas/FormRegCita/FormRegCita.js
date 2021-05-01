@@ -10,10 +10,10 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
   let hoy = new Date();
   const url = `${process.env.API_REGISTRAR_NUEVA_CITA}`;
   const urlConsultarPaciente = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
-  const [fecha, setFecha] = useState();
+  const [fecha, setFecha] = useState('');
   const [data, setData] = useState();
   const [idPaciente, setIdPaciente] = useState();
-  const [horaCita, setHoraCita] = useState();
+  const [horaCita, setHoraCita] = useState('');
   const hora = ['09:00 am', '09:30 am', '10:00 am', '10:30 am', '11:00 am', '11:30 am', '12:00 pm', '12:30 pm', '01:00 pm', '01:30 pm', '02:00 pm', '02:30 pm', '03:00 pm', '03:30 pm', '04:00 pm', '04:30 pm', '05:00 pm', '05:30 pm']
   const [disabledButton, setDisabledButton] = useState(false)
   const { register, handleSubmit } = useForm();
@@ -42,7 +42,6 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
   };
 
   const onSubmit = (data) => {
-    setDisabledButton(true)
     let newData = {
           fk_id_paciente: parseInt(idPaciente),
           nombre_doctor: 1,
@@ -78,7 +77,22 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
           valor_cita: "",
           observaciones: ""
       }
-    postCita(url, newData, setDataResponse)
+      if (
+        fecha === "" ||
+        horaCita === "" 
+      ) {
+        swal({
+          text: "Por favor complete todos los campos",
+          button: {
+            text: "De acuerdo!",
+          },
+          
+        });
+        setDisabledButton(false);
+      } else {
+        setDisabledButton(true)
+          postCita(url, newData, setDataResponse)
+      }
   };
 
   const handlerSlectHora = (e)=>{
@@ -102,7 +116,6 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
   useEffect(() => {
     obtenerPaciente(urlConsultarPaciente, cedulaPaciente, setData)
   }, []);
-  
 
   return (
     <form

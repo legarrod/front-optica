@@ -51,7 +51,7 @@ export default function TablaCitas({data}) {
 	
 	return (
 	<div className='mx-2 sm:mx-10 mt-3'>	
-		<TableContainer component={Paper}>
+		<TableContainer className="h-96" component={Paper}>
 			<Table className={classes.table} size="small" aria-label="a dense table">
 				<TableHead>
 				<TableRow>
