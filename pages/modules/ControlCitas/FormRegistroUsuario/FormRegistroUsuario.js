@@ -38,10 +38,6 @@ export default function FormRegistroUsuario({
     setDisabledButton(false);
     if (data.data === "Paciente agregado correctamente") {
       swal("Exelente", "Paciente creado", "success");
-<<<<<<< HEAD
-=======
-
->>>>>>> se valida al momento de crear una cita
       setOpen(false);
       getAllData();
       if (!accion) {
@@ -57,7 +53,13 @@ export default function FormRegistroUsuario({
   };
 
   const onSubmit = (data) => {
-<<<<<<< HEAD
+    if (accion === "actualizar") {
+      setDisabledButton(true);
+      put(urlPut, {...data, id: parseInt(dataUser.id)}, setDataResponse);
+    } else if (accion === "crear") {
+      setDisabledButton(true);
+      let nombre = document.getElementById("nombre").value;
+      //let apellidos = document.getElementById("apellidos").value;
 
     if (accion === "actualizar") {
       setDisabledButton(true);
@@ -66,15 +68,6 @@ export default function FormRegistroUsuario({
       setDisabledButton(true);
       let nombre = document.getElementById("nombre").value;
       //let apellidos = document.getElementById("apellidos").value;
-=======
-    if (accion === "actualizar") {
-      setDisabledButton(true);
-      put(urlPut, data, setDataResponse);
-    } else if (accion === "crear") {
-      setDisabledButton(true);
-      let nombre = document.getElementById("nombre").value;
-      let apellidos = document.getElementById("apellidos").value;
->>>>>>> se valida al momento de crear una cita
       let cedula = document.getElementById("cedula").value;
       let fechaNacimiento = document.getElementById("fecha_nacimiento").value;
       let celular = document.getElementById("celular").value;
@@ -83,11 +76,7 @@ export default function FormRegistroUsuario({
       let ocupacion = document.getElementById("ocupacion").value;
       if (
         nombre === "" ||
-<<<<<<< HEAD
         // apellidos === "" ||
-=======
-        apellidos === "" ||
->>>>>>> se valida al momento de crear una cita
         cedula === "" ||
         fechaNacimiento === "" ||
         celular === "" ||
@@ -99,24 +88,20 @@ export default function FormRegistroUsuario({
           button: {
             text: "De acuerdo!",
           },
-<<<<<<< HEAD
+
           
         });
         setDisabledButton(false);
-=======
-        });
->>>>>>> se valida al momento de crear una cita
-      } else {
+      }else {
+      
         post(url, Object.assign(data, fechaRegistro), setDataResponse);
         setCedulaPaciente(data.cedula);
       }
+
+      } 
     }
   };
-<<<<<<< HEAD
-console.log(dataUser);
-=======
 
->>>>>>> se valida al momento de crear una cita
   return (
     <form
       className="flex flex-col w-9/12 mx-16 md:mx-0"
@@ -127,7 +112,6 @@ console.log(dataUser);
         name="nombre"
         id="nombre"
         defaultValue={dataUser?.nombre}
-<<<<<<< HEAD
         placeholder="Nombre completo"
         ref={register}
       />
@@ -138,6 +122,12 @@ console.log(dataUser);
       />
       <input
 >>>>>>> se valida al momento de crear una cita
+=======
+        placeholder="Nombre completo"
+        ref={register}
+      />
+      {/* <input
+>>>>>>> nuevas validaciones
         className="border-2 border-gray-400 rounded-md m-3 text-xl"
         name="apellidos"
         id="apellidos"
@@ -145,10 +135,9 @@ console.log(dataUser);
         placeholder="Apellidos"
         ref={register}
 <<<<<<< HEAD
+<<<<<<< HEAD
       /> */}
-=======
-      />
->>>>>>> se valida al momento de crear una cita
+
       <input
         className="border-2 border-gray-400 rounded-md m-3 text-xl"
         name="cedula"
@@ -218,13 +207,14 @@ console.log(dataUser);
       />
 
       <input
-<<<<<<< HEAD
         disabled={disabledButton}
         className={disabledButton ? "bg-gray-500 py-1 px-5 rounded-md text-white font-semibold" : "bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"}
-=======
+
         // disabled={disabledButton}
         className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
->>>>>>> se valida al momento de crear una cita
+
+        className={disabledButton ? "bg-gray-500 py-1 px-5 rounded-md text-white font-semibold" : "bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"}
+
         type="submit"
       />
     </form>
