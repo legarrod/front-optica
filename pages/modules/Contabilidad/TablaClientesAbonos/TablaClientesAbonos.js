@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,6 +22,8 @@ import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Factura from "../Factura/Factura"
 import { put, remove} from '../../../api/AsyncHttpRequest'
 import DeleteIcon from '@material-ui/icons/Delete';
+import CachedIcon from '@material-ui/icons/Cached';
+
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -94,6 +96,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
   const urlObtenerFacturaPersona = `${process.env.API_OBTENER_FACTURA_PERSONA}`;
   const urlObtenerDetallePorFactura = `${process.env.API_OBTENER_DETALLER_POR_FACTURA}`;
   const urlRemove = `${process.env.API_ELIMINAR_FACTURA}`;
+  const urlRemoveAbono = `${process.env.API_ELIMINAR_ABONO}`;
   const urlActualizarStado = `${process.env.API_ACTUALIZAR_ESTADO_CITA}`;
   const urlObtenerAbonosFactura = `${process.env.API_OBTENER_ABONOS_POR_FACTURA}`;
   const [dataResponse, setDataResponse] = useState();
@@ -105,7 +108,11 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
  const [viewDetalleAbonos, setViewDetalleAbonos] = useState(false);
  const [viewFactura, setViewFactura] = useState(false);
  const [cedulaTemp, setCedulaTemp] =useState();
-  
+ const [reconsultaAbonos, setReconsultaAbonos] =useState();
+  const [disabledBotonEnviarAbono, setDisabledBotonEnviarAbono] = useState(false)
+  const [rowTemporal, setRowTemporal] = useState({})
+  const [controlRefresFactura, setControlRefresFactura] = useState(false)
+
   const handleClose = () => {
 	  setOpen(false);
 	};
@@ -120,7 +127,43 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 			  })
 			  getAllInvoices(urlObtenerFacturas, setAllInvoices);
 		}
+		if (response.data === 'Abono eliminado') {
+			swal({
+				text: response.data,
+				button: {
+				  text: "De acuerdo!",
+				}
+			  })
+			  setControlRefresFactura(true)
+			  getAllInvoices(urlObtenerFacturas, setAllInvoices);
+			  getAbonos(temConsultaAbono, callbackResponseGetAbonos);
+		}
+		if (response.data.data === true) {
+			getAllInvoices(urlObtenerFacturas, setAllInvoices);
+			setOpen(false);
+			setControlRefresFactura(true)
+			getAbonos(temConsultaAbono, callbackResponseGetAbonos);
+		}
+		if(response.data.text){
+			swal({
+				text: 'Algo salio mal, intentalo de nuevo puede ser que quieras eliminar una factura con abonos',
+				button: {
+				  text: "De acuerdo!",
+				}
+			  })
+		}
 
+	}
+	const callbackResponseGetAbonos =(data)=>{
+		setAllAbonos(data.data.data)
+		if (disabledBotonEnviarAbono) {
+			getAbonos(reconsultaAbonos, callbackResponseGetAbonos)
+			setDisabledBotonEnviarAbono(false)
+			setOpen(false);
+		}else{
+			setDisabledBotonEnviarAbono(false)
+		}
+		
 	}
 
 	const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
@@ -135,24 +178,24 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 		}
 
 	}
-	const getAbonos = async (urlObtenerAbonosFactura, setAllAbonos = null) => {
+	const getAbonos = async (urlObtenerAbonosFactura, callbackResponseGetAbonos = null) => {
 		try {
 			const data = await axios.get(urlObtenerAbonosFactura);
 			if (data) {
 			//setAllProducts(data.data);
-			setAllAbonos(data.data.data)
+			callbackResponseGetAbonos(data)
 			}
 		} catch (error) {
 			console.log(error);
 		}
 
 	}
-	const postAbono = async (url, formData = null, setDataResponse = null) => {
+	const postAbono = async (url, formData = null, responseCallback = null) => {
 
 		try {
 		  const data = await axios.post(url, formData);
 		  if (data) {
-			setDataResponse(data.data);
+			responseCallback(data);
 		  }
 		} catch (error) {
 		  console.log(error);
@@ -161,7 +204,9 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 	
 
 	const verListadoAbonos =(value)=> {
-		getAbonos(`${urlObtenerAbonosFactura}${value.id}`, setAllAbonos);
+		setRowTemporal(value)
+		setReconsultaAbonos(`${urlObtenerAbonosFactura}${value.id}`)
+		getAbonos(`${urlObtenerAbonosFactura}${value.id}`, callbackResponseGetAbonos);
 		setTemConsultaAbono(`${urlObtenerAbonosFactura}${value.id}`)
 		setDataInfo(value);
 		setViewFactura(false)
@@ -173,6 +218,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 	}  
 
 	const onSubmit = (data) => {
+		setDisabledBotonEnviarAbono(true)
 		let dataSaved = {
 			fk_id_factura: parseInt(dataInfo.id),
 			valor_abono: parseInt(data.abono),
@@ -180,7 +226,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 			usuario_registro_abono: 1,
 			nota_abono: data.note,
 		};
-		postAbono(urlAgregarAbono, dataSaved, setDataResponse);
+		postAbono(urlAgregarAbono, dataSaved, responseCallback);
 	};
 
 	const handlerBuscarFactura = (data)=>{
@@ -195,6 +241,11 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 	const callbackResponse =(data)=>{
 		refresData()
 	}
+	const handlerEliminarAbono = (idFactura)=>{
+
+		let id = parseInt(idFactura.id)
+		remove(`${urlRemoveAbono}${id}`, responseCallback)
+	}
 
 	const eliminarFactura =(idFactura)=>{
 		let id = parseInt(idFactura.id)
@@ -208,17 +259,23 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 		put(urlActualizarStado, newData, callbackResponse)
 		
 	}	
+	const formatData =(rowTemporal)=>{
+		if (controlRefresFactura) {
+			allInvoices.filter((item)=>{item.id === rowTemporal.id && setDataInfo(item)})
+			setControlRefresFactura(false)
+		}		
+	}
+
 	useEffect(() => {
-		refresData();
-		if (dataResponse?.data === true ) {
-			setOpen(false);
-			getAbonos(temConsultaAbono, setAllAbonos);
-		}
-		
+		refresData();		
 		if (facturaPersona.length >=0) {
 			getInvoices(`${urlObtenerDetallePorFactura}${facturaPersona[0].id}`, setDetalleFactura);
 		}
-	}, [dataResponse, temConsultaAbono, facturaPersona])
+		
+	}, [dataResponse, temConsultaAbono, facturaPersona ])
+
+	useMemo(() => formatData(rowTemporal, allInvoices), [rowTemporal, allInvoices])
+console.log(dataInfo);
 	
   return (
 	< div className="flex flex-col flex-wrap lg:flex-nowrap md:flex-row w-full">
@@ -263,10 +320,9 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 				viewDetalleAbonos && 
 				<div className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
 				{
-					dataInfo?.valor_factura > dataInfo?.total_deuda && dataInfo?.estado !== 'Pagada' && <div className="m-0 mb-5 flex flex-wrap justify-end">
-				
+					parseInt(dataInfo?.valor_factura) > parseInt(dataInfo?.total_deuda === null ? 0 : dataInfo?.total_deuda ) && dataInfo?.estado !== 'Pagada' && <div className="m-0 mb-5 flex flex-wrap justify-end">				 
 					<Button
-					className="text-base"
+						className="text-base"
 						variant="contained"
 						color="primary"
 						size="large"
@@ -321,7 +377,10 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 								<TableBody>
 								{allAbonos?.map((row, index) => (
 									<StyledTableRow key={index}>
-										<StyledTableCell align="center"><p className='w-20'>{row.fecha}</p></StyledTableCell>
+										<StyledTableCell align="center" className="flex justify-center items-center">
+											<button><DeleteIcon onClick={()=> handlerEliminarAbono(row)}/></button>
+											<p className=''>{row.fecha}</p>
+										</StyledTableCell>
 										<StyledTableCell align="center">$ {row.valor}</StyledTableCell>
 										<StyledTableCell align="center">{row.nota}</StyledTableCell>
 									</StyledTableRow>
@@ -451,7 +510,8 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 						//onChange={(e)=> handleTextarea(e)}
 						ref={register}/>  				
 				<input
-					className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
+					disabled={disabledBotonEnviarAbono}
+					className={disabledBotonEnviarAbono ? "bg-gray-500 py-1 px-5 rounded-md text-white font-semibold":"bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"}
 					type="submit"
 				/>
 			</form>

@@ -37,7 +37,7 @@ export default function FormRegistroUsuario({
   const setDataResponse = (data) => {
     setDisabledButton(false);
     if (data.data === "Paciente agregado correctamente") {
-      swal("Exelente", "Paciente creado", "success");
+      swal("Excelente", "Paciente creado", "success");
       setOpen(false);
       getAllData();
       if (!accion) {
@@ -46,7 +46,7 @@ export default function FormRegistroUsuario({
         setOpenRegCita(true);
       }
     } else if (data.data === "Paciente actualizado correctamente") {
-      swal("Exelente", "Paciente actualizado correctamente", "success");
+      swal("Excelente", "Paciente actualizado correctamente", "success");
       getAllData();
       setOpen(false);
     }

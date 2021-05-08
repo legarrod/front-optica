@@ -48,7 +48,7 @@ const [disbledButton, setDisbledButton] = useState(false)
   const setDataResponse = (data)=>{
     if (data?.data) {
       setDisbledButton(false)
-      swal("Exelente", "Cita Actualizada con exito!", "success")
+      swal("Excelente", "Cita Actualizada con exito!", "success")
     }
   }
 

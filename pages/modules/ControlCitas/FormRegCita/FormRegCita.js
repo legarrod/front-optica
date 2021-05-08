@@ -22,7 +22,7 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
   const setDataResponse =(data)=>{
  
     if (data.data.data === true) {
-      swal("Exelente", "Se ha registrado una nueva cita", "success");
+      swal("Excelente", "Se ha registrado una nueva cita", "success");
       setOpen(false);
       getDataEvent();
       setDisabledButton(false)

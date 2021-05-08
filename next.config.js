@@ -34,6 +34,8 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/contabilidad/api/facturacompleta",
     API_OBTENER_ABONOS_POR_FACTURA:
       "http://apioptica.recaudo.xyz/public/contabilidad/api/abonosfactura/",
+    API_ELIMINAR_ABONO:
+      "http://apioptica.recaudo.xyz/public/contabilidad/api/abono/delete/",
     API_REGISTRAR_ABONO:
       "http://apioptica.recaudo.xyz/public/contabilidad/api/facturas/crearabono",
     API_ELIMINAR_FACTURA:
