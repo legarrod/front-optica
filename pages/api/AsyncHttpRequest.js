@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getData = async (url, setData) => {
+export const getData = async (url, setData = null) => {
   try {
     const { data } = await axios.get(url);
     if (data.status_code === 200) {
@@ -25,7 +25,7 @@ export const post = async (url, formData = null, setDataResponse = null) => {
 
 export const put = async (url, params = null, setDataResponse = null) => {
   try {
-    const data = await axios.put(url, params, setDataResponse);
+    const data = await axios.put(url, params);
       setDataResponse(data);
    
   } catch (error) {
@@ -34,6 +34,14 @@ export const put = async (url, params = null, setDataResponse = null) => {
   //return axios.put(url, params, config);
 }
 
-// export function remove(url, params = null) {
-//   return axios.delete(url, params);
-// }
+export const remove = async(url, callback) =>{
+  try {
+    const data = await axios.delete(url);
+    callback(data);
+   
+  } catch (error) {
+    console.log(error);
+  }
+
+  // return axios.delete(url, params);
+}

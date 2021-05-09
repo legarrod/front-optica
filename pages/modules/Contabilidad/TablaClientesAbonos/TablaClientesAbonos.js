@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,7 +20,10 @@ import getDate from "../../../utils/utils";
 import LocalPrintshopIcon from '@material-ui/icons/LocalPrintshop';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Factura from "../Factura/Factura"
-import { put} from '../../../api/AsyncHttpRequest'
+import { put, remove} from '../../../api/AsyncHttpRequest'
+import DeleteIcon from '@material-ui/icons/Delete';
+import CachedIcon from '@material-ui/icons/Cached';
+
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -83,7 +86,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
   });
 
 
-export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
+export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAllInvoices}) {
 	let hoy = new Date();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -92,6 +95,8 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
   const urlObtenerFacturas = `${process.env.API_OBTENER_FACTURAS}`;
   const urlObtenerFacturaPersona = `${process.env.API_OBTENER_FACTURA_PERSONA}`;
   const urlObtenerDetallePorFactura = `${process.env.API_OBTENER_DETALLER_POR_FACTURA}`;
+  const urlRemove = `${process.env.API_ELIMINAR_FACTURA}`;
+  const urlRemoveAbono = `${process.env.API_ELIMINAR_ABONO}`;
   const urlActualizarStado = `${process.env.API_ACTUALIZAR_ESTADO_CITA}`;
   const urlObtenerAbonosFactura = `${process.env.API_OBTENER_ABONOS_POR_FACTURA}`;
   const [dataResponse, setDataResponse] = useState();
@@ -103,11 +108,64 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
  const [viewDetalleAbonos, setViewDetalleAbonos] = useState(false);
  const [viewFactura, setViewFactura] = useState(false);
  const [cedulaTemp, setCedulaTemp] =useState();
-  
+ const [reconsultaAbonos, setReconsultaAbonos] =useState();
+  const [disabledBotonEnviarAbono, setDisabledBotonEnviarAbono] = useState(false)
+  const [rowTemporal, setRowTemporal] = useState({})
+  const [controlRefresFactura, setControlRefresFactura] = useState(false)
+
   const handleClose = () => {
 	  setOpen(false);
 	};
  
+	const responseCallback = (response)=>{
+		if (response.data === 'Factura eliminada correctamente') {
+			swal({
+				text: response.data,
+				button: {
+				  text: "De acuerdo!",
+				}
+			  })
+			  getAllInvoices(urlObtenerFacturas, setAllInvoices);
+		}
+		if (response.data === 'Abono eliminado') {
+			swal({
+				text: response.data,
+				button: {
+				  text: "De acuerdo!",
+				}
+			  })
+			  setControlRefresFactura(true)
+			  getAllInvoices(urlObtenerFacturas, setAllInvoices);
+			  getAbonos(temConsultaAbono, callbackResponseGetAbonos);
+		}
+		if (response.data.data === true) {
+			getAllInvoices(urlObtenerFacturas, setAllInvoices);
+			setOpen(false);
+			setControlRefresFactura(true)
+			getAbonos(temConsultaAbono, callbackResponseGetAbonos);
+		}
+		if(response.data.text){
+			swal({
+				text: 'Algo salio mal, intentalo de nuevo puede ser que quieras eliminar una factura con abonos',
+				button: {
+				  text: "De acuerdo!",
+				}
+			  })
+		}
+
+	}
+	const callbackResponseGetAbonos =(data)=>{
+		setAllAbonos(data.data.data)
+		if (disabledBotonEnviarAbono) {
+			getAbonos(reconsultaAbonos, callbackResponseGetAbonos)
+			setDisabledBotonEnviarAbono(false)
+			setOpen(false);
+		}else{
+			setDisabledBotonEnviarAbono(false)
+		}
+		
+	}
+
 	const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
 		try {
 			const data = await axios.get(urlObtenerFacturas, setAllInvoices);
@@ -120,24 +178,24 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 		}
 
 	}
-	const getAbonos = async (urlObtenerAbonosFactura, setAllAbonos = null) => {
+	const getAbonos = async (urlObtenerAbonosFactura, callbackResponseGetAbonos = null) => {
 		try {
 			const data = await axios.get(urlObtenerAbonosFactura);
 			if (data) {
 			//setAllProducts(data.data);
-			setAllAbonos(data.data.data)
+			callbackResponseGetAbonos(data)
 			}
 		} catch (error) {
 			console.log(error);
 		}
 
 	}
-	const postAbono = async (url, formData = null, setDataResponse = null) => {
+	const postAbono = async (url, formData = null, responseCallback = null) => {
 
 		try {
 		  const data = await axios.post(url, formData);
 		  if (data) {
-			setDataResponse(data.data);
+			responseCallback(data);
 		  }
 		} catch (error) {
 		  console.log(error);
@@ -146,7 +204,9 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 	
 
 	const verListadoAbonos =(value)=> {
-		getAbonos(`${urlObtenerAbonosFactura}${value.id}`, setAllAbonos);
+		setRowTemporal(value)
+		setReconsultaAbonos(`${urlObtenerAbonosFactura}${value.id}`)
+		getAbonos(`${urlObtenerAbonosFactura}${value.id}`, callbackResponseGetAbonos);
 		setTemConsultaAbono(`${urlObtenerAbonosFactura}${value.id}`)
 		setDataInfo(value);
 		setViewFactura(false)
@@ -158,6 +218,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 	}  
 
 	const onSubmit = (data) => {
+		setDisabledBotonEnviarAbono(true)
 		let dataSaved = {
 			fk_id_factura: parseInt(dataInfo.id),
 			valor_abono: parseInt(data.abono),
@@ -165,7 +226,7 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 			usuario_registro_abono: 1,
 			nota_abono: data.note,
 		};
-		postAbono(urlAgregarAbono, dataSaved, setDataResponse);
+		postAbono(urlAgregarAbono, dataSaved, responseCallback);
 	};
 
 	const handlerBuscarFactura = (data)=>{
@@ -177,9 +238,19 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices}) {
 	const handlerImprimirFactura =()=>{
 		window.print()
 	}
-const callbackResponse =(data)=>{
-	refresData()
-}
+	const callbackResponse =(data)=>{
+		refresData()
+	}
+	const handlerEliminarAbono = (idFactura)=>{
+
+		let id = parseInt(idFactura.id)
+		remove(`${urlRemoveAbono}${id}`, responseCallback)
+	}
+
+	const eliminarFactura =(idFactura)=>{
+		let id = parseInt(idFactura.id)
+		remove(`${urlRemove}${id}`, responseCallback)
+	}
 	const handlerSaveState =(data)=>{
 		let index = data.e.target.selectedIndex;
 		let newData = {estado: data.e.target.options[index].text, id_factura: parseInt(data.row.id)}
@@ -187,19 +258,24 @@ const callbackResponse =(data)=>{
 		// put(url, Object.assign(data, defaultInfo), setDataResponse)
 		put(urlActualizarStado, newData, callbackResponse)
 		
-}	
+	}	
+	const formatData =(rowTemporal)=>{
+		if (controlRefresFactura) {
+			allInvoices.filter((item)=>{item.id === rowTemporal.id && setDataInfo(item)})
+			setControlRefresFactura(false)
+		}		
+	}
+
 	useEffect(() => {
-		refresData();
-		if (dataResponse?.data === true ) {
-			setOpen(false);
-			getAbonos(temConsultaAbono, setAllAbonos);
-		}
-		
+		refresData();		
 		if (facturaPersona.length >=0) {
 			getInvoices(`${urlObtenerDetallePorFactura}${facturaPersona[0].id}`, setDetalleFactura);
 		}
-	}, [dataResponse, temConsultaAbono, facturaPersona])
-	
+		
+	}, [dataResponse, facturaPersona ])
+
+	useMemo(() => formatData(rowTemporal, allInvoices), [rowTemporal, allInvoices])
+
   return (
 	< div className="flex flex-col flex-wrap lg:flex-nowrap md:flex-row w-full">
 			<div className="w-full px-1 sm:px-8">
@@ -221,11 +297,12 @@ const callbackResponse =(data)=>{
 									<StyledTableCell align="center">
 										<button><RemoveRedEyeIcon onClick={() => verListadoAbonos(row)}/></button>
 										<button><CloudDownloadIcon onClick={() => handlerBuscarFactura(row)}/></button>
+										<button><DeleteIcon onClick={() => eliminarFactura(row)}/></button>
 									</StyledTableCell>
 									<StyledTableCell align="center">{row.cedula}</StyledTableCell>
 									<StyledTableCell align="center">{row.paciente}</StyledTableCell>
 									{/* /<StyledTableCell align="left"><p className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'}>{row.estado}</p></StyledTableCell> */}
-									<select className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg my-3' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg': 'bg-red-400 p-2 w-28 text-center rounded-lg'} name="fk_id_estado" ref={register} onChange={(e)=>handlerSaveState({row, e})}>
+									<select className={row.estado === 'Pendiente' ? 'bg-yellow-400 p-2 w-28 text-center rounded-lg my-3' : row.estado === 'Pagada' ? 'bg-green-400 p-2 w-28 text-center rounded-lg my-3': 'bg-red-400 p-2 w-28 text-center rounded-lg my-3'} name="fk_id_estado" ref={register} onChange={(e)=>handlerSaveState({row, e})}>
 										<option selected="true" disabled="disabled">{row.estado}</option>
 										<option value={0}>Pendiente</option>
 										<option value={1}>Pagada</option>
@@ -242,10 +319,9 @@ const callbackResponse =(data)=>{
 				viewDetalleAbonos && 
 				<div className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
 				{
-					dataInfo?.valor_factura > dataInfo?.total_deuda && dataInfo?.estado !== 'Pagada' && <div className="m-0 mb-5 flex flex-wrap justify-end">
-				
+					parseInt(dataInfo?.valor_factura) > parseInt(dataInfo?.total_deuda === null ? 0 : dataInfo?.total_deuda ) && dataInfo?.estado !== 'Pagada' && <div className="m-0 mb-5 flex flex-wrap justify-end">				 
 					<Button
-					className="text-base"
+						className="text-base"
 						variant="contained"
 						color="primary"
 						size="large"
@@ -280,7 +356,11 @@ const callbackResponse =(data)=>{
 							</div>
 						</div>
 						<div>
-						<div className='flex flex-row'>
+							<div className='flex flex-row'>
+								<p className='text-base font-semibold'>Factura No:</p>
+								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{dataInfo?.numero_factura ? dataInfo?.numero_factura : "No hay nota para esta factura"}</p>
+							</div>
+							<div className='flex flex-row'>
 								<p className='text-base font-semibold'>Nota:</p>
 								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{dataInfo?.nota ? dataInfo?.nota : "No hay nota para esta factura"}</p>
 							</div>
@@ -300,7 +380,10 @@ const callbackResponse =(data)=>{
 								<TableBody>
 								{allAbonos?.map((row, index) => (
 									<StyledTableRow key={index}>
-										<StyledTableCell align="center"><p className='w-20'>{row.fecha}</p></StyledTableCell>
+										<StyledTableCell align="center" className="flex justify-center items-center">
+											<button><DeleteIcon onClick={()=> handlerEliminarAbono(row)}/></button>
+											<p className=''>{row.fecha}</p>
+										</StyledTableCell>
 										<StyledTableCell align="center">$ {row.valor}</StyledTableCell>
 										<StyledTableCell align="center">{row.nota}</StyledTableCell>
 									</StyledTableRow>
@@ -314,83 +397,7 @@ const callbackResponse =(data)=>{
 			}
 			{
 				viewFactura && <Factura facturaPersona={facturaPersona && facturaPersona[0]} detalleFactura={detalleFactura}/>
-			// 	<div id='factura' className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
-			// 	 <div className="m-0 mb-5 flex flex-wrap justify-end">
-			// 		<Button
-			// 		className="text-base"
-			// 			variant="contained"
-			// 			color="primary"
-			// 			size="large"
-			// 			className="rounded-sm"
-			// 			onClick={() => handlerImprimirFactura()}
-			// 			startIcon={<LocalPrintshopIcon />}
-			// 		>
-						
-			// 		</Button>
-			// 	</div>
-			// 	<div className='flex flex-col mb-10'>
-			// 		<div className="flex flex-row justify-between">
-			// 			<div className='mx-1'>
-			// 				<div className='flex flex-row'>
-			// 				<p className='text-sm font-semibold w-16'>Nombre:</p>
-			// 				<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.paciente}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-16'>Cedula:</p>
-			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.cedula}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-16'>Direccion:</p>
-			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.direccion}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-16'>Telefono:</p>
-			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.celular}</p>
-			// 				</div>
-			// 			</div>
-			// 			<div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-12'>Factura:</p>
-			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.numero_factura}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-12'>Fecha:</p>
-			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.fecha_creacion}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-12'>Nota:</p>
-			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.nota ? facturaPersona[0]?.nota : "No hay nota para esta factura"}</p>
-			// 				</div>
-			// 			</div>
-			// 		</div>
-			// 		<div className="overflow-y-auto ml-0 pr-2 w-full mx-3 h-60 mt-5">
-			// 			<TableContainer component={Paper}>
-			// 				<Table className={classes.table} size="small" aria-label="a dense table">
-			// 					<TableHead>
-			// 					<TableRow>
-			// 						<StyledTableCell align="center">Nombre</StyledTableCell>
-			// 						<StyledTableCell align="center">Cantidad</StyledTableCell>
-			// 						<StyledTableCell align="center">Sub total</StyledTableCell>
-			// 					</TableRow>
-			// 					</TableHead>
-			// 					<TableBody>
-			// 					{detalleFactura.length > 0 && detalleFactura?.map((row, index) => (
-			// 						<StyledTableRow key={index}>
-			// 							<StyledTableCell align="center"><p className='w-20'>{row.nombre}</p></StyledTableCell>
-			// 							<StyledTableCell align="center">$ {row.cantidad}</StyledTableCell>
-			// 							<StyledTableCell align="center">{row.valor_producto}</StyledTableCell>
-			// 						</StyledTableRow>
-			// 					))} 
-			// 					</TableBody>
-			// 				</Table>
-			// 			</TableContainer>
-			// 		</div>
-			// 		<div className='flex flex-row w-full justify-end'>
-			// 			<p className='text-base font-semibold'>Total:</p>
-			// 			<p className="text-base font-semibold mr-4 ml-3 text-gray-700">{facturaPersona[0]?.valor_total ? `$ ` + facturaPersona[0]?.valor_total : `$ 0` }</p>
-			// 		</div>
-			// 	</div>
-			// </div>
+			
 			}
 			
 		<Modal
@@ -430,7 +437,8 @@ const callbackResponse =(data)=>{
 						//onChange={(e)=> handleTextarea(e)}
 						ref={register}/>  				
 				<input
-					className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
+					disabled={disabledBotonEnviarAbono}
+					className={disabledBotonEnviarAbono ? "bg-gray-500 py-1 px-5 rounded-md text-white font-semibold":"bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"}
 					type="submit"
 				/>
 			</form>

@@ -14,6 +14,8 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/citas/api/citas/update",
     API_OBTENER_TODOS_LOS_PACIENTES:
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes",
+    API_BUSQUEDA_PACIENTES:
+      "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientesList/",
     API_GUARDAR_PACIENTE:
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/nuevo",
     API_CITA_POR_PACIENTE:
@@ -34,8 +36,12 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/contabilidad/api/facturacompleta",
     API_OBTENER_ABONOS_POR_FACTURA:
       "http://apioptica.recaudo.xyz/public/contabilidad/api/abonosfactura/",
+    API_ELIMINAR_ABONO:
+      "http://apioptica.recaudo.xyz/public/contabilidad/api/abono/delete/",
     API_REGISTRAR_ABONO:
       "http://apioptica.recaudo.xyz/public/contabilidad/api/facturas/crearabono",
+    API_ELIMINAR_FACTURA:
+      "http://apioptica.recaudo.xyz/public/contabilidad/api/facturas/delete/",
     API_CREAR_FACTURA:
       "http://apioptica.recaudo.xyz/public/contabilidad/api/facturas/crearfactura",
     API_OBTENER_ID_FACTURA:

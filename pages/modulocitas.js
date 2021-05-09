@@ -70,7 +70,8 @@ export default function ModuloCitas() {
   const [accion, setAccion] = useState('');
   const classes = useStyles();
   const [paciente, setPaciente] = useState({});
-
+  const [fechaFilter, setFechaFilter] = useState(getDate(hoy));
+  const [dateContainer, setDateContainer] = useState(true);
 
   const [user, setUser] = useState(undefined);
   const router = useRouter();
@@ -90,6 +91,7 @@ const resetearFecha = ()=>{
   const handlerCitasPorFecha =(day)=>{
     //setFechaFilter(getDate(day))
     getData(`${urlCitasPorFecha}${getDate(day)}`, setData);
+    setDateContainer(false);
   };
   
   useEffect(() => {
@@ -110,7 +112,15 @@ const resetearFecha = ()=>{
     })
       .then((name) => {
         setCedulaPaciente(name);
-        if (!name) throw null;
+        if (!name){
+          swal({
+            text: "Por favor ingrese un número de cedula",
+            button: {
+              text: "De acuerdo!",
+            }
+          })
+          throw null;
+        }
 
         return fetch(`${urlCitas}/${name}`);
       })
@@ -178,7 +188,7 @@ const resetearFecha = ()=>{
             variant="contained"
             color="primary"
             onClick={() => resetearFecha()}
-            
+            disabled={dateContainer}
           >
             Resetear fecha
           </Button>

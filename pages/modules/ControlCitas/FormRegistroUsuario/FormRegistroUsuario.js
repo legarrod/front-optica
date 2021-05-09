@@ -28,134 +28,173 @@ export default function FormRegistroUsuario({
 }) {
   const classes = useStyles();
   let hoy = new Date();
-  let fechaRegistro ={fecha_registro: hoy}
+  let fechaRegistro = { fecha_registro: hoy };
   const url = `${process.env.API_GUARDAR_PACIENTE}`;
-  const urlPut =`${process.env.API_ACTUALIZAR_INFORMACION_DEL_PACIENTE}`;
+  const urlPut = `${process.env.API_ACTUALIZAR_INFORMACION_DEL_PACIENTE}`;
   const { register, handleSubmit, control } = useForm();
-  const [disabledButton, setDisabledButton] = useState(false)
-  
-  const setDataResponse =(data)=>{
-    setDisabledButton(false)
+  const [disabledButton, setDisabledButton] = useState(false);
+  const urlPacientes = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
+
+
+  const setDataResponse = (data) => {
+    setDisabledButton(false);
+    getAllData(urlPacientes);
     if (data.data === "Paciente agregado correctamente") {
-      swal("Exelente", "Paciente creado", "success");
-      
+      swal("Excelente", "Paciente creado", "success");
       setOpen(false);
-      getAllData();
       if (!accion) {
-        getAllData();
         setOpen(false);
         setOpenRegCita(true);
       }
-    }else if(data.data === "Paciente actualizado correctamente"){
-      swal("Exelente", "Paciente actualizado correctamente", "success");
-      getAllData();
+    } else if (data.data === "Paciente actualizado correctamente") {
+      swal("Excelente", "Paciente actualizado correctamente", "success");
       setOpen(false);
-    }
-
-  }
-
-  const onSubmit = (data) => {
-   
-    if (accion === 'actualizar') {
-      setDisabledButton(true)
-      put(urlPut, data, setDataResponse)
-    }else if(accion === 'crear'){
-      setDisabledButton(true)
-      post(url, Object.assign(data, fechaRegistro), setDataResponse)
-      setCedulaPaciente(data.cedula)
     }
   };
 
+  const onSubmit = (data) => {
+    if (accion === "actualizar") {
+      setDisabledButton(true);
+      put(urlPut, {...data, id: parseInt(dataUser.id)}, setDataResponse);
+    } else if (accion === "crear") {
+      setDisabledButton(true);
+      let nombre = document.getElementById("nombre").value;
+      //let apellidos = document.getElementById("apellidos").value;
+
+    if (accion === "actualizar") {
+      setDisabledButton(true);
+      put(urlPut, {...data, id: parseInt(dataUser.id)}, setDataResponse);
+    } else if (accion === "crear") {
+      setDisabledButton(true);
+      let nombre = document.getElementById("nombre").value;
+      //let apellidos = document.getElementById("apellidos").value;
+      let cedula = document.getElementById("cedula").value;
+      let fechaNacimiento = document.getElementById("fecha_nacimiento").value;
+      let celular = document.getElementById("celular").value;
+      let direccion = document.getElementById("direccion").value;
+      // let ciudad = document.getElementById("ciudad");
+      let ocupacion = document.getElementById("ocupacion").value;
+      if (
+        nombre === "" ||
+        // apellidos === "" ||
+        cedula === "" ||
+        fechaNacimiento === "" ||
+        celular === "" ||
+        direccion === "" ||
+        ocupacion === ""
+      ) {
+        swal({
+          text: "Por favor complete todos los campos",
+          button: {
+            text: "De acuerdo!",
+          },
+
+          
+        });
+        setDisabledButton(false);
+      }else {
+      
+        post(url, Object.assign(data, fechaRegistro), setDataResponse);
+        setCedulaPaciente(data.cedula);
+      }
+
+      } 
+    }
+  };
 
   return (
-    
-      <form
+    <form
       className="flex flex-col w-9/12 mx-16 md:mx-0"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-     
-          <input
-            className="border-2 border-gray-400 rounded-md m-3 text-xl"
-            name="nombre"
-            defaultValue={dataUser?.nombre}
-            placeholder="Nombre"
-            ref={register}
-          />
-          <input
-            className="border-2 border-gray-400 rounded-md m-3 text-xl"
-            name="apellidos"
-            defaultValue={dataUser?.apellidos}
-            placeholder="Apellidos"
-            ref={register}
-          />
-          <input
-            className="border-2 border-gray-400 rounded-md m-3 text-xl"
-            name="cedula"
-            placeholder="Cedula"
-            defaultValue={cedulaPaciente}
-            ref={register}
-          />
-          <input
-            className="border-2 border-gray-400 rounded-md m-3 text-xl"
-            name="fecha_nacimiento"
-            defaultValue={dataUser?.fecha_nacimiento}
-            placeholder="Año/Mes/Día"
-            ref={register}
-          />
-          <input
-            className="border-2 border-gray-400 rounded-md m-3 text-xl"
-            name="celular"
-            defaultValue={dataUser?.celular}
-            placeholder="Celular"
-            ref={register}
-          />
-          <input
-            className="border-2 border-gray-400 rounded-md m-3 text-xl"
-            name="direccion"
-            defaultValue={dataUser?.direccion}
-            placeholder="Dirección"
-            ref={register}
-          />
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <input
+        className="border-2 border-gray-400 rounded-md m-3 text-xl"
+        name="nombre"
+        id="nombre"
+        defaultValue={dataUser?.nombre}
+        placeholder="Nombre completo"
+        ref={register}
+      />
 
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel htmlFor="outlined-age-native-simple">Ciudad</InputLabel>
-            <Controller
-              as={
-                <Select
-                  native
-                  name="ciudad"
-                  ref={register}
-                  value={dataUser?.ciudad}
-                  label="Ciudad"
-                  inputProps={{
-                    ciudad: "ciudad",
-                    id: "outlined-age-native-simple",
-                  }}
-                >
-                  <option aria-label="None" value="" />
-                  <option value={1}>Armenia</option>
-                  <option value={2}>Tebaida</option>
-                </Select>
-              }
+      <input
+        className="border-2 border-gray-400 rounded-md m-3 text-xl"
+        name="cedula"
+        id="cedula"
+        placeholder="Cedula"
+        defaultValue={cedulaPaciente}
+        ref={register}
+      />
+      <input
+        className="border-2 border-gray-400 rounded-md m-3 text-xl"
+        name="fecha_nacimiento"
+        id="fecha_nacimiento"
+        defaultValue={dataUser?.fecha_nacimiento}
+        placeholder="Año/Mes/Día"
+        ref={register}
+      />
+      <input
+        className="border-2 border-gray-400 rounded-md m-3 text-xl"
+        name="celular"
+        id="celular"
+        defaultValue={dataUser?.celular}
+        placeholder="Celular"
+        ref={register}
+      />
+      <input
+        className="border-2 border-gray-400 rounded-md m-3 text-xl"
+        name="direccion"
+        id="direccion"
+        defaultValue={dataUser?.direccion}
+        placeholder="Dirección"
+        ref={register}
+      />
+
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel htmlFor="outlined-age-native-simple">Ciudad</InputLabel>
+        <Controller
+          as={
+            <Select
+              native
               name="ciudad"
-              control={control}
-              defaultValue={1}
-            />
-          </FormControl>
-          <input
-            className="border-2 border-gray-400 rounded-md m-3 text-xl"
-            name="ocupacion"
-            defaultValue={dataUser?.ocupacion}
-            placeholder="Ocupación"
-            ref={register}
-          />
-     
-     <input
-          disabled={disabledButton}
-          className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
-          type="submit"
+              id="ciudad"
+              ref={register}
+              value={dataUser?.ciudad}
+              label="Ciudad"
+              inputProps={{
+                ciudad: "ciudad",
+                id: "outlined-age-native-simple",
+              }}
+            >
+              <option aria-label="None" value="" />
+              <option value={1}>Armenia</option>
+              <option value={2}>Tebaida</option>
+            </Select>
+          }
+          name="ciudad"
+          control={control}
+          defaultValue={1}
         />
-      </form>
- 
+      </FormControl>
+      <input
+        className="border-2 border-gray-400 rounded-md m-3 text-xl"
+        name="ocupacion"
+        id="ocupacion"
+        defaultValue={dataUser?.ocupacion}
+        placeholder="Ocupación"
+        ref={register}
+      />
+
+      <input
+        disabled={disabledButton}
+        className={disabledButton ? "bg-gray-500 py-1 px-5 rounded-md text-white font-semibold" : "bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"}
+
+        // disabled={disabledButton}
+        className="bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"
+
+        className={disabledButton ? "bg-gray-500 py-1 px-5 rounded-md text-white font-semibold" : "bg-blue-700 py-1 px-5 rounded-md text-white font-semibold"}
+
+        type="submit"
+      />
+    </form>
   );
 }

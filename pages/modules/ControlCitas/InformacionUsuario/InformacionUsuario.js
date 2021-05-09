@@ -14,7 +14,7 @@ export default function InformacionUsuario({allData}) {
       <div className="mx-2 md:mx-10">
         <div className="flex flex-wrap mt-1 ml-5">
           <p className="text-lg font-bold">Nombre:</p>
-          <p className="ml-3 text-lg">{allData?.nombre + ' ' +allData?.apellidos}</p>
+          <p className="ml-3 text-lg">{allData?.nombre}</p>
         </div>
         <div className="flex flex-wrap mt-1 ml-5">
           <p className="text-lg font-bold">Fecha nacimiento:</p>

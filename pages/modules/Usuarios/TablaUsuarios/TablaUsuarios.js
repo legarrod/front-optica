@@ -9,14 +9,14 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditIcon from '@material-ui/icons/Edit';
-
+import DeleteIcon from '@material-ui/icons/Delete';
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import swal from "sweetalert";
 import { useSpring, animated } from "react-spring/web.cjs";
 import FormRegistroUsuario from "../../ControlCitas/FormRegistroUsuario/FormRegistroUsuario";
-
+import {remove, getData, put} from '../../../api/AsyncHttpRequest'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -108,10 +108,11 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [dataUser, setDataUser] =useState();
-  const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
-  const rows = listaPacientes;
+  const urlRemove = `${process.env.API_ELIMINAR_PACIENTE}`;
+  let rows = listaPacientes;
   const [accion, setAccion] = useState('');
   const [cedulaPaciente, setCedulaPaciente] = useState();
+  const url = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
 
   const handleClose = () => {
     setOpen(false);
@@ -128,9 +129,16 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
     })
       .then((name) => {
         setCedulaPaciente(name);
-        if (!name) throw null;
-
-        return fetch(`${urlCitas}/${name}`);
+        if (!name){
+			swal({
+			  text: "Por favor ingrese un número de cedula",
+			  button: {
+				text: "De acuerdo!",
+			  }
+			})
+			throw null;
+		  }
+        return fetch(`${url}/${name}`);
       })
       .then((results) => {
         return results.json();
@@ -148,10 +156,9 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 
         } else {
           const name = paciente.nombre;
-          const apellidos = paciente.apellidos;
           swal({
             title: "El paciente ya existe",
-            text: `${name} ${apellidos}`,
+            text: `${name}`,
           });
      
         }
@@ -164,12 +171,24 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 		setDataUser(user && user[0])
 		setOpen(true), 
 		setAccion('actualizar'), 
-		setCedulaPaciente(cc)};
+		setCedulaPaciente(cc)
+	};
+
+	const responseCallback =(response)=>{
+		if (response) {
+			getAllData(url)
+		}
+	}
+
+	const eliminarCliente =(cc)=>{
+		remove(`${urlRemove}/${cc}`, responseCallback)
+	
+	}
   return (
 	
 	< div className="flex flex-col md:flex-row w-full">
 		<div className="w-full px-8">
-			<div className="m-0 mb-5 flex flex-wrap justify-end">
+			<div className="m-0 mb-5 flex flex-wrap justify-end">		
 				<Button
 					variant="contained"
 					color="primary"
@@ -181,8 +200,8 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 					Crear paciente
 				</Button>
 			</div>
-			<div className="overflow-y-auto w-full mx-3 h-5/6">
-				<TableContainer component={Paper}>
+			<div className="overflow-y-auto w-full mx-3">
+				<TableContainer className="h-96" component={Paper}>
 				<Table aria-label="customized table">
 					<TableHead>
 					<TableRow>
@@ -203,7 +222,7 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 						<StyledTableCell align="center">
 							<div className="flex flex-row">
 							<button><EditIcon onClick={() => actualizarCliente(row.cedula)}/></button>
-						
+						<button><DeleteIcon onClick={() => eliminarCliente(row.cedula)}/></button>
 							</div>
 						</StyledTableCell>
 						<StyledTableCell align="left">{row.cedula}</StyledTableCell>
@@ -239,7 +258,13 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 					<h2 className="text-3xl" id="titulo-registro">
 					Registrar usuario
 					</h2>
-					<FormRegistroUsuario setOpen={setOpen} accion={accion} dataUser={dataUser} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente} getAllData={getAllData}/>
+					<FormRegistroUsuario setOpen={setOpen} 
+										accion={accion} 
+										dataUser={dataUser} 
+										setCedulaPaciente={setCedulaPaciente} 
+										cedulaPaciente={cedulaPaciente} 
+										getAllData={getAllData}
+										/>
 				</div>
 			
 		</Modal>

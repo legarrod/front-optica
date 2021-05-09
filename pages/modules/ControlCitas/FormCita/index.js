@@ -48,7 +48,7 @@ const [disbledButton, setDisbledButton] = useState(false)
   const setDataResponse = (data)=>{
     if (data?.data) {
       setDisbledButton(false)
-      swal("Exelente", "Cita Actualizada con exito!", "success")
+      swal("Excelente", "Cita Actualizada con exito!", "success")
     }
   }
 
@@ -124,6 +124,8 @@ const [disbledButton, setDisbledButton] = useState(false)
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">Esferico</p>
               <input
+              tabindex="1"
+              autoFocus
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_esferico_derecho"
                 defaultValue={informacionCita?.lejos_esferico_derecho}
@@ -131,6 +133,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />          
               <input
+              tabindex="5"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_esferico_izquierdo"
                 defaultValue={informacionCita?.lejos_esferico_izquierdo}
@@ -143,6 +146,7 @@ const [disbledButton, setDisbledButton] = useState(false)
           <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="9"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="cerca_esferico_derecho"
                 defaultValue={informacionCita?.cerca_esferico_derecho}
@@ -150,6 +154,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />
             <input
+            tabindex="13"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="cerca_esferico_izquierdo"
               defaultValue={informacionCita?.cerca_esferico_izquierdo}
@@ -162,6 +167,7 @@ const [disbledButton, setDisbledButton] = useState(false)
          <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="17"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_esferico_derecho"
               defaultValue={informacionCita?.actual_esferico_derecho}
@@ -170,6 +176,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
     
             <input
+            tabindex="21"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_esferico_izquierdo"
               defaultValue={informacionCita?.actual_esferico_izquierdo}
@@ -192,6 +199,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">Cilindro</p>
               <input
+              tabindex="2"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_cilindro_derecho"
                 defaultValue={informacionCita?.lejos_cilindro_derecho}
@@ -199,6 +207,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />          
               <input
+              tabindex="6"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_cilindro_izquierdo"
                 defaultValue={informacionCita?.lejos_cilindro_izquierdo}
@@ -211,6 +220,7 @@ const [disbledButton, setDisbledButton] = useState(false)
    <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="10"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="cerca_cilindro_derecho"
                 defaultValue={informacionCita?.cerca_cilindro_derecho}
@@ -218,6 +228,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />
             <input
+            tabindex="14"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="cerca_cilindro_izquierdo"
               defaultValue={informacionCita?.cerca_cilindro_izquierdo}
@@ -230,6 +241,7 @@ const [disbledButton, setDisbledButton] = useState(false)
          <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p>  
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="18"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_cilindro_derecho"
               defaultValue={informacionCita?.actual_cilindro_derecho}
@@ -238,6 +250,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
     
             <input
+            tabindex="22"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_cilindro_izquierdo"
               defaultValue={informacionCita?.actual_cilindro_izquierdo}
@@ -257,6 +270,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">Eje</p>
               <input
+              tabindex="3"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_eje_derecho"
                 defaultValue={informacionCita?.lejos_eje_derecho}
@@ -264,6 +278,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />          
               <input
+              tabindex="7"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_eje_izquierdo"
                 defaultValue={informacionCita?.lejos_eje_izquierdo}
@@ -276,6 +291,7 @@ const [disbledButton, setDisbledButton] = useState(false)
    <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="11"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="cerca_eje_derecho"
                 defaultValue={informacionCita?.cerca_eje_derecho}
@@ -283,6 +299,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />
             <input
+            tabindex="15"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="cerca_eje_izquierdo"
               defaultValue={informacionCita?.cerca_eje_izquierdo}
@@ -295,6 +312,7 @@ const [disbledButton, setDisbledButton] = useState(false)
           <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="19"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_eje_derecho"
               defaultValue={informacionCita?.actual_eje_derecho}
@@ -303,6 +321,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
     
             <input
+            tabindex="23"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_eje_izquierdo"
               defaultValue={informacionCita?.actual_eje_izquierdo}
@@ -322,6 +341,8 @@ const [disbledButton, setDisbledButton] = useState(false)
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">A.V.</p>
               <input
+              tabindex="4"
+              
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_av_derecho"
                 defaultValue={informacionCita?.lejos_av_derecho}
@@ -329,6 +350,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />          
               <input
+              tabindex="8"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="lejos_av_izquierdo"
                 defaultValue={informacionCita?.lejos_av_izquierdo}
@@ -341,6 +363,7 @@ const [disbledButton, setDisbledButton] = useState(false)
    <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="12"
                 className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
                 name="cerca_av_derecho"
                 defaultValue={informacionCita?.cerca_av_derecho}
@@ -348,6 +371,7 @@ const [disbledButton, setDisbledButton] = useState(false)
                 ref={register}
               />
             <input
+            tabindex="16"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="cerca_av_izquierdo"
               defaultValue={informacionCita?.cerca_av_izquierdo}
@@ -360,6 +384,7 @@ const [disbledButton, setDisbledButton] = useState(false)
           <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
+            tabindex="20"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_av_derecho"
               defaultValue={informacionCita?.actual_av_derecho}
@@ -368,6 +393,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
     
             <input
+            tabindex="24"
               className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
               name="actual_av_izquierdo"
               defaultValue={informacionCita?.actual_av_izquierdo}
@@ -383,6 +409,7 @@ const [disbledButton, setDisbledButton] = useState(false)
 
         <div className="mx-1 my-1 md:w-full">
           <input
+          tabindex="25"
             className="border-2 h-20 md:w-full border-gray-400 rounded-md  text-xl p-3"
             name="observaciones"
             defaultValue={informacionCita?.observaciones}
@@ -396,6 +423,7 @@ const [disbledButton, setDisbledButton] = useState(false)
           <div className="mx-1 my-1 flex flex-col sm:flex-row justify-center items-center">
           <p className="text-sm m-0 text-black uppercase">Valor cita</p> 
             <input
+            tabindex="26"
             type="number"
               className="border-2 border-gray-400 rounded-md m-3 text-xl p-3"
               name="valor_cita"
@@ -404,7 +432,7 @@ const [disbledButton, setDisbledButton] = useState(false)
               ref={register}
             />
           </div>
-          <select className="border-2 sm:mt-5 h-12 bg-white border-gray-400 rounded-md text-xl" name="fk_id_estado" ref={register}>
+          <select tabindex="27" className="border-2 sm:mt-5 h-12 bg-white border-gray-400 rounded-md text-xl" name="fk_id_estado" ref={register}>
             <option value={0}>Re-abrir</option>
             <option value={1}>Consultado</option>
             <option value={2}>Cancelar</option>
@@ -413,6 +441,7 @@ const [disbledButton, setDisbledButton] = useState(false)
           <Link href={`/modulocitas`}>
 							<a>
               <Button
+              tabindex="28"
               variant="contained"
               color="secondary"
               size="large"
@@ -428,6 +457,7 @@ const [disbledButton, setDisbledButton] = useState(false)
 
           <div className="mx-5 my-2">
             <Button
+            tabindex="29"
             disabled={disbledButton}
               type="submit"
               variant="contained"
