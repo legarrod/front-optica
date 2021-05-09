@@ -16,7 +16,7 @@ import Button from "@material-ui/core/Button";
 import swal from "sweetalert";
 import { useSpring, animated } from "react-spring/web.cjs";
 import FormRegistroUsuario from "../../ControlCitas/FormRegistroUsuario/FormRegistroUsuario";
-import {remove, put} from '../../../api/AsyncHttpRequest'
+import {remove, getData, put} from '../../../api/AsyncHttpRequest'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -108,11 +108,11 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [dataUser, setDataUser] =useState();
-  const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const urlRemove = `${process.env.API_ELIMINAR_PACIENTE}`;
-  const rows = listaPacientes;
+  let rows = listaPacientes;
   const [accion, setAccion] = useState('');
   const [cedulaPaciente, setCedulaPaciente] = useState();
+  const url = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
 
   const handleClose = () => {
     setOpen(false);
@@ -138,7 +138,7 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 			})
 			throw null;
 		  }
-        return fetch(`${urlCitas}/${name}`);
+        return fetch(`${url}/${name}`);
       })
       .then((results) => {
         return results.json();
@@ -156,10 +156,9 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 
         } else {
           const name = paciente.nombre;
-          const apellidos = paciente.apellidos;
           swal({
             title: "El paciente ya existe",
-            text: `${name} ${apellidos}`,
+            text: `${name}`,
           });
      
         }
@@ -177,7 +176,7 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 
 	const responseCallback =(response)=>{
 		if (response) {
-			getAllData()
+			getAllData(url)
 		}
 	}
 
@@ -189,7 +188,7 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 	
 	< div className="flex flex-col md:flex-row w-full">
 		<div className="w-full px-8">
-			<div className="m-0 mb-5 flex flex-wrap justify-end">
+			<div className="m-0 mb-5 flex flex-wrap justify-end">		
 				<Button
 					variant="contained"
 					color="primary"
@@ -259,7 +258,13 @@ export default function CustomizedTables({listaPacientes, getAllData}) {
 					<h2 className="text-3xl" id="titulo-registro">
 					Registrar usuario
 					</h2>
-					<FormRegistroUsuario setOpen={setOpen} accion={accion} dataUser={dataUser} setCedulaPaciente={setCedulaPaciente} cedulaPaciente={cedulaPaciente} getAllData={getAllData}/>
+					<FormRegistroUsuario setOpen={setOpen} 
+										accion={accion} 
+										dataUser={dataUser} 
+										setCedulaPaciente={setCedulaPaciente} 
+										cedulaPaciente={cedulaPaciente} 
+										getAllData={getAllData}
+										/>
 				</div>
 			
 		</Modal>

@@ -239,10 +239,10 @@ useEffect(() => {
 			onSubmit={handleSubmit(onSubmit)}
 		>
 			<div>
-			<select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80" name="id_paciente" ref={register} onClick={(e) => handlerSlectPaciente(e)}>
+			<select className="border-2 p-2 bg-white rounded-md text-xl my-3 sm:m-3 w-80 uppercase" name="id_paciente" ref={register} onClick={(e) => handlerSlectPaciente(e)}>
 				{
 				listadoPacientes.length >0 && listadoPacientes?.map(item=>(
-						<option value={item.id}>{item.nombre}</option>
+						<option className="uppercase" value={item.id}>{item.nombre}</option>
 					))
 				}
 			</select>

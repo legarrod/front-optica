@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getData = async (url, setData) => {
+export const getData = async (url, setData = null) => {
   try {
     const { data } = await axios.get(url);
     if (data.status_code === 200) {

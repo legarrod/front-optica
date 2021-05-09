@@ -14,6 +14,8 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/citas/api/citas/update",
     API_OBTENER_TODOS_LOS_PACIENTES:
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes",
+    API_BUSQUEDA_PACIENTES:
+      "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientesList/",
     API_GUARDAR_PACIENTE:
       "http://apioptica.recaudo.xyz/public/apipacientes/api/pacientes/nuevo",
     API_CITA_POR_PACIENTE:

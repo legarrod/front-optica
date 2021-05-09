@@ -24,7 +24,7 @@ export default function FormRegistroUsuario({
   cedulaPaciente,
   accion,
   dataUser,
-  getAllData,
+  getAllData
 }) {
   const classes = useStyles();
   let hoy = new Date();
@@ -33,21 +33,21 @@ export default function FormRegistroUsuario({
   const urlPut = `${process.env.API_ACTUALIZAR_INFORMACION_DEL_PACIENTE}`;
   const { register, handleSubmit, control } = useForm();
   const [disabledButton, setDisabledButton] = useState(false);
+  const urlPacientes = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
+
 
   const setDataResponse = (data) => {
     setDisabledButton(false);
+    getAllData(urlPacientes);
     if (data.data === "Paciente agregado correctamente") {
       swal("Excelente", "Paciente creado", "success");
       setOpen(false);
-      getAllData();
       if (!accion) {
-        getAllData();
         setOpen(false);
         setOpenRegCita(true);
       }
     } else if (data.data === "Paciente actualizado correctamente") {
       swal("Excelente", "Paciente actualizado correctamente", "success");
-      getAllData();
       setOpen(false);
     }
   };
@@ -115,28 +115,6 @@ export default function FormRegistroUsuario({
         placeholder="Nombre completo"
         ref={register}
       />
-      {/* <input
-=======
-        placeholder="Nombre"
-        ref={register}
-      />
-      <input
->>>>>>> se valida al momento de crear una cita
-=======
-        placeholder="Nombre completo"
-        ref={register}
-      />
-      {/* <input
->>>>>>> nuevas validaciones
-        className="border-2 border-gray-400 rounded-md m-3 text-xl"
-        name="apellidos"
-        id="apellidos"
-        defaultValue={dataUser?.apellidos}
-        placeholder="Apellidos"
-        ref={register}
-<<<<<<< HEAD
-<<<<<<< HEAD
-      /> */}
 
       <input
         className="border-2 border-gray-400 rounded-md m-3 text-xl"

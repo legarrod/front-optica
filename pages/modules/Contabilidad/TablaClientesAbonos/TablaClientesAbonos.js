@@ -272,11 +272,10 @@ export default function TablaClientesAbonos({allInvoices, setAllInvoices, getAll
 			getInvoices(`${urlObtenerDetallePorFactura}${facturaPersona[0].id}`, setDetalleFactura);
 		}
 		
-	}, [dataResponse, temConsultaAbono, facturaPersona ])
+	}, [dataResponse, facturaPersona ])
 
 	useMemo(() => formatData(rowTemporal, allInvoices), [rowTemporal, allInvoices])
-console.log(dataInfo);
-	
+
   return (
 	< div className="flex flex-col flex-wrap lg:flex-nowrap md:flex-row w-full">
 			<div className="w-full px-1 sm:px-8">
@@ -357,7 +356,11 @@ console.log(dataInfo);
 							</div>
 						</div>
 						<div>
-						<div className='flex flex-row'>
+							<div className='flex flex-row'>
+								<p className='text-base font-semibold'>Factura No:</p>
+								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{dataInfo?.numero_factura ? dataInfo?.numero_factura : "No hay nota para esta factura"}</p>
+							</div>
+							<div className='flex flex-row'>
 								<p className='text-base font-semibold'>Nota:</p>
 								<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{dataInfo?.nota ? dataInfo?.nota : "No hay nota para esta factura"}</p>
 							</div>
@@ -394,83 +397,7 @@ console.log(dataInfo);
 			}
 			{
 				viewFactura && <Factura facturaPersona={facturaPersona && facturaPersona[0]} detalleFactura={detalleFactura}/>
-			// 	<div id='factura' className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5">
-			// 	 <div className="m-0 mb-5 flex flex-wrap justify-end">
-			// 		<Button
-			// 		className="text-base"
-			// 			variant="contained"
-			// 			color="primary"
-			// 			size="large"
-			// 			className="rounded-sm"
-			// 			onClick={() => handlerImprimirFactura()}
-			// 			startIcon={<LocalPrintshopIcon />}
-			// 		>
-						
-			// 		</Button>
-			// 	</div>
-			// 	<div className='flex flex-col mb-10'>
-			// 		<div className="flex flex-row justify-between">
-			// 			<div className='mx-1'>
-			// 				<div className='flex flex-row'>
-			// 				<p className='text-sm font-semibold w-16'>Nombre:</p>
-			// 				<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.paciente}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-16'>Cedula:</p>
-			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.cedula}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-16'>Direccion:</p>
-			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.direccion}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-16'>Telefono:</p>
-			// 					<p className="text-xs ml-3 mt-1 text-gray-700">{facturaPersona[0]?.celular}</p>
-			// 				</div>
-			// 			</div>
-			// 			<div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-12'>Factura:</p>
-			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.numero_factura}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-12'>Fecha:</p>
-			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.fecha_creacion}</p>
-			// 				</div>
-			// 				<div className='flex flex-row'>
-			// 					<p className='text-sm font-semibold w-12'>Nota:</p>
-			// 					<p className="text-xs w-44 ml-3 mt-1 text-gray-700">{facturaPersona[0]?.nota ? facturaPersona[0]?.nota : "No hay nota para esta factura"}</p>
-			// 				</div>
-			// 			</div>
-			// 		</div>
-			// 		<div className="overflow-y-auto ml-0 pr-2 w-full mx-3 h-60 mt-5">
-			// 			<TableContainer component={Paper}>
-			// 				<Table className={classes.table} size="small" aria-label="a dense table">
-			// 					<TableHead>
-			// 					<TableRow>
-			// 						<StyledTableCell align="center">Nombre</StyledTableCell>
-			// 						<StyledTableCell align="center">Cantidad</StyledTableCell>
-			// 						<StyledTableCell align="center">Sub total</StyledTableCell>
-			// 					</TableRow>
-			// 					</TableHead>
-			// 					<TableBody>
-			// 					{detalleFactura.length > 0 && detalleFactura?.map((row, index) => (
-			// 						<StyledTableRow key={index}>
-			// 							<StyledTableCell align="center"><p className='w-20'>{row.nombre}</p></StyledTableCell>
-			// 							<StyledTableCell align="center">$ {row.cantidad}</StyledTableCell>
-			// 							<StyledTableCell align="center">{row.valor_producto}</StyledTableCell>
-			// 						</StyledTableRow>
-			// 					))} 
-			// 					</TableBody>
-			// 				</Table>
-			// 			</TableContainer>
-			// 		</div>
-			// 		<div className='flex flex-row w-full justify-end'>
-			// 			<p className='text-base font-semibold'>Total:</p>
-			// 			<p className="text-base font-semibold mr-4 ml-3 text-gray-700">{facturaPersona[0]?.valor_total ? `$ ` + facturaPersona[0]?.valor_total : `$ 0` }</p>
-			// 		</div>
-			// 	</div>
-			// </div>
+			
 			}
 			
 		<Modal
