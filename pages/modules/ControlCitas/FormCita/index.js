@@ -67,7 +67,7 @@ const [disbledButton, setDisbledButton] = useState(false)
      {/* -------------------------------------------------------------- */}
      <div className="hidden sm:flex sm:flex-col">
           <div className="flex flex-row justify-center items-center">
-          <p className="text-lg mr-3 text-black uppercase transform hidden sm:block -rotate-90 sm:rotate-0">Lejos</p>
+          <p className="text-lg mr-3 text-black uppercase transform hidden sm:block -rotate-90 sm:rotate-0">RX EN USO</p>
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">OJO</p>
               <input
@@ -83,7 +83,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             </div>
         </div>
         <div className="flex flex-row justify-center items-center">
-        <p className="text-lg mr-3 text-black transform hidden sm:block -rotate-90 sm:rotate-0 uppercase">Cerca</p>
+        <p className="text-lg mr-3 text-black transform hidden sm:block -rotate-90 sm:rotate-0 uppercase">RX FINAL</p>
           <div className="m-0 flex flex-col justify-end"> 
             <input
             disabled
@@ -97,7 +97,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center">
+        {/* <div className="flex flex-row justify-center items-center">
         <p className="text-lg m-0 text-black transform hidden sm:block -rotate-90 sm:rotate-0 uppercase">Actual</p>
           <div className="m-0 flex flex-col justify-end"> 
             <input
@@ -113,14 +113,14 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
 
-        </div>
+        </div> */}
       </div>
 
         {/* -------------------------------------------------------------- */}
         {/* -------------------------------------------------------------- */}
       <div className="flex flex-col">
           <div className="flex flex-row justify-center items-center">
-             <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+             <p className="text-lg mr-3 text-black uppercase block sm:hidden">RX EN USO</p>
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">Esferico</p>
               <input
@@ -143,7 +143,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             </div>
         </div>
         <div className="flex flex-row justify-center items-center">
-          <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+          <p className="text-lg mr-3 text-black block sm:hidden uppercase">RX FINAL</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
             tabindex="9"
@@ -163,7 +163,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center">
+        {/* <div className="flex flex-row justify-center items-center">
          <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
@@ -185,7 +185,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
 
-        </div>
+        </div> */}
       </div>
 
         {/* -------------------------------------------------------------- */}
@@ -195,7 +195,7 @@ const [disbledButton, setDisbledButton] = useState(false)
        {/* -------------------------------------------------------------- */}
       <div className="flex flex-col">
           <div className="flex flex-row justify-center items-center">
- <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+          <p className="text-lg mr-3 text-black uppercase block sm:hidden">RX EN USO</p>
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">Cilindro</p>
               <input
@@ -217,7 +217,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             </div>
         </div>
         <div className="flex flex-row justify-center items-center">
-   <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+   <p className="text-lg mr-3 text-black block sm:hidden uppercase">RX FINAL</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
             tabindex="10"
@@ -237,7 +237,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center">
+        {/* <div className="flex flex-row justify-center items-center">
          <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p>  
           <div className="m-0 flex flex-col justify-end"> 
             <input
@@ -259,14 +259,14 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
 
-        </div>
+        </div> */}
       </div>
 
         {/* -------------------------------------------------------------- */}
         {/* -------------------------------------------------------------- */}
       <div className="flex flex-col">
           <div className="flex flex-row justify-center items-center">
-            <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+            <p className="text-lg mr-3 text-black uppercase block sm:hidden">RX EN USO</p>
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">Eje</p>
               <input
@@ -288,7 +288,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             </div>
         </div>
         <div className="flex flex-row justify-center items-center">
-   <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+   <p className="text-lg mr-3 text-black block sm:hidden uppercase">RX FINAL</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
             tabindex="11"
@@ -308,7 +308,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center">
+        {/* <div className="flex flex-row justify-center items-center">
           <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
@@ -330,14 +330,86 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
 
-        </div>
+        </div> */}
       </div>
 
         {/* -------------------------------------------------------------- */}
          {/* -------------------------------------------------------------- */}
       <div className="flex flex-col">
       <div className="flex flex-row justify-center items-center">
-            <p className="text-lg mr-3 text-black uppercase block sm:hidden">Lejos</p>
+            <p className="text-lg mr-3 text-black uppercase block sm:hidden">RX EN USO</p>
+            <div className="m-0 flex flex-col justify-end ">
+            <p className="text-black text-xl font-semibold text-center uppercase">ADD</p>
+              <input
+              tabindex="4"
+              
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_add_derecho"
+                defaultValue={informacionCita?.lejos_add_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />          
+              <input
+              tabindex="8"
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="lejos_add_izquierdo"
+                defaultValue={informacionCita?.lejos_add_izquierdo}
+                placeholder="Izquierdo"
+                ref={register}
+              />
+            </div>
+        </div>
+        <div className="flex flex-row justify-center items-center">
+          <p className="text-lg mr-3 text-black block sm:hidden uppercase">RX FINAL</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+            tabindex="12"
+                className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+                name="cerca_add_derecho"
+                defaultValue={informacionCita?.cerca_add_derecho}
+                placeholder="Derecho"
+                ref={register}
+              />
+            <input
+            tabindex="16"
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="cerca_add_izquierdo"
+              defaultValue={informacionCita?.cerca_add_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
+        </div>
+        {/* <div className="flex flex-row justify-center items-center">
+          <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
+          <div className="m-0 flex flex-col justify-end"> 
+            <input
+            tabindex="20"
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_av_derecho"
+              defaultValue={informacionCita?.actual_av_derecho}
+              placeholder="Derecho"
+              ref={register}
+            />
+    
+            <input
+            tabindex="24"
+              className="border-2 border-gray-400 w-32 rounded-md m-1 text-lg p-1"
+              name="actual_av_izquierdo"
+              defaultValue={informacionCita?.actual_av_izquierdo}
+              placeholder="Izquierdo"
+              ref={register}
+            />
+          </div>
+
+        </div> */}
+      </div>
+
+        {/* -------------------------------------------------------------- */}
+
+        <div className="flex flex-col">
+      <div className="flex flex-row justify-center items-center">
+            <p className="text-lg mr-3 text-black uppercase block sm:hidden">RX EN USO</p>
             <div className="m-0 flex flex-col justify-end ">
             <p className="text-black text-xl font-semibold text-center uppercase">A.V.</p>
               <input
@@ -360,7 +432,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             </div>
         </div>
         <div className="flex flex-row justify-center items-center">
-   <p className="text-lg mr-3 text-black block sm:hidden uppercase">Cerca</p> 
+          <p className="text-lg mr-3 text-black block sm:hidden uppercase">RX FINAL</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
             tabindex="12"
@@ -380,7 +452,7 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center">
+        {/* <div className="flex flex-row justify-center items-center">
           <p className="text-lg m-0 text-black block sm:hidden uppercase">Actual</p> 
           <div className="m-0 flex flex-col justify-end"> 
             <input
@@ -402,10 +474,9 @@ const [disbledButton, setDisbledButton] = useState(false)
             />
           </div>
 
-        </div>
+        </div> */}
       </div>
-
-        {/* -------------------------------------------------------------- */}
+        {/*--------------------------------------------------------------------- */}
 
         <div className="mx-1 my-1 md:w-full">
           <input

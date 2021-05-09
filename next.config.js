@@ -60,5 +60,9 @@ module.exports = {
       "http://apioptica.recaudo.xyz/public/citas/api/citaporcedula/",
     API_ACTUALIZAR_ESTADO_CITA:
       "http://apioptica.recaudo.xyz/public/contabilidad/api/facturas/actualizarestado/",
+    API_OBTENER_HORAS_CITAS_FECHA:
+      "http://apioptica.recaudo.xyz/public/citas/api/horascitasporfecha/",
+    API_ACTUALIZAR_HORA_CITA:
+      "http://apioptica.recaudo.xyz/public/citas/api/horacita/update",
   },
 };

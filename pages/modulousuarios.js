@@ -20,7 +20,6 @@ export default function modulousuarios() {
   
   const responseGetaData =(response)=>{
 	setListaPacientes(response)
-console.log(response);
   }
 
 	const getAllData = (url)=>{

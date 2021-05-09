@@ -128,7 +128,7 @@ export default function MenuNav() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
+      {/* <MenuItem onClick={handleMenuClose}>Perfil</MenuItem> */}
       <MenuItem onClick={handleClose}>Salir</MenuItem>
     </Menu>
   );
@@ -193,7 +193,7 @@ export default function MenuNav() {
         </Link>
       </MenuItem>
       
-      <MenuItem onClick={handleProfileMenuOpen}>
+      {/* <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -203,7 +203,7 @@ export default function MenuNav() {
           <AccountCircle />
         </IconButton>
         <p>Perfil</p>
-      </MenuItem>
+      </MenuItem> */}
 
       <MenuItem onClick={handleClose}>
       <IconButton
@@ -223,17 +223,12 @@ export default function MenuNav() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Optica Quindiana
+          <Link href="/">
+           <Typography className={classes.title} variant="h6" noWrap >
+           <a>Optica Quindiana</a> 
           </Typography>
+          </Link>
+         
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">

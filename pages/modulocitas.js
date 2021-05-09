@@ -62,6 +62,7 @@ export default function ModuloCitas() {
   const urlAllInformation = `${process.env.API_OBTENER_TODAS_LAS_CITAS}`;
   const urlCitas = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const urlCitasPorFecha = `${process.env.API_OBTENER_LAS_CITAS_POR_FECHA}`;
+  const urlHorasCitasPorFecha = `${process.env.API_OBTENER_HORAS_CITAS_FECHA}`;
   const [open, setOpen] = useState(false);
   const [openRegCita, setOpenRegCita] = useState(false);
   const [cedulaPaciente, setCedulaPaciente] = useState();
@@ -72,6 +73,7 @@ export default function ModuloCitas() {
   const [paciente, setPaciente] = useState({});
   const [fechaFilter, setFechaFilter] = useState(getDate(hoy));
   const [dateContainer, setDateContainer] = useState(true);
+const [horasPorFecha, setHorasPorFecha] = useState([])
 
   const [user, setUser] = useState(undefined);
   const router = useRouter();
@@ -84,6 +86,9 @@ export default function ModuloCitas() {
   };
   const getAllData = ()=>{
     getData(urlAllInformation, setAllData);
+  }
+  const getHorasFecha = (fecha)=>{
+    getData(`${urlHorasCitasPorFecha}${fecha}`, setHorasPorFecha);
   }
 const resetearFecha = ()=>{
   getDataEvent();
@@ -145,7 +150,7 @@ const resetearFecha = ()=>{
           })
           swal({
             title: "El paciente ya existe",
-            text: `${paciente.nombre} ${paciente.apellidos}`,
+            text: `${paciente.nombre}`,
           });
           setOpenRegCita(true);
         }
@@ -198,7 +203,7 @@ const resetearFecha = ()=>{
           
         </div>
         {/* <CardCitas data={data} allData={allData}/> */}
-        <TablaCitas data={data && data} />
+        <TablaCitas data={data && data} horasPorFecha={horasPorFecha} getHorasFecha={getHorasFecha}/>
       </div>
       <Modal
         aria-labelledby="spring-modal-title"

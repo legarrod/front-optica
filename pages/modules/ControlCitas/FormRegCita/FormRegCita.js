@@ -50,14 +50,10 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
           fecha_creacion: getDate(hoy),
           fecha_cita: fecha,
           hora: horaCita,
-          actual_av_derecho: "",
-          actual_av_izquierdo: "",
-          actual_cilindro_derecho: "",
-          actual_cilindro_izquierdo: "",
-          actual_eje_derecho: "",
-          actual_eje_izquierdo: "",
-          actual_esferico_derecho: "",
-          actual_esferico_izquierdo: "",
+          lejos_add_derecho: "", 
+          lejos_add_izquierdo: "", 
+          cerca_add_derecho: "", 
+          cerca_add_izquierdo: "",
           cerca_av_derecho: "",
           cerca_av_izquierdo: "",
           cerca_cilindro_derecho: "",
@@ -128,13 +124,6 @@ export default function FormRegCita({ setOpen, cedulaPaciente,  getDataEvent }) 
           name="nombre"
           placeholder="Nombre"
           defaultValue={data?.nombre}
-          ref={register}
-        />
-        <input
-          className="border-2 border-gray-400 rounded-md m-3 text-xl"
-          name="apellidos"
-          placeholder="Apellidos"
-          defaultValue={data?.apellidos}
           ref={register}
         />
         <div className="flex flex-wrap mb-2 items-center">

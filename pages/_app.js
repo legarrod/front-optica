@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
   }, [])
   
   return <AuthContext.Provider value={authData}>
-            <Component {...pageProps} />;
+            <Component {...pageProps} />
           </AuthContext.Provider> 
 }
 

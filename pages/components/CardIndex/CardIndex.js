@@ -42,7 +42,7 @@ export default function CardIndex() {
 		{
 			title: "Contabilidad",
 			description: "Aca encontramos un listado de todos los pacientes con informacion de abonos",
-			img: "https://cdn.pixabay.com/photo/2015/01/27/20/40/notebook-614213_960_720.jpg",
+			img: "https://cdn.pixabay.com/photo/2014/07/06/13/55/calculator-385506_960_720.jpg",
 			path: "/contabilidad"
 		}
 	]

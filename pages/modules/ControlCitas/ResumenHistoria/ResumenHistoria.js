@@ -38,8 +38,8 @@ export default function ResumenHistoria({setVerHistoria}) {
 	
 	}
 	return (
-		<div className="w-screen h-screen bg-black bg-opacity-25 absolute z-50 top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-			<div className='w-11/12 bg-white p-5 flex flex-wrap rounded-xl'>
+		<div className="w-screen h-screen bg-black py-6 bg-opacity-25 absolute z-50 top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+			<div className='overflow-auto w-11/12 h-full bg-white p-5 flex flex-wrap rounded-xl'>
 				<div>
 					<div className='flex flex-wrap'>
 						<input className="bg-white h-10 rounded-lg border-gray-800 border-2 my-0 " 
@@ -87,115 +87,148 @@ export default function ResumenHistoria({setVerHistoria}) {
 											/> 
 										</div>
 									</div>
-									<div className="grid grid-cols-1 md:grid-cols-2 "> 
-										<div className="flex flex-col justify-center items-start">
+									<div className="flex flex-wrap justify-center items-center"> 
+										<div className="flex flex-col justify-center w-2/5 mx-1 my-1 border bottom-2 border-blue-500 rounded-lg p-1 items-start">
+											<h2 className="text-xl font-semibold text-center w-full">ESFERICO</h2>
 											<div className="flex flex-row m-1 ">
-													<p className="text-xs font-semibold mr-2">Esferico lejos derecho:</p>
+													<p className="text-xs font-semibold mr-2">RX EN USO DERECHO:</p>
 													<p className="text-xs ">{citaPaciente.lejos_esferico_derecho}</p>
 												</div>
 												<div className="flex flex-row m-1 justify-center items-center">
-													<p className="text-xs font-semibold mr-2">Esferico lejos izquiero:</p>
+													<p className="text-xs font-semibold mr-2">RX EN USO IZQUIERDO:</p>
 													<p className="text-xs ">{citaPaciente.lejos_esferico_izquierdo}</p>
 												</div>
 												<div className="flex flex-row m-1 justify-center items-center">
-													<p className="text-xs font-semibold mr-2">Esferico cerca derecho:</p>
+													<p className="text-xs font-semibold mr-2">RX FINAL DERECHO:</p>
 													<p className="text-xs ">{citaPaciente.cerca_esferico_derecho}</p>
 												</div>
 												<div className="flex flex-row m-1 justify-center items-center">
-													<p className="text-xs font-semibold mr-2">Esferico cerca izquiero:</p>
+													<p className="text-xs font-semibold mr-2">RX FINAL IZQUIERDO:</p>
 													<p className="text-xs ">{citaPaciente.cerca_esferico_izquierdo}</p>
 												</div>
-												<div className="flex flex-row m-1 justify-center items-center">
+												{/* <div className="flex flex-row m-1 justify-center items-center">
 													<p className="text-xs font-semibold mr-2">Esferico actual derecho:</p>
 													<p className="text-xs ">{citaPaciente.actual_esferico_derecho}</p>
 												</div>
 												<div className="flex flex-row m-1 justify-center items-center">
 													<p className="text-xs font-semibold mr-2">Esferico actual izquiero:</p>
 													<p className="text-xs ">{citaPaciente.actual_esferico_izquierdo}</p>
-											</div>
+											</div> */}
 										
 										</div>
 
-										<div className="flex flex-col justify-center items-start">
+										<div className="flex flex-col justify-center w-2/5 mx-1 my-1 border bottom-2 border-blue-500 rounded-lg p-1 items-start">
+										<h2 className="text-xl font-semibold text-center w-full">CILINDRO</h2>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Cilindrico lejos derecho:</p>
+												<p className="text-xs font-semibold mr-2">RX EN USO DERECHO:</p>
 												<p className="text-xs ">{citaPaciente.lejos_cilindro_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Cilindrico lejos izquiero:</p>
+												<p className="text-xs font-semibold mr-2">RX EN USO IZQUIERDO:</p>
 												<p className="text-xs ">{citaPaciente.lejos_cilindro_izquierdo}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Cilindrico cerca derecho:</p>
+												<p className="text-xs font-semibold mr-2">RX FINAL DERECHO:</p>
 												<p className="text-xs ">{citaPaciente.cerca_cilindro_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Cilindrico cerca izquiero:</p>
+												<p className="text-xs font-semibold mr-2">RX FINAL IZQUIERDO:</p>
 												<p className="text-xs ">{citaPaciente.cerca_cilindro_izquierdo}</p>
 											</div>
-											<div className="flex flex-row m-1 justify-center items-center">
+											{/* <div className="flex flex-row m-1 justify-center items-center">
 												<p className="text-xs font-semibold mr-2">Cilindrico actual derecho:</p>
 												<p className="text-xs ">{citaPaciente.actual_cilindro_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
 												<p className="text-xs font-semibold mr-2">Cilindrico actual izquiero:</p>
 												<p className="text-xs ">{citaPaciente.actual_cilindro_izquierdo}</p>
-											</div>
+											</div> */}
 										</div>
 										
-										<div className="flex flex-col justify-center items-start">
+										<div className="flex flex-col justify-center w-2/5 mx-1 my-1 border bottom-2 border-blue-500 rounded-lg p-1 items-start">
+										<h2 className="text-xl font-semibold text-center w-full">EJE</h2>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Eje lejos derecho:</p>
+												<p className="text-xs font-semibold mr-2">RX EN USO DERECHO:</p>
 												<p className="text-xs ">{citaPaciente.lejos_eje_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Eje lejos izquiero:</p>
+												<p className="text-xs font-semibold mr-2">RX EN USO IZQUIERDO:</p>
 												<p className="text-xs ">{citaPaciente.lejos_eje_izquierdo}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Eje cerca derecho:</p>
+												<p className="text-xs font-semibold mr-2">RX FINAL DERECHO:</p>
 												<p className="text-xs ">{citaPaciente.cerca_eje_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">Eje cerca izquiero:</p>
+												<p className="text-xs font-semibold mr-2">RX FINAL IZQUIERDO:</p>
 												<p className="text-xs ">{citaPaciente.cerca_eje_izquierdo}</p>
 											</div>
-											<div className="flex flex-row m-1 justify-center items-center">
+											{/* <div className="flex flex-row m-1 justify-center items-center">
 												<p className="text-xs font-semibold mr-2">Eje actual derecho:</p>
 												<p className="text-xs ">{citaPaciente.actual_eje_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
 												<p className="text-xs font-semibold mr-2">Eje actual izquiero:</p>
 												<p className="text-xs ">{citaPaciente.ctual_eje_izquierdo}</p>
-											</div>
+											</div> */}
 										</div>
-										<div className="flex flex-col justify-center items-start">
+										<div className="flex flex-col justify-center w-2/5 mx-1 my-1 border bottom-2 border-blue-500 rounded-lg p-1 items-start">
+										<h2 className="text-xl font-semibold text-center w-full">ADD</h2>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">A.V lejos derecho:</p>
-												<p className="text-xs ">{citaPaciente.lejos_av_derecho}</p>
+												<p className="text-xs font-semibold mr-2">RX EN USO DERECHO:</p>
+												<p className="text-xs ">{citaPaciente.lejos_add_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">A.V lejos izquiero:</p>
-												<p className="text-xs ">{citaPaciente.lejos_av_izquierdo}</p>
+												<p className="text-xs font-semibold mr-2">RX EN USO IZQUIERDO:</p>
+												<p className="text-xs ">{citaPaciente.lejos_add_izquierdo}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">A.V cerca derecho:</p>
-												<p className="text-xs ">{citaPaciente.cerca_av_derecho}</p>
+												<p className="text-xs font-semibold mr-2">RX FINAL DERECHO:</p>
+												<p className="text-xs ">{citaPaciente.cerca_add_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
-												<p className="text-xs font-semibold mr-2">A.V cerca izquiero:</p>
-												<p className="text-xs ">{citaPaciente.cerca_av_izquierdo}</p>
+												<p className="text-xs font-semibold mr-2">RX FINAL IZQUIERDO:</p>
+												<p className="text-xs ">{citaPaciente.ccerca_add_izquierdo}</p>
 											</div>
-											<div className="flex flex-row m-1 justify-center items-center">
+											{/* <div className="flex flex-row m-1 justify-center items-center">
 												<p className="text-xs font-semibold mr-2">A.V actual derecho:</p>
 												<p className="text-xs ">{citaPaciente.actual_av_derecho}</p>
 											</div>
 											<div className="flex flex-row m-1 justify-center items-center">
 												<p className="text-xs font-semibold mr-2">A.V actual izquiero:</p>
 												<p className="text-xs ">{citaPaciente.actual_av_izquierdo}</p>
-											</div>
+											</div> */}
 
 										</div>
+										<div className="flex flex-col justify-center w-2/5 mx-1 my-1 border bottom-2 border-blue-500 rounded-lg p-1 items-start">
+										<h2 className="text-xl font-semibold text-center w-full">A.V.</h2>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">RX EN USO DERECHO:</p>
+												<p className="text-xs ">{citaPaciente.lejos_av_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">RX EN USO IZQUIERDO:</p>
+												<p className="text-xs ">{citaPaciente.lejos_av_izquierdo}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">RX FINAL DERECHO:</p>
+												<p className="text-xs ">{citaPaciente.cerca_av_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">RX FINAL IZQUIERDO:</p>
+												<p className="text-xs ">{citaPaciente.cerca_av_izquierdo}</p>
+											</div>
+											{/* <div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V actual derecho:</p>
+												<p className="text-xs ">{citaPaciente.actual_av_derecho}</p>
+											</div>
+											<div className="flex flex-row m-1 justify-center items-center">
+												<p className="text-xs font-semibold mr-2">A.V actual izquiero:</p>
+												<p className="text-xs ">{citaPaciente.actual_av_izquierdo}</p>
+											</div> */}
+
+										</div>
+										
 									</div>
 									
 								</div>
@@ -205,7 +238,7 @@ export default function ResumenHistoria({setVerHistoria}) {
 					variant="contained"
 					color="secondary"
 					size="large"
-					className="rounded-sm"
+					className="rounded-sm h-11"
 					style={{ marginTop: 4}}
 					onClick={()=>setVerHistoria(false)}
 					>X
