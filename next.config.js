@@ -1,5 +1,6 @@
 module.exports = {
   env: {
+    API_BASE_OPTICA: 'http://localhost/back-optica/public/',
     API_OBTENER_TODAS_LAS_CITAS:
       'http://localhost/back-optica/public/citas/api/citas',
     API_OBTENER_LAS_CITAS_POR_ESTADO:
@@ -46,8 +47,6 @@ module.exports = {
       'http://localhost/back-optica/public/contabilidad/api/facturas/crearfactura',
     API_OBTENER_ID_FACTURA:
       'http://localhost/back-optica/public/contabilidad/api/facturacodigo/',
-    API_CREAR_DETALLE_FACTURA:
-      'http://localhost/back-optica/public/contabilidad/api/facturas/creardetallefactura',
     API_OBTENER_FACTURA_PERSONA:
       'http://localhost/back-optica/public/contabilidad/api/facturacedula/',
     API_OBTENER_DETALLER_POR_FACTURA:

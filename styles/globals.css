@@ -14,6 +14,34 @@ a {
 * {
   box-sizing: border-box;
 }
+@page {
+  size: 8.5in 11in;
+}
+
+@media print {
+  .none-print {
+    display: none !important;
+  }
+  #header,
+  #nav,
+  .noprint {
+    display: none;
+  }
+  .ticket {
+    display: block !important;
+    border-style: none;
+    border: none;
+  }
+  .barra {
+    margin: 0px !important;
+  }
+  .fact {
+    padding: 0px !important;
+  }
+  @page {
+    margin: 2mm;
+  }
+}
 
 @tailwind base;
 @tailwind components;

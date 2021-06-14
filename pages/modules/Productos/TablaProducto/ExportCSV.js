@@ -10,7 +10,7 @@ export default function ExportCSV({ fileName }) {
   const fileExtension = '.xlsx';
   const [csvData, setCcsvData] = useState();
   const [response, setResponse] = useState(false);
-  const url = `${process.env.API_EXPORTAR}`;
+  const url = `${process.env.API_BASE_OPTICA}contabilidad/api/exportar-inventario`;
 
   const getFacturas = async (url) => {
     try {
@@ -45,8 +45,8 @@ export default function ExportCSV({ fileName }) {
       variant="contained"
       color="primary"
       size="large"
-      className="rounded-sm none-print"
-      style={{ marginLeft: 5, marginTop: 4 }}
+      className="rounded-sm"
+      style={{ marginLeft: 5 }}
       onClick={() => exportData()}
     >
       Exportar

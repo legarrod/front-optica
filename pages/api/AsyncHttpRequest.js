@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const getData = async (url, setData = null) => {
   try {
@@ -13,35 +13,30 @@ export const getData = async (url, setData = null) => {
 
 export const post = async (url, formData = null, setDataResponse = null) => {
   try {
-    const data = await axios.post(url, formData, setDataResponse);
-  
-      setDataResponse(data);
-
+    const data = await axios.post(url, formData);
+    setDataResponse(data);
   } catch (error) {
-    console.log(error);
+    setDataResponse(error);
   }
-  //return axios.post(url, formData, config);
 };
 
 export const put = async (url, params = null, setDataResponse = null) => {
   try {
     const data = await axios.put(url, params);
-      setDataResponse(data);
-   
+    setDataResponse(data);
   } catch (error) {
     console.log(error);
   }
   //return axios.put(url, params, config);
-}
+};
 
-export const remove = async(url, callback) =>{
+export const remove = async (url, callback) => {
   try {
     const data = await axios.delete(url);
     callback(data);
-   
   } catch (error) {
     console.log(error);
   }
 
   // return axios.delete(url, params);
-}
+};
