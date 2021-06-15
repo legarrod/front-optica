@@ -121,7 +121,6 @@ export default function FormCrearProducto({ setOpen, refresData }) {
         name="nombre"
         id="nombre"
         placeholder="Nombre"
-        value={data?.nombre}
         ref={register}
       />
       <input
@@ -129,7 +128,6 @@ export default function FormCrearProducto({ setOpen, refresData }) {
         name="descripcion"
         id="descripcion"
         placeholder="Descripcion"
-        value={data?.descripcion}
         ref={register}
       />
       {/* <div>

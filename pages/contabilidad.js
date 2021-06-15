@@ -43,6 +43,7 @@ export default function Productos() {
   };
 
   const handlerBuscarFactura = (e) => {
+    getInvoices(`${urlObtenerFacturaPersona}${e.target.value}`, setAllInvoices);
     setBuscando(true);
     setCedulaBuscar(e.target.value);
   };

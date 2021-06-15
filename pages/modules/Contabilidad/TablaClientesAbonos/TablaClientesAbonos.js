@@ -22,7 +22,6 @@ import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Factura from '../Factura/Factura';
 import { put, remove } from '../../../api/AsyncHttpRequest';
 import DeleteIcon from '@material-ui/icons/Delete';
-import CachedIcon from '@material-ui/icons/Cached';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -41,10 +40,6 @@ const StyledTableRow = withStyles((theme) => ({
     },
   },
 }))(TableRow);
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -101,7 +96,6 @@ export default function TablaClientesAbonos({
   const urlRemoveAbono = `${process.env.API_ELIMINAR_ABONO}`;
   const urlActualizarStado = `${process.env.API_ACTUALIZAR_ESTADO_CITA}`;
   const urlObtenerAbonosFactura = `${process.env.API_OBTENER_ABONOS_POR_FACTURA}`;
-  const [dataResponse, setDataResponse] = useState();
   const [allAbonos, setAllAbonos] = useState();
   const [facturaPersona, setFacturaPersona] = useState({});
   const [detalleFactura, setDetalleFactura] = useState([]);
@@ -109,8 +103,8 @@ export default function TablaClientesAbonos({
   const [temConsultaAbono, setTemConsultaAbono] = useState();
   const [viewDetalleAbonos, setViewDetalleAbonos] = useState(false);
   const [viewFactura, setViewFactura] = useState(false);
-  const [cedulaTemp, setCedulaTemp] = useState();
   const [reconsultaAbonos, setReconsultaAbonos] = useState();
+  const [idFactura, setIdFactura] = useState('');
   const [disabledBotonEnviarAbono, setDisabledBotonEnviarAbono] =
     useState(false);
   const [rowTemporal, setRowTemporal] = useState({});
@@ -138,11 +132,9 @@ export default function TablaClientesAbonos({
         },
       });
       setControlRefresFactura(true);
-      getAllInvoices(urlObtenerFacturas, setAllInvoices);
       getAbonos(temConsultaAbono, callbackResponseGetAbonos);
     }
     if (response.data.data === true) {
-      getAllInvoices(urlObtenerFacturas, setAllInvoices);
       setOpen(false);
       setControlRefresFactura(true);
       getAbonos(temConsultaAbono, callbackResponseGetAbonos);
@@ -159,8 +151,8 @@ export default function TablaClientesAbonos({
   const callbackResponseGetAbonos = (data) => {
     setAllAbonos(data.data.data);
     if (disabledBotonEnviarAbono) {
-      getAbonos(reconsultaAbonos, callbackResponseGetAbonos);
       setDisabledBotonEnviarAbono(false);
+      getAbonos(reconsultaAbonos, callbackResponseGetAbonos);
       setOpen(false);
     } else {
       setDisabledBotonEnviarAbono(false);
@@ -169,9 +161,8 @@ export default function TablaClientesAbonos({
 
   const getInvoices = async (urlObtenerFacturas, setAllInvoices = null) => {
     try {
-      const data = await axios.get(urlObtenerFacturas, setAllInvoices);
+      const data = await axios.get(urlObtenerFacturas);
       if (data) {
-        //setAllProducts(data.data);
         setAllInvoices(data.data.data);
       }
     } catch (error) {
@@ -216,6 +207,20 @@ export default function TablaClientesAbonos({
     setViewDetalleAbonos(true);
   };
 
+  const obtenerFactura = (data, id) => {
+    const responseInvoice = (data) => {
+      let newData = data.filter((item) => item.id === id);
+      setFacturaPersona(newData);
+    };
+    getInvoices(`${urlObtenerFacturaPersona}${data.cedula}`, responseInvoice);
+  };
+
+  const handlerBuscarFactura = (data) => {
+    setIdFactura(data.id);
+    obtenerFactura(data, data.id);
+    setViewFactura(true);
+    setViewDetalleAbonos(false);
+  };
   const refresData = () => {
     getInvoices(urlObtenerFacturas, setAllInvoices);
   };
@@ -232,16 +237,10 @@ export default function TablaClientesAbonos({
     postAbono(urlAgregarAbono, dataSaved, responseCallback);
   };
 
-  const handlerBuscarFactura = (data) => {
-    setCedulaTemp(data.cedula);
-    getInvoices(`${urlObtenerFacturaPersona}${data.cedula}`, setFacturaPersona);
-    setViewFactura(true);
-    setViewDetalleAbonos(false);
-  };
   const handlerImprimirFactura = () => {
     window.print();
   };
-  const callbackResponse = (data) => {
+  const callbackResponse = () => {
     refresData();
   };
   const handlerEliminarAbono = (idFactura) => {
@@ -273,14 +272,13 @@ export default function TablaClientesAbonos({
   };
 
   useEffect(() => {
-    refresData();
-    if (facturaPersona.length >= 0) {
+    if (facturaPersona.length >= 0 && idFactura !== '') {
       getInvoices(
-        `${urlObtenerDetallePorFactura}${facturaPersona[0].id}`,
+        `${urlObtenerDetallePorFactura}${idFactura}`,
         setDetalleFactura
       );
     }
-  }, [dataResponse, facturaPersona]);
+  }, [facturaPersona, idFactura]);
 
   useMemo(
     () => formatData(rowTemporal, allInvoices),

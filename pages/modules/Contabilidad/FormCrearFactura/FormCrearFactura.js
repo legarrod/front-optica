@@ -40,8 +40,8 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   const urlSalida = `${process.env.API_BASE_OPTICA}productos/api/productos/salida`;
   const urlPostDetalleFactura = `${process.env.API_BASE_OPTICA}contabilidad/api/facturas/creardetallefactura`;
   //const url = `${process.env.API_REGISTRAR_NUEVA_CITA}`;
-  const [data, setData] = useState();
   const [valueTextarea, setValueTextarea] = useState();
+  const urlLastInvoice = `${process.env.API_BASE_OPTICA}contabilidad/api/invoice-last-created`;
   const { register, handleSubmit } = useForm();
   const urlGetPacientes = `${process.env.API_OBTENER_TODOS_LOS_PACIENTES}`;
   const urlPosTFactura = `${process.env.API_CREAR_FACTURA}`;
@@ -84,7 +84,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
       localStorage.removeItem('facturaSinGuardar');
       setFacturaPendiente(false);
       getIdFactura(
-        `${url}${invoiceData.numero_factura}`,
+        `${url}` + (parseInt(numeroFac) + 1),
         setIdFactura,
         setFacturaOk
       );
@@ -125,12 +125,12 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   };
 
   const onSubmit = (data) => {
-    setNumeroFac(data.numero_factura);
     let newData = {
+      id_factura: parseInt(numeroFac) + 1,
       valor_factura: total,
       fechasalida: getDate(hoy),
       cc_usuario: data.id_paciente ? parseInt(data.id_paciente) : 0,
-      numero_factura: data.numero_factura,
+      numero_factura: parseInt(numeroFac) + 1,
       estado_factura: estado,
       observaciones: data.observaciones,
     };
@@ -205,7 +205,9 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   };
 
   const saveDetalleFactura = () => {
-    let num = 0;
+    let newCodigo = parseInt(numeroFac) + 1;
+
+    //parseInt(numeroFac) + 1
     let data = detailInvoice.map((item) => ({
       id_factura: idFactura,
       id_producto: parseInt(item.id),
@@ -219,7 +221,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
       fecha_salida: getDate(hoy),
     }));
     let newDataDetalle = data.map((item) => ({
-      id_factura: item.id_factura,
+      id_factura: newCodigo,
       id_producto: item.id_producto,
       cantidad: item.cantidad,
       valor_producto: item.valor_producto,
@@ -228,11 +230,19 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
     postDetalle(urlPostDetalleFactura, newDataDetalle, setResponseSuccess);
   };
 
-  const getIdFactura = async (url, setIdFactura, setFacturaOk) => {
+  const getIdFactura = async (url, setIdFactura, setFacturaOk = null) => {
     try {
       const { data } = await axios.get(url);
       setIdFactura(data.data[0].id);
       setFacturaOk(true);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  const getlastIdFactura = async (url, setIdFactura) => {
+    try {
+      const { data } = await axios.get(url);
+      setIdFactura(data);
     } catch (error) {
       console.log(error.message);
     }
@@ -259,6 +269,10 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
     }
   };
 
+  const responseLastInvoice = (response) => {
+    setNumeroFac(response.data[0].codigo);
+  };
+
   useEffect(() => {
     if (facturaOk) {
       saveDetalleFactura();
@@ -271,6 +285,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
       setSinInternet(true);
       //router.push('/')
     }
+    getlastIdFactura(`${urlLastInvoice}`, responseLastInvoice);
   }, [urlGetProductos, setListadoProductos, dataResponse, facturaOk]);
 
   return (
@@ -294,7 +309,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
               ))}
           </select>
           <div className="flex flex-wrap flex-col w-full sm:w-3/12 justify-center">
-            <input
+            {/* <input
               className="border-2 border-gray-400 rounded-md mt-3 sm:m-3 text-xl"
               name="numero_factura"
               placeholder="Factura Numero"
@@ -303,7 +318,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
               }
               value={data?.numero_factura}
               ref={register}
-            />
+            /> */}
             {/* <input
 					className="border-2 border-gray-400 rounded-md my-3 sm:m-3 text-xl"
 					name="valor_factura"
@@ -340,9 +355,11 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
             ref={register}
             onClick={(e) => handlerSlectProducto(e)}
           >
+            <option className="uppercase">Selcciona un articulo</option>
             {listadoProductos.length > 0 &&
               listadoProductos?.map((item) => (
                 <option
+                  className="uppercase"
                   value={JSON.stringify({
                     idproducto: item.idproducto,
                     codigo: item.codigo,
@@ -353,28 +370,30 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
               ))}
           </select>
           {viewInputsNewProducts && (
-            <div>
-              <label>{selectedProduct.name}</label>
-              <input
-                className="border-2 border-gray-400 rounded-md w-32 my-3 sm:m-3 text-xl"
-                name="valor_gafa"
-                placeholder="$"
-                ref={register}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-              <input
-                type="number"
-                className="border-2 border-gray-400 rounded-md w-20 my-3 sm:m-3 text-xl"
-                name="cantidad"
-                placeholder=""
-                ref={register}
-                onChange={(e) => setCantidad(e.target.value)}
-              />
-              <AddCircleIcon
-                className=""
-                style={{ fontSize: 30 }}
-                onClick={(e) => handlerAddProductDetail(e)}
-              />
+            <div className="flex flex-col">
+              <label className="uppercase">{selectedProduct.name}</label>
+              <div className="flex flex-row justify-start items-center">
+                <input
+                  className="border-2 border-gray-400 rounded-md w-32 my-3 sm:m-3 text-xl"
+                  name="valor_gafa"
+                  placeholder="$"
+                  ref={register}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+                <input
+                  type="number"
+                  className="border-2 border-gray-400 rounded-md w-20 my-3 sm:m-3 text-xl"
+                  name="cantidad"
+                  placeholder=""
+                  ref={register}
+                  onChange={(e) => setCantidad(e.target.value)}
+                />
+                <AddCircleIcon
+                  className=""
+                  style={{ fontSize: 30 }}
+                  onClick={(e) => handlerAddProductDetail(e)}
+                />
+              </div>
             </div>
           )}
         </div>
@@ -387,19 +406,11 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
             />
             <input
               className={
-                detailInvoice.length > 0 &&
-                invoiceData.numero_factura !== undefined &&
-                invoiceData.numero_factura !== ''
+                detailInvoice.length > 0
                   ? 'bg-blue-700 py-1 mx-2 px-10 rounded-md text-white font-semibold'
                   : 'bg-gray-400 py-1 mx-2 px-10 rounded-md text-white font-semibold'
               }
-              disabled={
-                detailInvoice.length > 0 &&
-                invoiceData.numero_factura !== undefined &&
-                invoiceData.numero_factura !== ''
-                  ? false
-                  : true
-              }
+              disabled={detailInvoice.length > 0 ? false : true}
               type="submit"
             />
           </div>
@@ -432,7 +443,8 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
           </div>
           <div className="flex flex-row mx-5">
             <p className="font-semibold text-lg">No. Factura:</p>
-            <p className="text-lg ml-3">{invoiceData.numero_factura}</p>
+            {/* <p className="text-lg ml-3">{invoiceData.numero_factura}</p> */}
+            <p className="text-lg ml-3">F{parseInt(numeroFac) + 1}</p>
           </div>
         </div>
         <div className="mt-10">
@@ -455,7 +467,11 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
                 <TableBody>
                   {detailInvoice.map((row) => (
                     <TableRow key={row.name}>
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        className="uppercase"
+                        component="th"
+                        scope="row"
+                      >
                         {row.name}
                       </TableCell>
                       <TableCell align="right">{row.cantidad}</TableCell>

@@ -135,7 +135,7 @@ export default function CustomizedTableProducto() {
     setObtenerDataImg(null);
   };
   const eliminarProducto = (value) => {
-    remove(`${urlDeleteProdcto}id=${value.idproducto}`);
+    remove(`${urlDeleteProdcto}id=${value.codigo}`);
   };
 
   const putProducto = async (url, params) => {
@@ -154,12 +154,9 @@ export default function CustomizedTableProducto() {
     getProduct(urlGetProducts, setAllProducts);
   };
   const onSubmit = (data) => {
-    let dataExtra = {
-      idproducto: parseInt(codigoProducto),
-      imagen: files !== null ? files : linkFoto,
-    };
-    let newdata = Object.assign(data, files, dataExtra);
-    putProducto(urlUpdateProducts, newdata);
+    console.log(data);
+
+    putProducto(urlUpdateProducts, data);
   };
 
   useEffect(() => {
@@ -168,7 +165,7 @@ export default function CustomizedTableProducto() {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row w-full">
+    <div className="flex flex-col md:flex-row w-full mb-10">
       <div className="w-full px-8">
         <div className="m-0 mb-5 flex flex-wrap justify-end">
           <div className="m-2">
@@ -268,21 +265,23 @@ export default function CustomizedTableProducto() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <input
-              className="border-2 border-gray-400 rounded-md m-3 text-xl"
+              className="border-2 border-gray-400 rounded-md m-3 text-xl select-none"
               name="codigo"
-              disabled="true"
+              defaultValue={data?.codigo}
               placeholder={data?.codigo}
               ref={register}
             />
             <input
               className="border-2 border-gray-400 rounded-md m-3 text-xl"
               name="nombre"
+              defaultValue={data?.nombre}
               placeholder={data?.nombre}
               ref={register}
             />
             <input
               className="border-2 border-gray-400 rounded-md m-3 text-xl"
               name="descripcion"
+              defaultValue={data?.descripcion}
               placeholder={data?.descripcion}
               ref={register}
             />
