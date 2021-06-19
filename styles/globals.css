@@ -15,7 +15,7 @@ a {
   box-sizing: border-box;
 }
 @page {
-  size: 8.5in 11in;
+  size: 8cm 9cm;
 }
 
 @media print {
