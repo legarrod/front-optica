@@ -15,7 +15,7 @@ a {
   box-sizing: border-box;
 }
 @page {
-  size: 8cm 9cm;
+  size: 8cm 12cm;
 }
 
 @media print {
@@ -27,10 +27,28 @@ a {
   .noprint {
     display: none;
   }
+  .css-print{
+    text-transform: capitalize;
+  font-size: 12px;
+  font-weight: 800;
+  }
+  .titles-print{
+    font-weight: 800;
+  }
+  .truncate-factura{
+    display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 2;
+   overflow: hidden;
+  }
   .ticket {
+    font-size: 12px;
     display: block !important;
+    margin-top: 0px !important;
     border-style: none;
     border: none;
+    font-weight: 800;
+    margin-bottom: 0px !important;
   }
   .barra {
     margin: 0px !important;

@@ -226,7 +226,7 @@ export default function MenuNav() {
         <Toolbar>
           <Link href="/">
             <Typography className={classes.title} variant="h6" noWrap>
-              <a>Optica Quindiana La Tebaida</a>
+              <a>Optica Quindiana Tebaida</a>
             </Typography>
           </Link>
 

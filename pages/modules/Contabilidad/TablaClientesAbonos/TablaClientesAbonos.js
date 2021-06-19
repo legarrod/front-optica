@@ -352,7 +352,7 @@ export default function TablaClientesAbonos({
         </div>
       </div>
       {viewDetalleAbonos && (
-        <div className="mx-0  flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5 ticket">
+        <div className="mx-0 flex flex-col w-full md:w-4/5 mt-10 md:mt-0 border-2 p-2 rounded-lg mb-5 ticket">
           <div className="flex flex-row-reverse w-full justify-between none-print">
             {parseInt(dataInfo?.valor_factura) >
               parseInt(
@@ -387,31 +387,37 @@ export default function TablaClientesAbonos({
           </div>
 
           <div className="flex flex-col mb-10">
-            <p className="hidden uppercase text-xl w-full text-center mb-3 ticket">
+            <p className="hidden uppercase text-xl w-full text-center ticket">
               Optica Quindiana Tebaida
             </p>
-            <div className="flex flex-row justify-between">
+            <p className="hidden uppercase text-lg w-full text-center ticket">
+              Cra. 7 # 11-33 Local 1 
+            </p>
+            <p className="hidden uppercase text-lg w-full text-center mb-3 ticket">
+              7514100 | 313 7128624
+            </p>
+            <div className="flex flex-wrap justify-between css-print">
               <div>
                 <div className="flex flex-row">
-                  <p className="text-base font-semibold">Nombre:</p>
+                  <p className="text-base font-semibold titles-print">Nombre:</p>
                   <p className="text-xs ml-3 mt-1 text-gray-700">
                     {dataInfo?.paciente}
                   </p>
                 </div>
                 <div className="flex flex-row">
-                  <p className="text-base font-semibold">Total deuda:</p>
+                  <p className="text-base font-semibold titles-print">Total deuda:</p>
                   <p className="text-xs ml-3 mt-1 text-gray-700">
                     $ {dataInfo?.valor_factura}
                   </p>
                 </div>
                 <div className="flex flex-row">
-                  <p className="text-base font-semibold">Total abonado:</p>
+                  <p className="text-base font-semibold titles-print">Total abonado:</p>
                   <p className="text-xs ml-3 mt-1 text-gray-700">
                     $ {dataInfo?.total_abonos ? dataInfo?.total_abonos : '---'}
                   </p>
                 </div>
                 <div className="flex flex-row">
-                  <p className="text-base font-semibold">
+                  <p className="text-base font-semibold titles-print">
                     Pendiente por pagar:
                   </p>
                   <p className="text-xs ml-3 mt-1 text-gray-700">
@@ -430,7 +436,7 @@ export default function TablaClientesAbonos({
                 </div>
                 <div className="flex flex-row">
                   <p className="text-base font-semibold">Nota:</p>
-                  <p className="text-xs w-44 ml-3 mt-1 text-gray-700">
+                  <p className="text-xs w-44 ml-3 mt-1 text-gray-700 truncate-factura">
                     {dataInfo?.nota
                       ? dataInfo?.nota
                       : 'No hay nota para esta factura'}
@@ -438,7 +444,7 @@ export default function TablaClientesAbonos({
                 </div>
               </div>
             </div>
-            <p className="text-2xl w-full text-center uppercase">
+            <p className="text-xl w-full text-center uppercase">
               Total Abonos
             </p>
             <div className="overflow-y-auto ml-0 pr-2 w-full mx-3 h-60">
@@ -450,9 +456,9 @@ export default function TablaClientesAbonos({
                 >
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell align="center">Fecha</StyledTableCell>
-                      <StyledTableCell align="center">Abono</StyledTableCell>
-                      <StyledTableCell align="center">Nota</StyledTableCell>
+                      <StyledTableCell align="center" className="css-print">Fecha</StyledTableCell>
+                      <StyledTableCell align="center" className="css-print">Abono</StyledTableCell>
+                      <StyledTableCell className="none-print" align="center">Nota</StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -460,19 +466,19 @@ export default function TablaClientesAbonos({
                       <StyledTableRow key={index}>
                         <StyledTableCell
                           align="center"
-                          className="flex justify-center items-center "
+                          className="flex justify-center items-center css-print"
                         >
                           <button className="none-print">
                             <DeleteIcon
                               onClick={() => handlerEliminarAbono(row)}
                             />
                           </button>
-                          <p className="">{row.fecha}</p>
+                          <p className="css-print">{row.fecha}</p>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          $ {row.valor}
+                          <p className="css-print">$ {row.valor}</p>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
+                        <StyledTableCell className="none-print" align="center">
                           {row.nota}
                         </StyledTableCell>
                       </StyledTableRow>

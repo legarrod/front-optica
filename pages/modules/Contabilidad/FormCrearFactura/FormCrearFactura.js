@@ -355,7 +355,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
             ref={register}
             onClick={(e) => handlerSlectProducto(e)}
           >
-            <option className="uppercase">Selcciona un articulo</option>
+            <option className="uppercase">Selecciona un articulo</option>
             {listadoProductos.length > 0 &&
               listadoProductos?.map((item) => (
                 <option
