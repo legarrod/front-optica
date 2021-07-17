@@ -67,7 +67,7 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   const [dataResponse, setDataResponse] = useState();
   const [facturaOk, setFacturaOk] = useState();
   const [sinInternet, setSinInternet] = useState(false);
-
+  const [clearLocal, setClearLocal] = useState(false);
   const getProductos = async (urlGetProductos, setListadoProductos) => {
     try {
       const { data } = await axios.get(urlGetProductos);
@@ -272,7 +272,12 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
   const responseLastInvoice = (response) => {
     setNumeroFac(response.data[0].codigo);
   };
-
+  const eliminarLocalstorage = () => {
+    setFacturaPendiente(false);
+    localStorage.removeItem('dataDetallefactura');
+    localStorage.removeItem('facturaSinGuardar');
+    localStorage.removeItem('respaldoFactura');
+  };
   useEffect(() => {
     if (facturaOk) {
       saveDetalleFactura();
@@ -287,7 +292,14 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
     }
     getlastIdFactura(`${urlLastInvoice}`, responseLastInvoice);
   }, [urlGetProductos, setListadoProductos, dataResponse, facturaOk]);
-
+  useEffect(() => {
+    let dataDetalle = localStorage.getItem('dataDetallefactura') ? true : false;
+    let facSin = localStorage.getItem('facturaSinGuardar') ? true : false;
+    let respalFac = localStorage.getItem('respaldoFactura') ? true : false;
+    if (dataDetalle || facSin || respalFac) {
+      setClearLocal(true);
+    }
+  }, []);
   return (
     <div className="flex flex-col md:flex-row">
       <form
@@ -419,11 +431,20 @@ export default function FormCrearFactura({ setOpen, cedulaPaciente }) {
         )}
         {facturaPendiente === true && (
           <button
-            className="bg-red-600 py-1 mx-2 px-10 rounded-md text-white font-semibold"
+            className="bg-red-600 py-1 mx-2 px-10 my-2 rounded-md text-white font-semibold"
             onClick={() => handlerReenviar()}
             type="button"
           >
             Tienes una factura pendiente
+          </button>
+        )}
+        {clearLocal && (
+          <button
+            className="bg-yellow-800 py-1 mx-2 my-2 px-10 rounded-md text-white font-semibold"
+            onClick={() => eliminarLocalstorage()}
+            type="button"
+          >
+            Limpiar
           </button>
         )}
         {sinInternet && (
