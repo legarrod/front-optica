@@ -126,6 +126,7 @@ export default function Productos() {
                 allInvoices={allInvoices}
                 setAllInvoices={setAllInvoices}
                 getAllInvoices={getInvoices}
+                refresDataAll={refresData}
               />
             </div>
           </div>

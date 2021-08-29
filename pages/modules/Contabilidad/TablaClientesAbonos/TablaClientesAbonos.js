@@ -83,6 +83,7 @@ export default function TablaClientesAbonos({
   allInvoices,
   setAllInvoices,
   getAllInvoices,
+  refresDataAll,
 }) {
   let hoy = new Date();
   const classes = useStyles();
@@ -113,7 +114,7 @@ export default function TablaClientesAbonos({
   const handleClose = () => {
     setOpen(false);
   };
-
+  const [activeButton, setActiveButton] = useState('');
   const responseCallback = (response) => {
     if (response.data === 'Factura eliminada correctamente') {
       swal({
@@ -131,10 +132,12 @@ export default function TablaClientesAbonos({
           text: 'De acuerdo!',
         },
       });
+      refresDataAll();
       setControlRefresFactura(true);
       getAbonos(temConsultaAbono, callbackResponseGetAbonos);
     }
     if (response.data.data === true) {
+      refresDataAll();
       setOpen(false);
       setControlRefresFactura(true);
       getAbonos(temConsultaAbono, callbackResponseGetAbonos);
@@ -226,7 +229,6 @@ export default function TablaClientesAbonos({
   };
 
   const onSubmit = (data) => {
-    setDisabledBotonEnviarAbono(true);
     let dataSaved = {
       fk_id_factura: parseInt(dataInfo.id),
       valor_abono: parseInt(data.abono),
@@ -391,7 +393,7 @@ export default function TablaClientesAbonos({
               Optica Quindiana Tebaida
             </p>
             <p className="hidden uppercase text-lg w-full text-center ticket">
-              Cra. 7 # 11-33 Local 1 
+              Cra. 7 # 11-33 Local 1
             </p>
             <p className="hidden uppercase text-lg w-full text-center mb-3 ticket">
               7514100 | 313 7128624
@@ -399,19 +401,25 @@ export default function TablaClientesAbonos({
             <div className="flex flex-wrap justify-between css-print">
               <div>
                 <div className="flex flex-row">
-                  <p className="text-base font-semibold titles-print">Nombre:</p>
+                  <p className="text-base font-semibold titles-print">
+                    Nombre:
+                  </p>
                   <p className="text-xs ml-3 mt-1 text-gray-700">
                     {dataInfo?.paciente}
                   </p>
                 </div>
                 <div className="flex flex-row">
-                  <p className="text-base font-semibold titles-print">Total deuda:</p>
+                  <p className="text-base font-semibold titles-print">
+                    Total deuda:
+                  </p>
                   <p className="text-xs ml-3 mt-1 text-gray-700">
                     $ {dataInfo?.valor_factura}
                   </p>
                 </div>
                 <div className="flex flex-row">
-                  <p className="text-base font-semibold titles-print">Total abonado:</p>
+                  <p className="text-base font-semibold titles-print">
+                    Total abonado:
+                  </p>
                   <p className="text-xs ml-3 mt-1 text-gray-700">
                     $ {dataInfo?.total_abonos ? dataInfo?.total_abonos : '---'}
                   </p>
@@ -444,9 +452,7 @@ export default function TablaClientesAbonos({
                 </div>
               </div>
             </div>
-            <p className="text-xl w-full text-center uppercase">
-              Total Abonos
-            </p>
+            <p className="text-xl w-full text-center uppercase">Total Abonos</p>
             <div className="overflow-y-auto ml-0 pr-2 w-full mx-3 h-60">
               <TableContainer component={Paper}>
                 <Table
@@ -456,9 +462,15 @@ export default function TablaClientesAbonos({
                 >
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell align="center" className="css-print">Fecha</StyledTableCell>
-                      <StyledTableCell align="center" className="css-print">Abono</StyledTableCell>
-                      <StyledTableCell className="none-print" align="center">Nota</StyledTableCell>
+                      <StyledTableCell align="center" className="css-print">
+                        Fecha
+                      </StyledTableCell>
+                      <StyledTableCell align="center" className="css-print">
+                        Abono
+                      </StyledTableCell>
+                      <StyledTableCell className="none-print" align="center">
+                        Nota
+                      </StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -523,6 +535,7 @@ export default function TablaClientesAbonos({
                   className="border-2 border-gray-400 rounded-md m-3 text-xl pl-2"
                   name="abono"
                   placeholder="Valor a registrar"
+                  onChange={(e) => setActiveButton(e.target.value)}
                   ref={register}
                 />
                 <textarea
@@ -532,15 +545,14 @@ export default function TablaClientesAbonos({
                   //onChange={(e)=> handleTextarea(e)}
                   ref={register}
                 />
-                <input
-                  disabled={disabledBotonEnviarAbono}
-                  className={
-                    disabledBotonEnviarAbono
-                      ? 'bg-gray-500 py-1 px-5 rounded-md text-white font-semibold'
-                      : 'bg-blue-700 py-1 px-5 rounded-md text-white font-semibold'
-                  }
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={activeButton !== '' ? false : true}
                   type="submit"
-                />
+                >
+                  Enviar
+                </Button>
               </form>
             </div>
           </div>
