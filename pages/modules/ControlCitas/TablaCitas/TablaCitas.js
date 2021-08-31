@@ -48,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TablaCitas({ data, horasPorFecha, getHorasFecha }) {
   const hora = [
+    '08:00 am',
+    '08:15 am',
+    '08:30 am',
+    '08:45 am',
     '09:00 am',
     '09:15 am',
     '09:30 am',
